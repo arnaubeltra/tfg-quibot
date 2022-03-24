@@ -10,7 +10,6 @@
         android:name="com.example.tfgquibotapp.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
-
     <fragment
         android:id="@+id/interactWithRobot"
         android:name="com.example.tfgquibotapp.ui.interactWithRobot.InteractWithRobot"

@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Qui-Bot 2D</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 
     <!-- Menu -->
     <string name="menu_home">Inici</string>
@@ -7,19 +11,6 @@
     <string name="menu_interact">Interactua amb el robot</string>
     <string name="menu_tic_tac_toe">Tres en ratlla</string>
     <string name="menu_connect4">Connecta 4</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string name="title_activity_home">Home</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-
-
 
     <!-- Login and Register layout -->
     <string name="txtEmail">Correu electrònic</string>
@@ -41,5 +32,12 @@
     <string name="registering">Registrant</string>
     <string name="newUserRegistered">Nou usuari registrat correctament</string>
     <string name="txtErrorRegistering">Error en realitzar el registre</string>
+
+    <!-- Tic tac toe -->
+    <string name="btnTxtNovaPartida">Nova partida</string>
+    <string name="btnTxtComJugar">Com jugar?</string>
+    <string name="txtPlayer1">Jugador 1</string>
+    <string name="txtPlayer2">Jugador 2</string>
+    <string name="txtScore">0</string>
 
 </resources>
