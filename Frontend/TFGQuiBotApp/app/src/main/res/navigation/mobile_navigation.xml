@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.tfgquibotapp.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/interactWithRobot"
+        android:name="com.example.tfgquibotapp.ui.interactWithRobot.InteractWithRobot"
+        android:label="@string/menu_interact"
+        tools:layout="@layout/fragment_interact_with_robot" />
+    <fragment
+        android:id="@+id/experiments"
+        android:name="com.example.tfgquibotapp.ui.experiments.Experiments"
+        android:label="@string/menu_experiments"
+        tools:layout="@layout/fragment_experiments" />
+    <fragment
+        android:id="@+id/ticTacToe"
+        android:name="com.example.tfgquibotapp.ui.ticTacToe.TicTacToe"
+        android:label="@string/menu_tic_tac_toe"
+        tools:layout="@layout/fragment_tic_tac_toe" />
+    <fragment
+        android:id="@+id/connect4"
+        android:name="com.example.tfgquibotapp.ui.connect4.Connect4"
+        android:label="@string/menu_connect4"
+        tools:layout="@layout/fragment_connect4" />
+</navigation>

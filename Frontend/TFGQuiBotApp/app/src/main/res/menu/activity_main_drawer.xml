@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/icon_home"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/experiments"
+            android:icon="@drawable/experiments_icon"
+            android:title="@string/menu_experiments" />
+        <item
+            android:id="@+id/interactWithRobot"
+            android:icon="@drawable/interact_icon"
+            android:title="@string/menu_interact" />
+        <item
+            android:id="@+id/ticTacToe"
+            android:icon="@drawable/tic_tac_toe_icon"
+            android:title="@string/menu_tic_tac_toe" />
+        <item
+            android:id="@+id/connect4"
+            android:icon="@drawable/icon_connect4"
+            android:title="@string/menu_connect4" />
+    </group>
+</menu>
