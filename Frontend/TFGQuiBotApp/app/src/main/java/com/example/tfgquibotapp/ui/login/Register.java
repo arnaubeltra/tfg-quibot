@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.tfgquibotapp.Home;
+import com.example.tfgquibotapp.User;
 import com.example.tfgquibotapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -78,7 +78,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void goToHomeActivity() {
-        Intent intent = new Intent(Register.this, Home.class);
+        Intent intent = new Intent(Register.this, User.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

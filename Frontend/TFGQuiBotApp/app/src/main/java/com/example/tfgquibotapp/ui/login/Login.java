@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.tfgquibotapp.Home;
+import com.example.tfgquibotapp.Admin;
+import com.example.tfgquibotapp.User;
 import com.example.tfgquibotapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -56,7 +58,11 @@ public class Login extends AppCompatActivity {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     loginDialog.dismiss();
-                    goToHomeActivity();
+                    Log.d("hello", "login: " + email);
+                    if (email.equals("a@a.com"))
+                        goToHomeActivityAdmin();
+                    else
+                        goToHomeActivity();
                 } else {
                     loginDialog.dismiss();
                     Toast.makeText(Login.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
@@ -66,7 +72,15 @@ public class Login extends AppCompatActivity {
     }
 
     private void goToHomeActivity() {
-        Intent intent = new Intent(Login.this, Home.class);
+        Log.d("hello", "goToHomeActivity: ");
+        Intent intent = new Intent(Login.this, User.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void goToHomeActivityAdmin() {
+        Log.d("hello", "goToHomeActivityAdmin: ");
+        Intent intent = new Intent(Login.this, Admin.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

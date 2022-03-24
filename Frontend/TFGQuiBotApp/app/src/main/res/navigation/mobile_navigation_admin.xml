@@ -2,14 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation"
-    app:startDestination="@id/nav_home">
+    android:id="@+id/mobile_navigation2"
+    app:startDestination="@id/homeAdmin">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.tfgquibotapp.ui.home.HomeFragment"
+        android:id="@+id/homeAdmin"
+        android:name="com.example.tfgquibotapp.ui.homeAdmin.HomeAdmin"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home_admin" />
     <fragment
         android:id="@+id/interactWithRobot"
         android:name="com.example.tfgquibotapp.ui.interactWithRobot.InteractWithRobot"
@@ -21,13 +21,8 @@
         android:label="@string/menu_experiments"
         tools:layout="@layout/fragment_experiments" />
     <fragment
-        android:id="@+id/ticTacToe"
-        android:name="com.example.tfgquibotapp.ui.ticTacToe.TicTacToe"
-        android:label="@string/menu_tic_tac_toe"
-        tools:layout="@layout/fragment_tic_tac_toe" />
-    <fragment
-        android:id="@+id/connect4"
-        android:name="com.example.tfgquibotapp.ui.connect4.Connect4"
-        android:label="@string/menu_connect4"
-        tools:layout="@layout/fragment_connect4" />
+        android:id="@+id/usersList"
+        android:name="com.example.tfgquibotapp.ui.usersList.UsersList"
+        android:label="@string/menu_users_list"
+        tools:layout="@layout/fragment_users_list" />
 </navigation>

@@ -11,6 +11,7 @@
     <string name="menu_interact">Interactua amb el robot</string>
     <string name="menu_tic_tac_toe">Tres en ratlla</string>
     <string name="menu_connect4">Connecta 4</string>
+    <string name="menu_users_list">Llista d\'usuaris</string>
 
     <!-- Login and Register layout -->
     <string name="txtEmail">Correu electrònic</string>
@@ -39,5 +40,12 @@
     <string name="txtPlayer1">Jugador 1</string>
     <string name="txtPlayer2">Jugador 2</string>
     <string name="txtScore">0</string>
+    <string name="title_activity_admin">Admin</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
