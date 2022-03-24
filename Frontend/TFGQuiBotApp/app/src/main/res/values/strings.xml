@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Qui-Bot 2D</string>
+
+    <!-- Login and Register layout -->
+    <string name="txtEmail">Correu electrònic</string>
+    <string name="txtPassword">Contrassenya</string>
+    <string name="txtRepeatPassword">Repeteix la contrassenya</string>
+    <string name="txtLogin">Entrar</string>
+    <string name="txtCreateNewAccount">Crear un nou compte?</string>
+    <string name="txtCreateAccount">Crear compte</string>
+    <string name="txtAlreadyHaveAnAccount">Ja tens un compte?</string>
+
+    <!-- Login -->
+    <string name="txtEnterCorrectEmail">Entra un correu vàlid.</string>
+    <string name="txtPasswordLength">La contrassenya ha de contenir 6 caràcters o més.</string>
+    <string name="txtWaitLogin">Espera mentre s\'inicia sessió.</string>
+    <string name="txtLoggingIn">Iniciant sessió</string>
+    <string name="txtErrorLoggingIn">Error iniciant sessió.</string>
+
+    <!-- Register -->
+    <string name="registering">Registrant</string>
+    <string name="newUserRegistered">Nou usuari registrat correctament</string>
+    <string name="txtErrorRegistering">Error en realitzar el registre</string>
+
+
+</resources>

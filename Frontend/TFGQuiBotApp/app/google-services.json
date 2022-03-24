@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "725830421162",
+    "project_id": "tfg-quibot",
+    "storage_bucket": "tfg-quibot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725830421162:android:67e3d4f3098541ae471ed3",
+        "android_client_info": {
+          "package_name": "com.example.tfgquibotapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725830421162-l85hborfn0uld5mk0818h53i646k78sf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8mMmW3aNP7wR3iAK1FMbHJV8US_BBw3U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725830421162-l85hborfn0uld5mk0818h53i646k78sf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
