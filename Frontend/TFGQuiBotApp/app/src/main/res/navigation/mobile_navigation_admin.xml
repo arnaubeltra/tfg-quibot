@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/homeAdmin"
-        android:name="com.example.tfgquibotapp.ui.homeAdmin.HomeAdmin"
+        android:name="edu.upc.arnaubeltra.tfgquibotapp.ui.homeAdmin.HomeAdmin"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home_admin" />
     <fragment
         android:id="@+id/interactWithRobot"
-        android:name="com.example.tfgquibotapp.ui.interactWithRobot.InteractWithRobot"
+        android:name="edu.upc.arnaubeltra.tfgquibotapp.ui.interactWithRobot.InteractWithRobot"
         android:label="@string/menu_interact"
         tools:layout="@layout/fragment_interact_with_robot" />
     <fragment
         android:id="@+id/experiments"
-        android:name="com.example.tfgquibotapp.ui.experiments.Experiments"
+        android:name="edu.upc.arnaubeltra.tfgquibotapp.ui.experiments.Experiments"
         android:label="@string/menu_experiments"
         tools:layout="@layout/fragment_experiments" />
     <fragment
         android:id="@+id/usersList"
-        android:name="com.example.tfgquibotapp.ui.usersList.UsersList"
+        android:name="edu.upc.arnaubeltra.tfgquibotapp.ui.usersList.UsersList"
         android:label="@string/menu_users_list"
         tools:layout="@layout/fragment_users_list" />
 </navigation>

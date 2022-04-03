@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tfgquibotapp">
+    package="edu.upc.arnaubeltra.tfgquibotapp">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -10,20 +12,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TFGQuiBotApp">
         <activity
-            android:name=".Admin"
+            android:name="edu.upc.arnaubeltra.tfgquibotapp.Admin"
             android:exported="false"
             android:label="@string/title_activity_admin"
             android:theme="@style/Theme.TFGQuiBotApp.NoActionBar" />
         <activity
-            android:name=".User"
+            android:name="edu.upc.arnaubeltra.tfgquibotapp.User"
             android:exported="false"
             android:theme="@style/Theme.TFGQuiBotApp.NoActionBar" />
         <activity
-            android:name=".ui.login.Register"
+            android:name="edu.upc.arnaubeltra.tfgquibotapp.ui.login.Register"
             android:exported="false"
             android:windowSoftInputMode="stateVisible|adjustPan" />
         <activity
-            android:name=".ui.login.Login"
+            android:name="edu.upc.arnaubeltra.tfgquibotapp.ui.login.Login"
             android:exported="true"
             android:windowSoftInputMode="stateVisible|adjustPan">
             <intent-filter>

@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.interactWithRobot.InteractWithRobot">
+    tools:context="edu.upc.arnaubeltra.tfgquibotapp.ui.interactWithRobot.InteractWithRobot">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
