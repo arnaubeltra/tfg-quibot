@@ -1,5 +1,6 @@
 package edu.upc.arnaubeltra.tfgquibot;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -24,6 +25,8 @@ import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 
 public class UserNavigation extends AppCompatActivity {
 
+    public static UserNavigation instance;
+
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
 
@@ -33,6 +36,8 @@ public class UserNavigation extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        instance = this;
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -59,6 +64,10 @@ public class UserNavigation extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_user_navigation);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+    }
+
+    public static Context getInstance() {
+        return instance.getApplicationContext();
     }
 
     @Override

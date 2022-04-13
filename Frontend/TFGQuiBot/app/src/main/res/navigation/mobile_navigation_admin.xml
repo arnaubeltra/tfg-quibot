@@ -16,7 +16,7 @@
         tools:layout="@layout/fragment_interact_with_robot" />
     <fragment
         android:id="@+id/experiments"
-        android:name="edu.upc.arnaubeltra.tfgquibot.ui.experiments.Experiments"
+        android:name="edu.upc.arnaubeltra.tfgquibot.ui.experiments.ExperimentsList"
         android:label="@string/menu_experiments"
         tools:layout="@layout/fragment_experiments" />
     <fragment
