@@ -11,68 +11,59 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import edu.upc.arnaubeltra.tfgquibot.AdminNavigation;
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
+import edu.upc.arnaubeltra.tfgquibot.firebase.Authentication;
+import edu.upc.arnaubeltra.tfgquibot.firebase.RealtimeDatabase;
 import edu.upc.arnaubeltra.tfgquibot.models.User;
 
 public class Login extends AppCompatActivity {
 
-    private EditText emailUser, passwordUser;
+    private EditText nameUser, surnameUser;
 
     private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
+    private Authentication authentication;
     private ProgressDialog loginDialog;
-    private String emailPattern = "[a-zA-Z0-9._-]+@+[a-z]+\\.+[a-z]+";
-
-    private DatabaseReference usersDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        emailUser = findViewById(R.id.inputTxtEmail);
-        passwordUser = findViewById(R.id.inputTxtPassword);
+        nameUser = findViewById(R.id.inputNameUser);
+        surnameUser = findViewById(R.id.inputSurnameUser);
 
         findViewById(R.id.btnLogin).setOnClickListener(view -> login());
-        findViewById(R.id.textViewCreateNewAccount).setOnClickListener(view -> startActivity(new Intent(Login.this, Register.class)));
+        findViewById(R.id.textViewEnterAsAdmin).setOnClickListener(view -> goToAdminLogin());
 
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
+        authentication = Authentication.getInstance();
 
         loginDialog = new ProgressDialog(this);
-
-        usersDb = FirebaseDatabase.getInstance().getReference();
     }
 
     private void login() {
-        String email = emailUser.getText().toString();
-        String password = passwordUser.getText().toString();
+        String name = nameUser.getText().toString();
+        String surname = surnameUser.getText().toString();
 
-        if (!email.matches(emailPattern)) {
-            emailUser.setError("Enter correct email");
-        } else if ((password.isEmpty()) || (password.length() < 6)) {
-            passwordUser.setError("Password length must be higher than 6");
-        } else {
+
+        if (name.isEmpty())
+            nameUser.setError("El camp de nom no pot estar buit");
+        else if (surname.isEmpty())
+            surnameUser.setError("El camp de cognoms no pot estar buit");
+        else {
             loginDialog.setMessage("Espera mentre s'inicia sessió");
             loginDialog.setTitle(R.string.txtLoggingIn);
             loginDialog.setCanceledOnTouchOutside(false);
             loginDialog.show();
 
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            firebaseAuth.signInAnonymously().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     loginDialog.dismiss();
-                    Log.d("hello", "login: " + email);
-                    if (email.equals("a@a.com"))
-                        goToHomeActivityAdmin();
-                    else {
-                        notifyNewUserLogin(email);
-                        goToHomeActivity();
-                    }
+                    notifyNewUserLogin(authentication.getUser(), name, surname);
+                    goToHomeActivityUser();
                 } else {
                     loginDialog.dismiss();
                     Toast.makeText(Login.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
@@ -81,22 +72,41 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    private void notifyNewUserLogin(String email) {
-        User newUser = new User("", email);
-        usersDb.child("active-users").setValue(newUser);
+    private void notifyNewUserLogin(String uid, String name, String surname) {
+        /*String uidHash = "";
+        try {
+            uidHash = createHash(name, surname);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }*/
+        User userLogged = new User(uid, name, surname);
+        RealtimeDatabase.getInstance().newUserLogged(userLogged);
     }
 
-    private void goToHomeActivity() {
+    private void goToHomeActivityUser() {
         Log.d("hello", "goToHomeActivity: ");
         Intent intent = new Intent(Login.this, UserNavigation.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
-    private void goToHomeActivityAdmin() {
-        Log.d("hello", "goToHomeActivityAdmin: ");
-        Intent intent = new Intent(Login.this, AdminNavigation.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+    private void goToAdminLogin() {
+        startActivity(new Intent(Login.this, AdminLogin.class));
     }
+
+    /*private String createHash(String name, String surname) throws NoSuchAlgorithmException {
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        messageDigest.reset();
+        messageDigest.update((name + " " + surname).getBytes());
+        byte[] digest = messageDigest.digest();
+
+        BigInteger bigInteger = new BigInteger(1, digest);
+        String hashCode = bigInteger.toString(16);
+
+        while(hashCode.length() < 32 ){
+            hashCode = "0" + hashCode;
+        }
+
+        return hashCode;
+    }*/
 }

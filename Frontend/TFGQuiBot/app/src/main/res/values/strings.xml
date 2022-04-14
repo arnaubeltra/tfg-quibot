@@ -13,14 +13,22 @@
     <string name="menu_connect4">Connecta 4</string>
     <string name="menu_users_list">Llista d\'usuaris</string>
 
-    <!-- Login and Register layout -->
-    <string name="txtEmail">Correu electrònic</string>
-    <string name="txtPassword">Contrassenya</string>
+    <!-- Login layout -->
+    <string name="txtName">Nom</string>
+    <string name="txtSurname">Cognoms</string>
+
     <string name="txtRepeatPassword">Repeteix la contrassenya</string>
     <string name="txtLogin">Entrar</string>
     <string name="txtCreateNewAccount">Crear un nou compte?</string>
     <string name="txtCreateAccount">Crear compte</string>
     <string name="txtAlreadyHaveAnAccount">Ja tens un compte?</string>
+
+    <!-- Admin login -->
+    <string name="txtTitleLoginAdmin">Entrar com a administrador</string>
+    <string name="txtEmail">Correu electrònic</string>
+    <string name="txtPassword">Contrassenya</string>
+    <string name="txtGoBackLogin">Tornar a inici de sessió</string>
+
 
     <!-- Login -->
     <string name="txtEnterCorrectEmail">Entra un correu vàlid.</string>
@@ -39,13 +47,20 @@
     <string name="btnTxtComJugar">Com jugar?</string>
     <string name="txtPlayer1">Jugador 1</string>
     <string name="txtPlayer2">Jugador 2</string>
-    <string name="txtScore">0</string>
+    <string name="txtGameNotStarted">Inicia una partida</string>
     <string name="title_activity_admin">Admin</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="txtGameStarted">El joc ha començat</string>
+    <string name="txtEndGame">Finalitzar partida</string>
+    <string name="txtFirstStartNewGame">Per poder jugar, primer inicia un nou joc.</string>
+    <string name="txtYourTurn">El teu torn</string>
+    <string name="txtHisTurn">El seu torn</string>
+
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txtReset">Reset</string>
     <string name="txtReadColor">Llegeix color</string>

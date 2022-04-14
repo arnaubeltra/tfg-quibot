@@ -11,8 +11,11 @@
         android:roundIcon="@mipmap/quibot_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TFGQuiBot">
-
-        <!--<activity
+        <activity
+            android:name=".ui.login.AdminLogin"
+            android:exported="false"
+            android:windowSoftInputMode="stateVisible|adjustPan"/>
+        <activity
             android:name=".ui.login.Login"
             android:exported="true"
             android:windowSoftInputMode="stateVisible|adjustPan">
@@ -21,24 +24,24 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>-->
-
-        <activity
+        </activity>
+        <!--
+<activity
             android:name=".ui.login.Login"
             android:exported="false"
             android:windowSoftInputMode="stateVisible|adjustPan">
         </activity>
-
+        -->
         <activity
             android:name=".ui.login.Register"
             android:exported="false"
             android:windowSoftInputMode="stateVisible|adjustPan" />
-        <!--<activity
+        <activity
             android:name=".UserNavigation"
             android:exported="false"
-            android:theme="@style/Theme.TFGQuiBot.NoActionBar" />-->
-
-        <activity
+            android:theme="@style/Theme.TFGQuiBot.NoActionBar" />
+        <!--
+<activity
             android:name=".UserNavigation"
             android:exported="true"
             android:theme="@style/Theme.TFGQuiBot.NoActionBar" >
@@ -48,13 +51,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        -->
         <activity
             android:name=".AdminNavigation"
             android:exported="false"
             android:theme="@style/Theme.TFGQuiBot.NoActionBar" />
     </application>
-
-
 
 </manifest>

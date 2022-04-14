@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "1058327400258",
-    "project_id": "tfg-quibot-3b420",
-    "storage_bucket": "tfg-quibot-3b420.appspot.com"
+    "project_number": "565285437269",
+    "firebase_url": "https://tfg-quibot-fc871-default-rtdb.firebaseio.com",
+    "project_id": "tfg-quibot-fc871",
+    "storage_bucket": "tfg-quibot-fc871.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1058327400258:android:ace2d6afd69ac53bfc82db",
+        "mobilesdk_app_id": "1:565285437269:android:cc05d4354e3c45cf3779dc",
         "android_client_info": {
           "package_name": "edu.upc.arnaubeltra.tfgquibot"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1058327400258-qjeour26oer0fs8o2pbj3rjctt5ucgn3.apps.googleusercontent.com",
+          "client_id": "565285437269-cnbo3qm1e03sm6ll0pfjgkfimaj9avko.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDzAROjU8A2sBBfxDnWpNTHGgcOsFjybYg"
+          "current_key": "AIzaSyA5S2v3HxQ3pNP7i46GWwEFJ5kGJql9aRE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1058327400258-qjeour26oer0fs8o2pbj3rjctt5ucgn3.apps.googleusercontent.com",
+              "client_id": "565285437269-cnbo3qm1e03sm6ll0pfjgkfimaj9avko.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

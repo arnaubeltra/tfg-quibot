@@ -52,10 +52,10 @@ public class ExperimentsAdapter extends RecyclerView.Adapter<ExperimentsAdapter.
 
         IExperimentsRCVItemClicked listener;
 
-        public ExperimentsViewHolder(@NonNull View itemView, IExperimentsRCVItemClicked itemCLickedListener) {
+        public ExperimentsViewHolder(@NonNull View itemView, IExperimentsRCVItemClicked itemClickedListener) {
             super(itemView);
 
-            listener = itemCLickedListener;
+            listener = itemClickedListener;
             itemView.setOnClickListener(this);
         }
 

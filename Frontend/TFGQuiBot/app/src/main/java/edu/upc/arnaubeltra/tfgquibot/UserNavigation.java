@@ -21,6 +21,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityUserNavigationBinding;
+import edu.upc.arnaubeltra.tfgquibot.firebase.Authentication;
+import edu.upc.arnaubeltra.tfgquibot.firebase.RealtimeDatabase;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 
 public class UserNavigation extends AppCompatActivity {
@@ -28,7 +30,8 @@ public class UserNavigation extends AppCompatActivity {
     public static UserNavigation instance;
 
     private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
+    private Authentication authentication;
+    private RealtimeDatabase realtimeDatabase;
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityUserNavigationBinding binding;
@@ -40,19 +43,14 @@ public class UserNavigation extends AppCompatActivity {
         instance = this;
 
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
+        authentication = Authentication.getInstance();
+        realtimeDatabase = RealtimeDatabase.getInstance();
 
         binding = ActivityUserNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarUserNavigation.toolbar);
-        /*binding.appBarUserNavigation.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -88,10 +86,15 @@ public class UserNavigation extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logout:
+                deleteLoggedUser();
                 firebaseAuth.signOut();
                 goToLoginActivity();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteLoggedUser() {
+        realtimeDatabase.deleteUserLoggedOut(authentication.getUser());
     }
 
     private void goToLoginActivity() {

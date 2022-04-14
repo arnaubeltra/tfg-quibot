@@ -22,8 +22,8 @@ public class Register extends AppCompatActivity {
 
     private EditText emailRegister, passwordRegister, confirmPasswordRegister;
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
+    //private FirebaseAuth firebaseAuth;
+    //private FirebaseUser firebaseUser;
     private ProgressDialog registerDialog;
     private String emailPattern = "[a-zA-Z0-9._-]+@+[a-z]+\\.+[a-z]+";
 
@@ -39,8 +39,8 @@ public class Register extends AppCompatActivity {
         findViewById(R.id.btnCreateAccountRegister).setOnClickListener(view -> registerNewUser());
         findViewById(R.id.textViewAlreadyHaveAnAccount).setOnClickListener(view -> finish());
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
+        //firebaseAuth = FirebaseAuth.getInstance();
+        //firebaseUser = firebaseAuth.getCurrentUser();
 
         registerDialog = new ProgressDialog(this);
     }
@@ -62,7 +62,7 @@ public class Register extends AppCompatActivity {
             registerDialog.setCanceledOnTouchOutside(false);
             registerDialog.show();
 
-            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            /*firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
@@ -74,7 +74,7 @@ public class Register extends AppCompatActivity {
                         Toast.makeText(Register.this, R.string.txtErrorRegistering, Toast.LENGTH_SHORT).show();
                     }
                 }
-            });
+            });*/
         }
     }
 
