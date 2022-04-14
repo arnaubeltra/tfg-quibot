@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/homeAdmin2">
+    app:startDestination="@id/homeAdmin">
     <fragment
-        android:id="@+id/homeAdmin2"
+        android:id="@+id/homeAdmin"
         android:name="edu.upc.arnaubeltra.tfgquibot.ui.homeAdmin.HomeAdmin"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home_admin" />
     <fragment
-        android:id="@+id/interactWithRobot2"
+        android:id="@+id/interactWithRobot"
         android:name="edu.upc.arnaubeltra.tfgquibot.ui.interactWithRobot.InteractWithRobot"
         android:label="@string/menu_interact"
         tools:layout="@layout/fragment_interact_with_robot" />

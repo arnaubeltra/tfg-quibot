@@ -67,4 +67,8 @@
     <string name="txtRaisePipette">Pujar xeringa</string>
     <string name="txtLowerPipette">Baixar xeringa</string>
 
+    <!-- List users -->
+    <string name="txtGivePermissions">Donar accés</string>
+    <string name="txtQuitPermissions">Treure accés</string>
+
 </resources>

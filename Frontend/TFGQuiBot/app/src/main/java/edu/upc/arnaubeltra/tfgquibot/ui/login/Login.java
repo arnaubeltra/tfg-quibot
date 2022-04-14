@@ -79,7 +79,7 @@ public class Login extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }*/
-        User userLogged = new User(uid, name, surname);
+        User userLogged = new User(uid, name, surname, false);
         RealtimeDatabase.getInstance().newUserLogged(userLogged);
     }
 

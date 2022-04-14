@@ -46,6 +46,8 @@ public class UserNavigation extends AppCompatActivity {
         authentication = Authentication.getInstance();
         realtimeDatabase = RealtimeDatabase.getInstance();
 
+        realtimeDatabase.getLoggedInUsers();
+
         binding = ActivityUserNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
