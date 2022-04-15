@@ -3,17 +3,26 @@ package edu.upc.arnaubeltra.tfgquibot.ui.interactWithRobot;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
+import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
+import edu.upc.arnaubeltra.tfgquibot.firebase.Authentication;
 
 public class InteractWithRobot extends Fragment {
 
     private InteractWithRobotViewModel interactWithRobotViewModel;
+
+    private Authentication authentication = Authentication.getInstance();
+
+    private Boolean isAuthorized = false;
 
     // Required empty public constructor
     public InteractWithRobot() {}
@@ -35,29 +44,42 @@ public class InteractWithRobot extends Fragment {
 
         interactWithRobotViewModel = new ViewModelProvider(this).get(InteractWithRobotViewModel.class);
 
+        interactWithRobotViewModel.setupFirebaseListenerPermissionsUser(authentication.getUser());
+        interactWithRobotViewModel.getPermissionsUser().observe(getViewLifecycleOwner(), permission -> {
+            isAuthorized = permission;
+            Log.d("TAG", "permissions charge: " + permission);
+        });
+
         return v;
     }
 
     private void action(String interaction) {
-        switch (interaction) {
-            case "forward":
-                interactWithRobotViewModel.sendInteraction("forward");
-            case "backwards":
-                interactWithRobotViewModel.sendInteraction("backwards");
-            case "left":
-                interactWithRobotViewModel.sendInteraction("left");
-            case "right":
-                interactWithRobotViewModel.sendInteraction("right");
-            case "raise_pipette":
-                interactWithRobotViewModel.sendInteraction("raise_pipette");
-            case "lower_pipette":
-                interactWithRobotViewModel.sendInteraction("lower_pipette");
-            case "suck":
-                interactWithRobotViewModel.sendInteraction("suck");
-            case "reset":
-                interactWithRobotViewModel.sendInteraction("reset");
-            case "readColor":
-                interactWithRobotViewModel.sendInteraction("readColor");
-        }
+        if (checkPermissions()) {
+            switch (interaction) {
+                case "forward":
+                    interactWithRobotViewModel.sendInteraction("forward");
+                case "backwards":
+                    interactWithRobotViewModel.sendInteraction("backwards");
+                case "left":
+                    interactWithRobotViewModel.sendInteraction("left");
+                case "right":
+                    interactWithRobotViewModel.sendInteraction("right");
+                case "raise_pipette":
+                    interactWithRobotViewModel.sendInteraction("raise_pipette");
+                case "lower_pipette":
+                    interactWithRobotViewModel.sendInteraction("lower_pipette");
+                case "suck":
+                    interactWithRobotViewModel.sendInteraction("suck");
+                case "reset":
+                    interactWithRobotViewModel.sendInteraction("reset");
+                case "readColor":
+                    interactWithRobotViewModel.sendInteraction("readColor");
+            }
+        } else
+            Toast.makeText(UserNavigation.getInstance(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean checkPermissions() {
+        return isAuthorized;
     }
 }

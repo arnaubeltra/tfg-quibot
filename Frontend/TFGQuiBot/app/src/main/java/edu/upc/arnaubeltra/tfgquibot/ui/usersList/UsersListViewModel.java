@@ -13,7 +13,7 @@ public class UsersListViewModel extends ViewModel {
     private final RealtimeDatabase realtimeDatabase = RealtimeDatabase.getInstance();
 
     public void updateLoggedInUsers() {
-        realtimeDatabase.setLoggedInUsers();
+        realtimeDatabase.setupFirebaseListenerLoggedInUsers();
     }
 
     public LiveData<ArrayList<User>> getLoggedInUsers() {

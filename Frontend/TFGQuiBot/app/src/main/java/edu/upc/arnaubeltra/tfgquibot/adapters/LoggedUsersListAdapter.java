@@ -1,5 +1,6 @@
 package edu.upc.arnaubeltra.tfgquibot.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
     private ILoggedUserListRCVItemClicked listener;
 
     private ArrayList<User> loggedUsersList = new ArrayList<>();
-    private int index = 0;
+    //private int index = 0;
 
     private RealtimeDatabase realtimeDatabase = RealtimeDatabase.getInstance();
 
@@ -74,10 +75,13 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
 
             txtUserNameSurname = itemView.findViewById(R.id.txtUserNameSurname);
             btnGiveQuitAccess = itemView.findViewById(R.id.btnGiveQuitAccess);
-            btnGiveQuitAccess.setOnClickListener(view -> changePermission());
+            btnGiveQuitAccess.setOnClickListener(view -> changePermission(getAdapterPosition()));
 
             listener = itemClickedListener;
             itemView.setOnClickListener(this);
+
+            //index = getAdapterPosition();
+            //Log.d("TAG", "onClick: " + index);
         }
 
         @Override
@@ -85,7 +89,7 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
             listener.onUserClicked(getAdapterPosition());
         }
 
-        private void changePermission() {
+        private void changePermission(int index) {
             if (loggedUsersList.get(index).getAuthorized()) {
                 loggedUsersList.get(index).setAuthorized(false);
                 realtimeDatabase.updateAuthorizationUser(loggedUsersList.get(index).getUid(), false);

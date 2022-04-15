@@ -66,6 +66,8 @@
     <string name="txtReadColor">Llegeix color</string>
     <string name="txtRaisePipette">Pujar xeringa</string>
     <string name="txtLowerPipette">Baixar xeringa</string>
+    <string name="txtNoPermissions">Demana permisos per poder controlar el robot.</string>
+
 
     <!-- List users -->
     <string name="txtGivePermissions">Donar accés</string>

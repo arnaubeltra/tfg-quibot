@@ -29,6 +29,8 @@ public class RealtimeDatabase {
     private ArrayList<User> usersList;
     private MutableLiveData<ArrayList<User>> usersListLiveData;
 
+    private MutableLiveData<Boolean> permissionsUserLiveData;
+
     public RealtimeDatabase() {
         this.firebaseDatabase = FirebaseDatabase.getInstance();
         this.firebaseAuth = FirebaseAuth.getInstance();
@@ -46,12 +48,14 @@ public class RealtimeDatabase {
 
     public void deleteUserLoggedOut(String uid) {
         DatabaseReference databaseReference = firebaseDatabase.getReference("users");
-        Query query = databaseReference.equalTo(uid);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        //Query query = databaseReference.equalTo(uid);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                snapshot.getRef().removeValue();
+                //snapshot.getRef().removeValue();
+                snapshot.child(uid).getRef().removeValue();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("TAG", "onCancelled: ", error.toException());
@@ -66,12 +70,12 @@ public class RealtimeDatabase {
         return usersListLiveData;
     }
 
-    public void setLoggedInUsers() {
-        DatabaseReference databaseReference = firebaseDatabase.getReference("users");
-        ValueEventListener newLoggedInUserListener = new ValueEventListener() {
+    public void setupFirebaseListenerLoggedInUsers() {
+        DatabaseReference usersReference = firebaseDatabase.getReference("users");
+
+        usersReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("TAG", "onDataChange: ha canviat");
                 usersList = new ArrayList<>();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     User user = dataSnapshot.getValue(User.class);
@@ -79,16 +83,37 @@ public class RealtimeDatabase {
                 }
                 usersListLiveData.setValue(usersList);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("TAG", "onCancelled: ", databaseError.toException());
             }
-        };
-        databaseReference.addListenerForSingleValueEvent(newLoggedInUserListener);
+        });
     }
 
     public void updateAuthorizationUser(String uid, boolean status) {
         DatabaseReference databaseReference = firebaseDatabase.getReference("users");
         databaseReference.child(uid).child("authorized").setValue(status);
+    }
+
+    public LiveData<Boolean> getPermissionsUser() {
+        if (permissionsUserLiveData == null)
+            permissionsUserLiveData = new MutableLiveData<Boolean>();
+        return permissionsUserLiveData;
+    }
+
+    public void setupFirebaseListenerPermissionsUser(String uid) {
+        DatabaseReference userReference = firebaseDatabase.getReference("users/" + uid);
+        userReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                permissionsUserLiveData.setValue(snapshot.child("authorized").getValue(Boolean.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("TAG", "onCancelled: ", databaseError.toException());
+            }
+        });
     }
 }
