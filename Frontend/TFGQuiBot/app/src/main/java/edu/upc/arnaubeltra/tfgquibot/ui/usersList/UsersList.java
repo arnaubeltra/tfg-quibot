@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -25,8 +26,10 @@ public class UsersList extends Fragment implements LoggedUsersListAdapter.ILogge
     private RecyclerView rcvListLoggedInUsers;
     private LoggedUsersListAdapter loggedUsersListAdapter;
 
-    private static UsersList instance;
+    //private static UsersList instance;
     private ArrayList<User> loggedUsersList = new ArrayList<>();
+
+    private TextView textViewNoUsersLoggedIn;
 
     // Required empty public constructor
     public UsersList() {}
@@ -41,6 +44,8 @@ public class UsersList extends Fragment implements LoggedUsersListAdapter.ILogge
         super.onCreate(savedInstanceState);
         View v =  inflater.inflate(R.layout.fragment_users_list, container, false);
 
+        textViewNoUsersLoggedIn = v.findViewById(R.id.textViewNoUsersLoggedIn);
+
         loggedUsersListAdapter = new LoggedUsersListAdapter(this);
         rcvListLoggedInUsers = v.findViewById(R.id.rcvListLoggedInUsers);
         rcvListLoggedInUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -53,6 +58,10 @@ public class UsersList extends Fragment implements LoggedUsersListAdapter.ILogge
             public void onChanged(ArrayList<User> users) {
                 loggedUsersList = users;
                 loggedUsersListAdapter.updateLoggedUsersList(users);
+                if (loggedUsersListAdapter.getItemCount() == 0)
+                    textViewNoUsersLoggedIn.setVisibility(View.VISIBLE);
+                else
+                    textViewNoUsersLoggedIn.setVisibility(View.INVISIBLE);
             }
         });
 

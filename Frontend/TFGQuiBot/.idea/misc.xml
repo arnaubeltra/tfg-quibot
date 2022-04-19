@@ -17,6 +17,8 @@
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/drawable/ic_baseline_swap_vertical_circle_24.xml" value="0.3425" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/drawable/ic_launcher_background.xml" value="0.168" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/drawable/ic_menu_camera.xml" value="0.168" />
+        <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/drawable/quibot_logo_background.xml" value="0.3305" />
+        <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout-v26/fragment_home_admin.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/activity_admin_login.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/activity_admin_navigation.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
@@ -26,13 +28,14 @@
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/app_bar_user_navigation.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/content_admin_navigation.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/content_user_navigation.xml" value="0.35104166666666664" />
+        <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/frag_home_admin.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/fragment_connect4.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/fragment_experiments.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/fragment_home_admin.xml" value="0.35104166666666664" />
+        <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/fragment_home_admin.xml" value="0.33" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/fragment_home_user.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/fragment_interact_with_robot.xml" value="0.33" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/fragment_tic_tac_toe.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/fragment_users_list.xml" value="0.18926553672316385" />
+        <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/fragment_users_list.xml" value="0.33" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/layout_list_experiments.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/layout_list_users.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TFG/tfg-quibot/Frontend/TFGQuiBot/app/src/main/res/layout/nav_header_admin_navigation.xml" value="0.35104166666666664" />

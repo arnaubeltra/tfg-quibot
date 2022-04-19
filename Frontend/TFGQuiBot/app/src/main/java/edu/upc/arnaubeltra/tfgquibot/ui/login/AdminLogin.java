@@ -43,7 +43,8 @@ public class AdminLogin extends AppCompatActivity {
     }
 
     private void login() {
-        String email = emailUser.getText().toString();
+        goToHomeActivityAdmin();
+        /*String email = emailUser.getText().toString();
         String password = passwordUser.getText().toString();
 
         if (!email.matches(emailPattern)) {
@@ -65,7 +66,7 @@ public class AdminLogin extends AppCompatActivity {
                     Toast.makeText(AdminLogin.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
                 }
             });
-        }
+        }*/
     }
 
     private void goToHomeActivityAdmin() {

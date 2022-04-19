@@ -72,5 +72,8 @@
     <!-- List users -->
     <string name="txtGivePermissions">Donar accés</string>
     <string name="txtQuitPermissions">Treure accés</string>
+    <string name="txtNoUsersLoggedIn">Cap usuari ha accedit a l\'aplicació.</string>
+
+    <!--<string name="txtHomeAdmin">Benvingut a l\'aplicació Qui-Bot H2O.\n\nCom a administrador pots:\nConsultar la llista d\'experimentsInteractuar amb el robotVeure la llista d'usuaris no administradors que estan utilitzant l\'aplicació.</string>-->
 
 </resources>

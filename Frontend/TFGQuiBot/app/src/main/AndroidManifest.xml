@@ -14,11 +14,13 @@
         <activity
             android:name=".ui.login.AdminLogin"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible|adjustPan"/>
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.login.Login"
             android:exported="true"
-            android:windowSoftInputMode="stateVisible|adjustPan">
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,11 +37,13 @@
         <activity
             android:name=".ui.login.Register"
             android:exported="false"
-            android:windowSoftInputMode="stateVisible|adjustPan" />
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".UserNavigation"
             android:exported="false"
-            android:theme="@style/Theme.TFGQuiBot.NoActionBar" />
+            android:theme="@style/Theme.TFGQuiBot.NoActionBar"
+            android:screenOrientation="portrait"/>
         <!--
 <activity
             android:name=".UserNavigation"
@@ -55,7 +59,8 @@
         <activity
             android:name=".AdminNavigation"
             android:exported="false"
-            android:theme="@style/Theme.TFGQuiBot.NoActionBar" />
+            android:theme="@style/Theme.TFGQuiBot.NoActionBar"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

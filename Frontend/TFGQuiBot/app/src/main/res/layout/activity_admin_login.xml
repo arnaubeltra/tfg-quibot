@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.login.AdminLogin"
-    android:background="@drawable/quibot_background"
+    android:background="@drawable/quibot_bg_dark"
     android:windowSoftInputMode="stateVisible|adjustPan|adjustResize">
 
     <View
