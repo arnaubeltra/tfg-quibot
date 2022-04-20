@@ -14,7 +14,7 @@ import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 public class RobotAPI extends AppCompatActivity {
 
 
-    private static final String BASE_URL = "https://localhost:5000";
+    private static final String BASE_URL = "http://192.168.223.125:10000";
     private static final String TAG = "RobotAPI";
 
     private static RobotAPI instance;
@@ -34,31 +34,33 @@ public class RobotAPI extends AppCompatActivity {
 
         switch (interaction) {
             case "forward":
-                url += "/sendInstruction?action=up";
+                url += "/sendInstruction?instruction=up";
                 break;
             case "backwards":
-                url += "/sendInstruction?action=down";
+                url += "/sendInstruction?instruction=down";
                 break;
             case "left":
-                url += "/sendInstruction?action=left";
+                url += "/sendInstruction?instruction=left";
                 break;
             case "right":
-                url += "/sendInstruction?action=right";
+                url += "/sendInstruction?instruction=right";
                 break;
             case "raise_pipette":
-                url += "/sendInstruction?action=raise_pipette";
+                url += "/sendInstruction?instruction=raise_pipette";
                 break;
             case "lower_pipette":
-                url += "/sendInstruction?action=lower_pipette";
+                url += "/sendInstruction?instruction=lower_pipette";
                 break;
             case "suck":
-                url += "/sendInstruction?action=suck";
+                url += "/sendInstruction?instruction=suck";
                 break;
             case "reset":
-                url += "/sendInstruction?action=reset";
+                url += "/sendInstruction?instruction=reset";
                 break;
             case "readColor":
-                url += "/sendInstruction?action=readColor";
+                url += "/sendInstruction?instruction=readColor";
+                break;
+            default:
                 break;
         }
 
@@ -68,7 +70,7 @@ public class RobotAPI extends AppCompatActivity {
             } catch (Exception ex) {
                 Log.d(TAG, "onResponse: Cannot execute action (API)");
             }
-        }, error -> Log.d(TAG, "interactWithRobot: Error trying to connect with API"));
+        }, error -> Log.d(TAG, "error: " + error));
         queue.add(stringRequest);
     }
 }

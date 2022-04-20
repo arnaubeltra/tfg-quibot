@@ -5,7 +5,7 @@ import socket
 
 app = Flask(__name__)
 
-HOST = '10.42.0.184'
+HOST = '10.42.0.112'
 PORT = 9999
 
 socket_conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -74,4 +74,4 @@ def checkWinner(listPositions):
 
 if __name__ == '__main__':
 
-    app.run(port = 10000)
+    app.run(host = '0.0.0.0', port = 10000)# , debug = True)#host = '0.0.0.0', , port = 10000)

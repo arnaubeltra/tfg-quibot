@@ -58,22 +58,33 @@ public class InteractWithRobot extends Fragment {
             switch (interaction) {
                 case "forward":
                     interactWithRobotViewModel.sendInteraction("forward");
+                    break;
                 case "backwards":
                     interactWithRobotViewModel.sendInteraction("backwards");
+                    break;
                 case "left":
                     interactWithRobotViewModel.sendInteraction("left");
+                    break;
                 case "right":
                     interactWithRobotViewModel.sendInteraction("right");
+                    break;
                 case "raise_pipette":
                     interactWithRobotViewModel.sendInteraction("raise_pipette");
+                    break;
                 case "lower_pipette":
                     interactWithRobotViewModel.sendInteraction("lower_pipette");
+                    break;
                 case "suck":
                     interactWithRobotViewModel.sendInteraction("suck");
+                    break;
                 case "reset":
                     interactWithRobotViewModel.sendInteraction("reset");
+                    break;
                 case "readColor":
                     interactWithRobotViewModel.sendInteraction("readColor");
+                    break;
+                default:
+                    break;
             }
         } else
             Toast.makeText(UserNavigation.getInstance(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
