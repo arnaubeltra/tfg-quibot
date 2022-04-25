@@ -14,7 +14,7 @@ import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 public class RobotAPI extends AppCompatActivity {
 
 
-    private static final String BASE_URL = "http://192.168.223.125:10000";
+    private static final String BASE_URL = "http://192.168.100.2:10000";
     private static final String TAG = "RobotAPI";
 
     private static RobotAPI instance;

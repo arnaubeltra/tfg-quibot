@@ -20,21 +20,27 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityUserNavigationBinding;
 import edu.upc.arnaubeltra.tfgquibot.firebase.Authentication;
 import edu.upc.arnaubeltra.tfgquibot.firebase.RealtimeDatabase;
+import edu.upc.arnaubeltra.tfgquibot.socket.SocketConnection;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 
 public class UserNavigation extends AppCompatActivity {
 
     public static UserNavigation instance;
 
-    private FirebaseAuth firebaseAuth;
-    private Authentication authentication;
     private RealtimeDatabase realtimeDatabase;
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityUserNavigationBinding binding;
+
+    private SocketConnection socketConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +48,7 @@ public class UserNavigation extends AppCompatActivity {
 
         instance = this;
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        authentication = Authentication.getInstance();
+        socketConnection = SocketConnection.getInstance();
         realtimeDatabase = RealtimeDatabase.getInstance();
 
         realtimeDatabase.getLoggedInUsers();
@@ -88,16 +93,19 @@ public class UserNavigation extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logout:
-                deleteLoggedUser();
-                firebaseAuth.signOut();
+                Socket socket = socketConnection.socketConnectionServer;
+                new Thread(() -> {
+                    try {
+                        socket.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
                 goToLoginActivity();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteLoggedUser() {
-        realtimeDatabase.deleteUserLoggedOut(authentication.getUser());
-    }
 
     private void goToLoginActivity() {
         Intent intent = new Intent(UserNavigation.this, Login.class);

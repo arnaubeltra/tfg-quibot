@@ -15,12 +15,16 @@ import android.widget.Toast;
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.firebase.Authentication;
+import edu.upc.arnaubeltra.tfgquibot.socket.SocketConnection;
+import edu.upc.arnaubeltra.tfgquibot.socket.SocketFunctions;
 
 public class InteractWithRobot extends Fragment {
 
     private InteractWithRobotViewModel interactWithRobotViewModel;
 
-    private Authentication authentication = Authentication.getInstance();
+    //private Authentication authentication = Authentication.getInstance();
+
+    private SocketFunctions socketFunctions;
 
     private Boolean isAuthorized = false;
 
@@ -30,6 +34,10 @@ public class InteractWithRobot extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        socketFunctions = SocketFunctions.getInstance();
+        socketFunctions.checkPermissions();
+
         View v = inflater.inflate(R.layout.fragment_interact_with_robot, container, false);
 
         v.findViewById(R.id.btnForward).setOnClickListener(view -> action("forward"));
@@ -44,7 +52,7 @@ public class InteractWithRobot extends Fragment {
 
         interactWithRobotViewModel = new ViewModelProvider(this).get(InteractWithRobotViewModel.class);
 
-        interactWithRobotViewModel.setupFirebaseListenerPermissionsUser(authentication.getUser());
+        //interactWithRobotViewModel.setupFirebaseListenerPermissionsUser(authentication.getUser());
         interactWithRobotViewModel.getPermissionsUser().observe(getViewLifecycleOwner(), permission -> {
             isAuthorized = permission;
             Log.d("TAG", "permissions charge: " + permission);
@@ -54,7 +62,7 @@ public class InteractWithRobot extends Fragment {
     }
 
     private void action(String interaction) {
-        if (checkPermissions()) {
+        if (socketFunctions.checkPermissions()) {
             switch (interaction) {
                 case "forward":
                     interactWithRobotViewModel.sendInteraction("forward");
