@@ -1,5 +1,6 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.interactWithRobot;
 
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,15 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.firebase.Authentication;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
 
 public class InteractWithRobot extends Fragment {
 
     private InteractWithRobotViewModel interactWithRobotViewModel;
-
-    private Authentication authentication = Authentication.getInstance();
 
     private Boolean isAuthorized = false;
 
@@ -42,12 +46,17 @@ public class InteractWithRobot extends Fragment {
         v.findViewById(R.id.btnReset).setOnClickListener(view -> action("reset"));
         v.findViewById(R.id.btnReadColor).setOnClickListener(view -> action("readColor"));
 
-        interactWithRobotViewModel = new ViewModelProvider(this).get(InteractWithRobotViewModel.class);
+        interactWithRobotViewModel = new ViewModelProvider(Login.getContext()).get(InteractWithRobotViewModel.class);
 
-        interactWithRobotViewModel.setupFirebaseListenerPermissionsUser(authentication.getUser());
-        interactWithRobotViewModel.getPermissionsUser().observe(getViewLifecycleOwner(), permission -> {
-            isAuthorized = permission;
-            Log.d("TAG", "permissions charge: " + permission);
+        PermissionsViewModel permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
+        permissionsViewModel.checkUserPermissions(Login.getIpAddress());
+        permissionsViewModel.getUserPermissions().observe(getViewLifecycleOwner(), auth -> {
+            try {
+                JSONObject responseObject = new JSONObject(auth);
+                isAuthorized = responseObject.getString("response").equals("true");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         });
 
         return v;

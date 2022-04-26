@@ -1,36 +1,41 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.gson.Gson;
 
-import edu.upc.arnaubeltra.tfgquibot.AdminNavigation;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
-import edu.upc.arnaubeltra.tfgquibot.firebase.Authentication;
-import edu.upc.arnaubeltra.tfgquibot.firebase.RealtimeDatabase;
-import edu.upc.arnaubeltra.tfgquibot.models.User;
 
 public class Login extends AppCompatActivity {
 
+    public static Login instance;
     private EditText nameUser, surnameUser;
-
-    private FirebaseAuth firebaseAuth;
-    private Authentication authentication;
+    private LoginViewModel loginViewModel;
     private ProgressDialog loginDialog;
+    private static String ipAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        instance = this;
 
         nameUser = findViewById(R.id.inputNameUser);
         surnameUser = findViewById(R.id.inputSurnameUser);
@@ -38,15 +43,30 @@ public class Login extends AppCompatActivity {
         findViewById(R.id.btnLogin).setOnClickListener(view -> login());
         findViewById(R.id.textViewEnterAsAdmin).setOnClickListener(view -> goToAdminLogin());
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        authentication = Authentication.getInstance();
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         loginDialog = new ProgressDialog(this);
+
+        WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(WIFI_SERVICE);
+        ipAddress = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
+    }
+
+    public static Context getInstance() {
+        return instance.getApplicationContext();
+    }
+
+    public static Login getContext() {
+        return instance;
+    }
+
+    public static String getIpAddress() {
+        return ipAddress;
     }
 
     private void login() {
         String name = nameUser.getText().toString();
         String surname = surnameUser.getText().toString();
+
 
 
         if (name.isEmpty())
@@ -59,32 +79,22 @@ public class Login extends AppCompatActivity {
             loginDialog.setCanceledOnTouchOutside(false);
             loginDialog.show();
 
-            firebaseAuth.signInAnonymously().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
+            loginViewModel.newUserLogin(ipAddress, name, surname, "false");
+            loginViewModel.getNewUserLoginResponse().observe(this, response -> {
+                try {
+                    JSONObject responseObject = new JSONObject(response);
+                    if (responseObject.getString("response").equals("login-user-success"))
+                        goToHomeActivityUser();
+                    else Toast.makeText(Login.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
                     loginDialog.dismiss();
-                    notifyNewUserLogin(authentication.getUser(), name, surname);
-                    goToHomeActivityUser();
-                } else {
-                    loginDialog.dismiss();
-                    Toast.makeText(Login.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             });
         }
     }
 
-    private void notifyNewUserLogin(String uid, String name, String surname) {
-        /*String uidHash = "";
-        try {
-            uidHash = createHash(name, surname);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }*/
-        User userLogged = new User(uid, name, surname, false);
-        RealtimeDatabase.getInstance().newUserLogged(userLogged);
-    }
-
     private void goToHomeActivityUser() {
-        Log.d("hello", "goToHomeActivity: ");
         Intent intent = new Intent(Login.this, UserNavigation.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
@@ -93,20 +103,4 @@ public class Login extends AppCompatActivity {
     private void goToAdminLogin() {
         startActivity(new Intent(Login.this, AdminLogin.class));
     }
-
-    /*private String createHash(String name, String surname) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-        messageDigest.reset();
-        messageDigest.update((name + " " + surname).getBytes());
-        byte[] digest = messageDigest.digest();
-
-        BigInteger bigInteger = new BigInteger(1, digest);
-        String hashCode = bigInteger.toString(16);
-
-        while(hashCode.length() < 32 ){
-            hashCode = "0" + hashCode;
-        }
-
-        return hashCode;
-    }*/
 }
