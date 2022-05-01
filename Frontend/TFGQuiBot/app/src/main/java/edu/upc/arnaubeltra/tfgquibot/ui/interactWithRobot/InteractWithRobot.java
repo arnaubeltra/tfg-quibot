@@ -1,13 +1,10 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.interactWithRobot;
 
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +15,6 @@ import org.json.JSONObject;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
-import edu.upc.arnaubeltra.tfgquibot.firebase.Authentication;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
 
@@ -94,7 +90,7 @@ public class InteractWithRobot extends Fragment {
 
     private void checkPermissions() {
         permissionsViewModel.checkUserPermissions(Login.getIpAddress());
-        permissionsViewModel.getUserPermissions().observe(getViewLifecycleOwner(), auth -> {
+        permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
             try {
                 JSONObject responseObject = new JSONObject(auth);
                 isAuthorized = responseObject.getString("response").equals("true");

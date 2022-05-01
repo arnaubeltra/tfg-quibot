@@ -11,6 +11,7 @@ public class PermissionsViewModel extends ViewModel {
     private RobotAPI robotAPI = RobotAPI.getInstance();
 
     private static MutableLiveData<String> permissionsLiveData;
+    private static MutableLiveData<String> changePermissionsLiveData;
 
     public void checkUserPermissions(String user) {
         if (permissionsLiveData == null)
@@ -18,11 +19,25 @@ public class PermissionsViewModel extends ViewModel {
         robotAPI.checkPermissionsUser(user);
     }
 
-    public LiveData<String> getUserPermissions() {
+    public LiveData<String> getUserPermissionsResponse() {
         return permissionsLiveData;
     }
 
-    public void setUserPermissions(String response) {
+    public void setUserPermissionsResponse(String response) {
         permissionsLiveData.setValue(response);
+    }
+
+    public void changeUserPermissions(String user, String auth) {
+        if (changePermissionsLiveData == null)
+            changePermissionsLiveData = new MutableLiveData<>();
+        robotAPI.changePermissionsUser(user, auth);
+    }
+
+    public LiveData<String> getUserPermissionsChangeResponse() {
+        return changePermissionsLiveData;
+    }
+
+    public void setUserPermissionsChangeResponse(String response) {
+        changePermissionsLiveData.setValue(response);
     }
 }

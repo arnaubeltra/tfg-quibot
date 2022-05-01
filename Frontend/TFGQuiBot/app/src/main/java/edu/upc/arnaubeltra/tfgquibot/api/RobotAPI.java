@@ -2,8 +2,6 @@ package edu.upc.arnaubeltra.tfgquibot.api;
 
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -11,14 +9,19 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.upc.arnaubeltra.tfgquibot.NavigationViewModel;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
+import edu.upc.arnaubeltra.tfgquibot.models.ListUsersAPI;
+import edu.upc.arnaubeltra.tfgquibot.models.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersListViewModel;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
 
 public class RobotAPI extends ViewModel {
@@ -31,14 +34,12 @@ public class RobotAPI extends ViewModel {
     private RequestQueue getRequestQueue;
     private RequestQueue postRequestQueue;
 
-    private String getRequestResponse;
-    private String postRequestResponse;
-
-    private static MutableLiveData<String> postRequestResponseLiveData;
-
     private LoginViewModel loginViewModel;
     private NavigationViewModel navigationViewModel;
     private PermissionsViewModel permissionsViewModel;
+    private UsersListViewModel usersListViewModel;
+
+    private ArrayList<User> loggedUsersList;
 
     public static RobotAPI getInstance() {
         if (instance == null) instance = new RobotAPI();
@@ -113,11 +114,16 @@ public class RobotAPI extends ViewModel {
         getRequest(url, "checkPermissionsUser");
     }
 
-    public String changePermissionsUser(String userIP, String auth) {
+    public void changePermissionsUser(String userIP, String auth) {
         String url = BASE_URL + "/user/change-permissions?user=" + userIP + "&isAuthorized=" + auth;
         getRequest(url, "changePermissionsUser");
-        return getRequestResponse;
     }
+
+    public void getLoggedInUsersList() {
+        String url = BASE_URL + "/list-users";
+        getRequest(url, "getLoggedInUsersList");
+    }
+
 
     private void getRequest(String url, String callFun) {
         if (getRequestQueue == null)
@@ -128,7 +134,7 @@ public class RobotAPI extends ViewModel {
                     try {
                         parseGetResponse(response, callFun);
                     } catch (Exception ex) {
-                        Log.d(TAG, "onResponse: Cannot execute action (API)");
+                        Log.d(TAG, "onResponse: Cannot execute action (API)" + ex);
                     }
                 }, 
                 error -> Log.d(TAG, "Get error: " + error));
@@ -139,6 +145,7 @@ public class RobotAPI extends ViewModel {
         loginViewModel = new ViewModelProvider(Login.getContext()).get(LoginViewModel.class);
         navigationViewModel = new ViewModelProvider(Login.getContext()).get(NavigationViewModel.class);
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
+        usersListViewModel = new ViewModelProvider(Login.getContext()).get(UsersListViewModel.class);
 
         switch (callFun) {
             case "adminLogin":
@@ -151,7 +158,34 @@ public class RobotAPI extends ViewModel {
                 navigationViewModel.setLogoutAdminResponse(response);
                 break;
             case "checkPermissionsUser":
-                permissionsViewModel.setUserPermissions(response);
+                permissionsViewModel.setUserPermissionsResponse(response);
+                break;
+            case "changePermissionsUser":
+                permissionsViewModel.setUserPermissionsChangeResponse(response);
+                break;
+            case "getLoggedInUsersList":
+                //Log.d("TAG", "parseGetResponse: " + response);
+                loggedUsersList = new ArrayList<>();
+                Gson gson = new GsonBuilder().create();
+                ListUsersAPI listUsersAPI = gson.fromJson(response, ListUsersAPI.class);
+                if (listUsersAPI != null) {
+                    for (int i = 0; i < listUsersAPI.getUsers().size(); i++) {
+                        User user = new User(listUsersAPI.getUsers().get(i).getUid(),
+                                listUsersAPI.getUsers().get(i).getName(),
+                                listUsersAPI.getUsers().get(i).getSurname(),
+                                listUsersAPI.getUsers().get(i).getAuthorized());
+                        loggedUsersList.add(user);
+                    }
+
+                    Log.d("TAG", "parseGetResponse: " + listUsersAPI.getUsers());
+                    /*User user = new User(listUsersAPI.getUser().getUid(),
+                            listUsersAPI.getUser().getName(),
+                            listUsersAPI.getUser().getSurname(),
+                            listUsersAPI.getUser().getAuthorized());
+                    loggedUsersList.add(user);*/
+                    //Log.d("TAG", "parseGetResponse list: " + loggedUsersList.get(1));
+                }
+                usersListViewModel.setLoggedInUsersListResponse(loggedUsersList);
                 break;
         }
     }
