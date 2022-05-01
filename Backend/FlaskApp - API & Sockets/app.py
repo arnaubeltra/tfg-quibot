@@ -2,11 +2,21 @@ from flask import Flask, request, jsonify
 
 from user import *
 
+import socket
+
 app = Flask(__name__)
 
 connectedUsers = {}
 connectedAdmins = 0
 
+# IP and Ports for socket connections
+HOST_ROBOT = '192.168.100.15'
+PORT_ROBOT = 9999
+
+#robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+
+# Mobile App API
 @app.route('/user/login', methods = ['POST'])
 def loginUser():
     global connectedUsers
@@ -55,20 +65,6 @@ def checkPermissionsUser():
         return jsonify(response)
     return ""
 
-@app.route('/list-users', methods = ['GET'])
-def listUsers():
-    global connectedUsers
-    if (request.method == 'GET'):
-        if (len(connectedUsers) != 0):
-            response = {}
-            for user in connectedUsers:
-                value = connectedUsers[user]
-                response[user] = {'name': value.getName(), 'surname': value.getSurname(), 'isAuthorized': value.getIsAuthorized()}
-                return jsonify(response)
-    return ""
-
-
-
 @app.route('/user/change-permissions', methods = ['GET'])
 def changePermissionsUser():
     global connectedUsers
@@ -82,7 +78,21 @@ def changePermissionsUser():
         return jsonify(response)
     return ""
 
-#Interaction with robot
+@app.route('/list-users', methods = ['GET'])
+def listUsers():
+    global connectedUsers
+    listResponse = []
+    if (request.method == 'GET'):
+        if (len(connectedUsers) != 0):
+            response = {}
+            for user in connectedUsers:
+                value = connectedUsers[user]
+                listResponse.append({'uid': user, 'name': value.getName(), 'surname': value.getSurname(), 'isAuthorized': value.getIsAuthorized()})
+                response["users"] = listResponse
+            return jsonify(response)
+    return ""
+
+# Interaction with robot
 @app.route("/sendInstruction", methods = ['GET'])
 def sendInstruction():
     global robotSocket
@@ -92,4 +102,7 @@ def sendInstruction():
     return ""
 
 if __name__ == '__main__':
+    #robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
     app.run(host = '0.0.0.0', port = 10000, debug = True)
+    
