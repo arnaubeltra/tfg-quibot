@@ -1,0 +1,22 @@
+================================
+==== DESCRIPCIÓ API QUI-BOT ====
+================================
+
+- Inici sessió  -->  /user/login (POST)
+
+- Inici sessió admin  -->  /admin/login  (GET)
+
+- Tancar sessió  -->  /user/logout?user={ip}  (GET)
+
+- Tancar sessió admin  -->  /admin/logout  (GET)
+
+- Comprovar permisos  -->  /user/check-permissions?user={ip}  (GET)
+
+- Llistar-usuaris  -->  /list-users  (GET)
+
+- Donar/treure permís  -->  /user/change-permissions?user={ip}&isAuthorized={true/false}  (GET)
+
+- Iniciar socket joc  -->  /init-game-communication  (GET)
+
+
+Quan s'inicia un joc, s'arriba a un endpoint de la API i s'estableix la connexió entre la APP i el servidor.
