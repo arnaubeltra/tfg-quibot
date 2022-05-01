@@ -2,9 +2,12 @@ package edu.upc.arnaubeltra.tfgquibot;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.Formatter;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -12,6 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -19,23 +24,22 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityAdminNavigationBinding;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 
 public class AdminNavigation extends AppCompatActivity {
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityAdminNavigationBinding binding;
+
+    private NavigationViewModel navigationViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
 
         binding = ActivityAdminNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -53,9 +57,9 @@ public class AdminNavigation extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_admin_navigation);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navigationViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,8 +79,16 @@ public class AdminNavigation extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logout:
-                firebaseAuth.signOut();
-                goToLoginActivity();
+                navigationViewModel.logoutAdmin();
+                navigationViewModel.getLogoutAdminResponse().observe(this, response -> {
+                    try {
+                        JSONObject responseObject = new JSONObject(response);
+                        if (responseObject.getString("response").equals("logout-admin-success"))
+                            goToLoginActivity();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
         }
         return super.onOptionsItemSelected(item);
     }

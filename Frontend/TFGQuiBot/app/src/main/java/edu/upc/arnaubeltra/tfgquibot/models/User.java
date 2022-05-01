@@ -1,12 +1,12 @@
 package edu.upc.arnaubeltra.tfgquibot.models;
 
 public class User {
-    private String uid, name, surname;
-    private Boolean isAuthorized;
+    private String uid, name, surname, isAuthorized;
+    //private Boolean isAuthorized;
 
     public User() {}
 
-    public User(String uid, String name, String surname, Boolean isAuthorized) {
+    public User(String uid, String name, String surname, String isAuthorized) {
         this.uid = uid;
         this.name = name;
         this.surname = surname;
@@ -37,11 +37,11 @@ public class User {
         this.surname = surname;
     }
 
-    public Boolean getAuthorized() {
+    public String getAuthorized() {
         return isAuthorized;
     }
 
-    public void setAuthorized(Boolean authorized) {
+    public void setAuthorized(String authorized) {
         isAuthorized = authorized;
     }
 }

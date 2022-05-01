@@ -67,4 +67,7 @@ dependencies {
 
     /* Material design */
     implementation 'com.google.android.material:material:<version>'
+
+    /* JSON parse */
+    implementation 'com.google.code.gson:gson:2.8.6'
 }

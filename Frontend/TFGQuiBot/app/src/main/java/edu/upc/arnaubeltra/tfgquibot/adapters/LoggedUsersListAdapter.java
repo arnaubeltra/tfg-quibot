@@ -8,16 +8,20 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.firebase.RealtimeDatabase;
 import edu.upc.arnaubeltra.tfgquibot.models.User;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersList;
+import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
 
 public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersListAdapter.LoggedUsersListViewHolder> {
+
+    private PermissionsViewModel permissionsViewModel;
 
     public interface ILoggedUserListRCVItemClicked {
         void onUserClicked(int index);
@@ -26,9 +30,7 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
     private ILoggedUserListRCVItemClicked listener;
 
     private ArrayList<User> loggedUsersList = new ArrayList<>();
-    //private int index = 0;
 
-    private RealtimeDatabase realtimeDatabase = RealtimeDatabase.getInstance();
 
     public LoggedUsersListAdapter(ILoggedUserListRCVItemClicked listener) {
         this.listener = listener;
@@ -51,7 +53,7 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
     public void onBindViewHolder(@NonNull LoggedUsersListAdapter.LoggedUsersListViewHolder holder, int position) {
         holder.txtUserNameSurname.setText(loggedUsersList.get(position).getName() + " " + loggedUsersList.get(position).getSurname());
 
-        if (loggedUsersList.get(position).getAuthorized().equals(false)) {
+        if (loggedUsersList.get(position).getAuthorized().equals("false")) {
             holder.btnGiveQuitAccess.setText(R.string.txtGivePermissions);
         } else {
             holder.btnGiveQuitAccess.setText(R.string.txtQuitPermissions);
@@ -79,9 +81,6 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
 
             listener = itemClickedListener;
             itemView.setOnClickListener(this);
-
-            //index = getAdapterPosition();
-            //Log.d("TAG", "onClick: " + index);
         }
 
         @Override
@@ -90,13 +89,15 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
         }
 
         private void changePermission(int index) {
-            if (loggedUsersList.get(index).getAuthorized()) {
-                loggedUsersList.get(index).setAuthorized(false);
-                realtimeDatabase.updateAuthorizationUser(loggedUsersList.get(index).getUid(), false);
+            permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
+
+            if (loggedUsersList.get(index).getAuthorized().equals("true")) {
+                loggedUsersList.get(index).setAuthorized("false");
+                permissionsViewModel.changeUserPermissions(loggedUsersList.get(index).getUid(), "false");
             }
             else {
-                loggedUsersList.get(index).setAuthorized(true);
-                realtimeDatabase.updateAuthorizationUser(loggedUsersList.get(index).getUid(),true);
+                loggedUsersList.get(index).setAuthorized("true");
+                permissionsViewModel.changeUserPermissions(loggedUsersList.get(index).getUid(), "true");
             }
             updateLoggedUsersList(loggedUsersList);
         }

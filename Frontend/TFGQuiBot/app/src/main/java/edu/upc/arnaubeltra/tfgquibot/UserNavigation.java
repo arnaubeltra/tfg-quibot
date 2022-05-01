@@ -2,17 +2,16 @@ package edu.upc.arnaubeltra.tfgquibot;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Menu;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -20,33 +19,26 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityUserNavigationBinding;
-import edu.upc.arnaubeltra.tfgquibot.firebase.Authentication;
-import edu.upc.arnaubeltra.tfgquibot.firebase.RealtimeDatabase;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 
 public class UserNavigation extends AppCompatActivity {
 
     public static UserNavigation instance;
 
-    private FirebaseAuth firebaseAuth;
-    private Authentication authentication;
-    private RealtimeDatabase realtimeDatabase;
-
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityUserNavigationBinding binding;
+
+    private NavigationViewModel navigationViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         instance = this;
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        authentication = Authentication.getInstance();
-        realtimeDatabase = RealtimeDatabase.getInstance();
-
-        realtimeDatabase.getLoggedInUsers();
 
         binding = ActivityUserNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -64,6 +56,8 @@ public class UserNavigation extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_user_navigation);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navigationViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
     }
 
     public static Context getInstance() {
@@ -86,17 +80,21 @@ public class UserNavigation extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(WIFI_SERVICE);
         switch (item.getItemId()) {
             case R.id.logout:
-                deleteLoggedUser();
-                firebaseAuth.signOut();
-                goToLoginActivity();
+                navigationViewModel.logoutUser(Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress()));
+                navigationViewModel.getLogoutUserResponse().observe(this, response -> {
+                    try {
+                        JSONObject responseObject = new JSONObject(response);
+                        if (responseObject.getString("response").equals("logout-user-success"))
+                            goToLoginActivity();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void deleteLoggedUser() {
-        realtimeDatabase.deleteUserLoggedOut(authentication.getUser());
     }
 
     private void goToLoginActivity() {

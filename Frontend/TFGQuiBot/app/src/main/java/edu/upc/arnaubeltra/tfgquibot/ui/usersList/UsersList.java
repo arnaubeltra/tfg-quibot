@@ -2,22 +2,36 @@ package edu.upc.arnaubeltra.tfgquibot.ui.usersList;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import edu.upc.arnaubeltra.tfgquibot.AdminNavigation;
 import edu.upc.arnaubeltra.tfgquibot.R;
+import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.adapters.LoggedUsersListAdapter;
-import edu.upc.arnaubeltra.tfgquibot.firebase.RealtimeDatabase;
+import edu.upc.arnaubeltra.tfgquibot.models.ListUsersAPI;
 import edu.upc.arnaubeltra.tfgquibot.models.User;
 
 
@@ -31,13 +45,10 @@ public class UsersList extends Fragment implements LoggedUsersListAdapter.ILogge
 
     private TextView textViewNoUsersLoggedIn;
 
+    private UsersListViewModel usersListViewModel;
+
     // Required empty public constructor
     public UsersList() {}
-
-    /*public static UsersList getInstance() {
-        if (instance == null) instance = new UsersList();
-        return instance;
-    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,25 +62,44 @@ public class UsersList extends Fragment implements LoggedUsersListAdapter.ILogge
         rcvListLoggedInUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvListLoggedInUsers.setAdapter(loggedUsersListAdapter);
 
-        UsersListViewModel usersListViewModel = new ViewModelProvider(this).get(UsersListViewModel.class);
+
+
+        usersListViewModel = new ViewModelProvider(this).get(UsersListViewModel.class);
+        refreshUsersList();
+
+        setHasOptionsMenu(true);
+
+        return v;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        menu.findItem(R.id.reload).setVisible(true);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.reload:
+                Toast.makeText(getActivity(), R.string.txtRefreshedList, Toast.LENGTH_SHORT).show();
+                refreshUsersList();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void refreshUsersList() {
         usersListViewModel.updateLoggedInUsers();
-        usersListViewModel.getLoggedInUsers().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
+        usersListViewModel.getLoggedInUsersListResponse().observe(getViewLifecycleOwner(), new Observer<ArrayList<User>>() {
             @Override
-            public void onChanged(ArrayList<User> users) {
-                loggedUsersList = users;
-                loggedUsersListAdapter.updateLoggedUsersList(users);
+            public void onChanged(ArrayList<User> loggedUsers) {
+                loggedUsersListAdapter.updateLoggedUsersList(loggedUsers);
                 if (loggedUsersListAdapter.getItemCount() == 0)
                     textViewNoUsersLoggedIn.setVisibility(View.VISIBLE);
                 else
                     textViewNoUsersLoggedIn.setVisibility(View.INVISIBLE);
             }
         });
-
-        return v;
-    }
-
-    public void changePermission(int index) {
-
     }
 
     @Override
