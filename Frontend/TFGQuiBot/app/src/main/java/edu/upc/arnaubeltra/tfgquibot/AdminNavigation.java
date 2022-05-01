@@ -2,20 +2,12 @@ package edu.upc.arnaubeltra.tfgquibot;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.Formatter;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Menu;
-import android.widget.Button;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -29,6 +21,7 @@ import org.json.JSONObject;
 
 import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityAdminNavigationBinding;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
 
 public class AdminNavigation extends AppCompatActivity {
 

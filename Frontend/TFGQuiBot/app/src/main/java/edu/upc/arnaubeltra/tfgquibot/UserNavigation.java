@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityUserNavigationBinding;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
 
 public class UserNavigation extends AppCompatActivity {
 

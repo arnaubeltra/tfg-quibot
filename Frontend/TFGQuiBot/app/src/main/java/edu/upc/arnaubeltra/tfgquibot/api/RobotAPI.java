@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.upc.arnaubeltra.tfgquibot.NavigationViewModel;
+import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
 import edu.upc.arnaubeltra.tfgquibot.models.ListUsersAPI;
 import edu.upc.arnaubeltra.tfgquibot.models.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
@@ -164,7 +164,6 @@ public class RobotAPI extends ViewModel {
                 permissionsViewModel.setUserPermissionsChangeResponse(response);
                 break;
             case "getLoggedInUsersList":
-                //Log.d("TAG", "parseGetResponse: " + response);
                 loggedUsersList = new ArrayList<>();
                 Gson gson = new GsonBuilder().create();
                 ListUsersAPI listUsersAPI = gson.fromJson(response, ListUsersAPI.class);
@@ -176,14 +175,6 @@ public class RobotAPI extends ViewModel {
                                 listUsersAPI.getUsers().get(i).getAuthorized());
                         loggedUsersList.add(user);
                     }
-
-                    Log.d("TAG", "parseGetResponse: " + listUsersAPI.getUsers());
-                    /*User user = new User(listUsersAPI.getUser().getUid(),
-                            listUsersAPI.getUser().getName(),
-                            listUsersAPI.getUser().getSurname(),
-                            listUsersAPI.getUser().getAuthorized());
-                    loggedUsersList.add(user);*/
-                    //Log.d("TAG", "parseGetResponse list: " + loggedUsersList.get(1));
                 }
                 usersListViewModel.setLoggedInUsersListResponse(loggedUsersList);
                 break;
