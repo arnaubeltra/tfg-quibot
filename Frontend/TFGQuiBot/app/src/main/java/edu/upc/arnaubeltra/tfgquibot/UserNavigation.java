@@ -5,11 +5,16 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -35,6 +40,9 @@ public class UserNavigation extends AppCompatActivity {
 
     private NavigationViewModel navigationViewModel;
 
+    private Button btnExperiments;
+    NavController navController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,20 +54,30 @@ public class UserNavigation extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarUserNavigation.toolbar);
 
+        btnExperiments = findViewById(R.id.btnExperimentsHomeUser);
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.homeUser, R.id.experiments, R.id.interactWithRobot, R.id.ticTacToe, R.id.connect4)
+                R.id.homeUser)
                 .setOpenableLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_user_navigation);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_user_navigation);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+
+
+        btnExperiments.setOnClickListener(view -> {
+            navController.navigate(R.id.experiments);
+        });
+
         navigationViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
     }
+
+
 
     public static Context getInstance() {
         return instance.getApplicationContext();
@@ -89,6 +107,7 @@ public class UserNavigation extends AppCompatActivity {
                     try {
                         JSONObject responseObject = new JSONObject(response);
                         if (responseObject.getString("response").equals("logout-user-success"))
+                            finish();
                             goToLoginActivity();
                     } catch (JSONException e) {
                         e.printStackTrace();
