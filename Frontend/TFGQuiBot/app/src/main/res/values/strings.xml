@@ -74,6 +74,7 @@
     <string name="txtPhisicalLayout">Disposició per jugar al joc.</string>
     <string name="txtClose">Tancar</string>
     <string name="txtPermissionsPlayTicTacToe">Demana permisos per jugar al Tres en ratlla</string>
+    <string name="txtRobotNotConnected">El robot no està connectat!</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txtReset">Reset</string>
@@ -81,6 +82,10 @@
     <string name="txtRaisePipette">Pujar xeringa</string>
     <string name="txtLowerPipette">Baixar xeringa</string>
     <string name="txtNoPermissions">Demana permisos per poder controlar el robot.</string>
+
+
+    <string name="txtCheckRobotConnection">Comprova que el robot estigui executant el seu programa ja que el servidor és incapaç de connectar-s\'hi.</string>
+    <string name="txtAccept">D\'acord</string>
 
 
     <!-- List users -->

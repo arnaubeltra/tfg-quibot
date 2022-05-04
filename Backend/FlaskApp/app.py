@@ -13,15 +13,6 @@ connectedAdmins = 0
 
 ticTacToe = None
 
-"""
-ticTacToePlayers = 0
-ticTacToeBoard = [[0,0,0],[0,0,0],[0,0,0]]
-ticTacToeStatus = 0
-player = 0
-x = 0
-y = 0
-"""
-
 # IP and Ports for socket connections
 HOST_ROBOT = '192.168.100.15'
 PORT_ROBOT = 10001
@@ -65,6 +56,16 @@ def adminLogout():
         response = {'response': 'logout-admin-success'}
         return jsonify(response)
     return ""
+
+@app.route('/check-robot-connection')
+def checkRobotConnection():
+    if (request.method == 'GET'):
+        try:
+            robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+            return {'response': 'robot-connection-success'}
+        except socket.error:
+            return {'response': 'robot-connection-failed'}
 
 @app.route('/user/check-permissions', methods = ['GET'])
 def checkPermissionsUser():

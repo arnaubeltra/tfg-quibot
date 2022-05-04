@@ -24,6 +24,7 @@ import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersListViewModel;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.viewModels.RobotConnectionViewModel;
 
 public class RobotAPI extends ViewModel {
 
@@ -40,6 +41,7 @@ public class RobotAPI extends ViewModel {
     private PermissionsViewModel permissionsViewModel;
     private UsersListViewModel usersListViewModel;
     private TicTacToeViewModel ticTacToeViewModel;
+    private RobotConnectionViewModel robotConnectionViewModel;
 
     private ArrayList<User> loggedUsersList;
 
@@ -146,6 +148,12 @@ public class RobotAPI extends ViewModel {
         getRequest(url, "");
     }
 
+    public void checkRobotConnection() {
+        String url = BASE_URL + "/check-robot-connection";
+        getRequest(url, "checkRobotConnection");
+    }
+
+
     private void getRequest(String url, String callFun) {
         if (getRequestQueue == null)
             getRequestQueue = Volley.newRequestQueue(Login.getInstance());
@@ -168,6 +176,7 @@ public class RobotAPI extends ViewModel {
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
         usersListViewModel = new ViewModelProvider(Login.getContext()).get(UsersListViewModel.class);
         ticTacToeViewModel = new ViewModelProvider(Login.getContext()).get(TicTacToeViewModel.class);
+        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
 
         switch (callFun) {
             case "adminLogin":
@@ -178,6 +187,9 @@ public class RobotAPI extends ViewModel {
                 break;
             case "adminLogout":
                 navigationViewModel.setLogoutAdminResponse(response);
+                break;
+            case "checkRobotConnection":
+                robotConnectionViewModel.setCheckRobotConnectionResponse(response);
                 break;
             case "checkPermissionsUser":
                 permissionsViewModel.setUserPermissionsResponse(response);

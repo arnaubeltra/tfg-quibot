@@ -1,5 +1,6 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.interactWithRobot;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,11 +18,13 @@ import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.viewModels.RobotConnectionViewModel;
 
 public class InteractWithRobot extends Fragment {
 
     private InteractWithRobotViewModel interactWithRobotViewModel;
     private PermissionsViewModel permissionsViewModel;
+    private RobotConnectionViewModel robotConnectionViewModel;
 
     private Boolean isAuthorized = false;
 
@@ -46,8 +49,33 @@ public class InteractWithRobot extends Fragment {
         interactWithRobotViewModel = new ViewModelProvider(Login.getContext()).get(InteractWithRobotViewModel.class);
 
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
+        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
+
+        checkRobotConnection();
 
         return v;
+    }
+
+    private void checkRobotConnection() {
+        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("response").equals("robot-connection-failed"))
+                    dialogWarningRobotNotConnected();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void dialogWarningRobotNotConnected() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.txtRobotNotConnected)
+                .setMessage(R.string.txtCheckRobotConnection)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void action(String interaction) {

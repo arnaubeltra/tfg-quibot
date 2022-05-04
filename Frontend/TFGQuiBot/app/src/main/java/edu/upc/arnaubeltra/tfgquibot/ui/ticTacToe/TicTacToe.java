@@ -1,9 +1,11 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.ticTacToe;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -23,6 +25,7 @@ import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.viewModels.RobotConnectionViewModel;
 
 public class TicTacToe extends Fragment {
 
@@ -38,6 +41,7 @@ public class TicTacToe extends Fragment {
 
     private TicTacToeViewModel ticTacToeViewModel;
     private PermissionsViewModel permissionsViewModel;
+    private RobotConnectionViewModel robotConnectionViewModel;
 
     private int player = 0;
 
@@ -51,6 +55,7 @@ public class TicTacToe extends Fragment {
 
         ticTacToeViewModel = new ViewModelProvider(Login.getContext()).get(TicTacToeViewModel.class);
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
+        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
 
         btnTicTacToe1 = v.findViewById(R.id.btnTicTacToe1);
         btnTicTacToe1.setOnClickListener(view -> ticTacToeMovement(0, 0));
@@ -82,10 +87,33 @@ public class TicTacToe extends Fragment {
         THREAD_RUNNING = true;
         startThreadGame();
 
+        checkRobotConnection();
         onGetRequestResponse();
         onGetUserPermissions();
 
         return v;
+    }
+
+    private void checkRobotConnection() {
+        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("response").equals("robot-connection-failed"))
+                    dialogWarningRobotNotConnected();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void dialogWarningRobotNotConnected() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.txtRobotNotConnected)
+                .setMessage(R.string.txtCheckRobotConnection)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void onGetRequestResponse() {
@@ -172,7 +200,6 @@ public class TicTacToe extends Fragment {
         permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), response -> {
             try {
                 JSONObject responseObject = new JSONObject(response);
-                Log.d("TAG", "onGetUserPermissions: " + response);
                 IS_AUTHORIZED = responseObject.getString("response").equals("true");
             } catch (JSONException e) {
                 e.printStackTrace();

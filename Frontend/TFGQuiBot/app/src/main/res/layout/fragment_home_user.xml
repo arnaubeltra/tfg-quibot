@@ -6,6 +6,18 @@ android:layout_height="match_parent"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 tools:context=".ui.homeUser.HomeUser">
 
+    <ImageView
+        android:id="@+id/imageViewBackground"
+        android:layout_width="450dp"
+        android:layout_height="636dp"
+        android:alpha="0.1"
+        android:background="@drawable/quibot_bg_light"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,18 +43,6 @@ tools:context=".ui.homeUser.HomeUser">
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.38" />
-
-            <ImageView
-                android:id="@+id/imageViewBackground"
-                android:layout_width="450dp"
-                android:layout_height="636dp"
-                android:alpha="0.1"
-                android:background="@drawable/quibot_bg_light"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/imageViewLogoUser"

@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.interactWithRobot.InteractWithRobot">
 
+    <ImageView
+        android:id="@+id/imageViewBackground"
+        android:layout_width="450dp"
+        android:layout_height="636dp"
+        android:alpha="0.1"
+        android:background="@drawable/quibot_bg_light"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
