@@ -1,20 +1,31 @@
 from flask import Flask, request, jsonify
 
 from user import *
+from ticTacToe import *
 
 import socket
+import threading
 
 app = Flask(__name__)
 
 connectedUsers = {}
 connectedAdmins = 0
 
+ticTacToe = None
+
+"""
+ticTacToePlayers = 0
+ticTacToeBoard = [[0,0,0],[0,0,0],[0,0,0]]
+ticTacToeStatus = 0
+player = 0
+x = 0
+y = 0
+"""
+
 # IP and Ports for socket connections
 HOST_ROBOT = '192.168.100.15'
-PORT_ROBOT = 9999
+PORT_ROBOT = 10001
 
-#robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
 
 # Mobile App API
 @app.route('/user/login', methods = ['POST'])
@@ -92,17 +103,83 @@ def listUsers():
             return jsonify(response)
     return ""
 
+@app.route("/start-ticTacToe")
+def startTicTacToe():
+    global ticTacToe
+    if (request.method == 'GET'):
+        if (ticTacToe is None):
+            ticTacToe = TicTacToe()
+        ticTacToe.setTicTacToeStatus(1)
+        if (ticTacToe.getTicTacToePlayers() == 0):
+            ticTacToe.setTicTacToePlayers(1)
+            return {'response': 'tic-tac-toe-start-success', 'player': 1}
+        elif (ticTacToe.getTicTacToePlayers() == 1):
+            ticTacToe.setTicTacToePlayers(2)
+            return {'response': 'tic-tac-toe-start-success', 'player': 2}
+        else:
+            return {'response': 'game-is-full'}
+    return ""
+
+@app.route("/finish-ticTacToe")
+def finishTicTacToe():
+    global ticTacToe
+    if (request.method == 'GET'):
+        ticTacToe = None
+    return ""
+
+@app.route("/status-ticTacToe")
+def statusTicTacToe():
+    global ticTacToe
+    if (request.method == 'GET'):
+        status = ticTacToe.checkBoard()
+        if (status == 1):
+            return {'response': 'winner-1'}
+        elif (status == 2):
+            return {'response': 'winner-2'}
+        else:
+            if (ticTacToe.getTicTacToePlayers() != 2):
+                print 
+                return {'response': 'waiting-for-player'}
+            elif (ticTacToe.getTicTacToeBoard() == [[0,0,0],[0,0,0],[0,0,0]]): 
+                return {'response': 'tic-tac-toe-init', 'player': ticTacToe.getPlayer()}
+            elif (ticTacToe.getTicTacToeStatus() == 0): 
+                return {'response': 'game-is-over'}
+            return {'response': 'no-winner', 'x': ticTacToe.getX(), 'y': ticTacToe.getY(), 'player': ticTacToe.getPlayer()}
+    return ""
+
+
 # Interaction with robot
 @app.route("/sendInstruction", methods = ['GET'])
 def sendInstruction():
-    global robotSocket
     if (request.method == 'GET'):
+        robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
         send = b"action " + request.args.get('instruction').encode('UTF-8')
         robotSocket.sendall(send)
+        robotSocket.close()
+    return ""
+    
+@app.route("/ticTacToePosition", methods = ['GET'])
+def ticTacToePosition():
+    global ticTacToe
+    if (request.method == 'GET'):
+        ticTacToe.setX(request.args.get('x')) 
+        ticTacToe.setY(request.args.get('y')) 
+        ticTacToe.setPlayer(request.args.get('player'))
+        if (ticTacToe.getTicTacToeBoard()[int(ticTacToe.getX())][int(ticTacToe.getY())] == 0):
+            board = ticTacToe.getTicTacToeBoard()
+            board[int(ticTacToe.getX())][int(ticTacToe.getY())] = int(ticTacToe.getPlayer())
+            ticTacToe.setTicTacToeBoard(board)
+            robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+            send = b"tic_tac_toe_put_chip " + " ".join([ticTacToe.getX(), ticTacToe.getY(), ticTacToe.getPlayer()]).encode('UTF-8')
+            robotSocket.sendall(send)
+            robotSocket.close()
+            return {'response': 'tic-tac-toe-position-success', 'x': ticTacToe.getX(), 'y': ticTacToe.getY()}       
+        else:
+            return {'response': 'tic-tac-toe-position-full'}
     return ""
 
 if __name__ == '__main__':
-    #robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
     app.run(host = '0.0.0.0', port = 10000, debug = True)
     

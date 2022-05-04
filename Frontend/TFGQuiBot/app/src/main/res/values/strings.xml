@@ -53,13 +53,27 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="txtFailedStartingGame">Failed starting game</string>
+    <string name="txtGameIsFull">El joc està ple</string>
+    <string name="txtGameIsOver">S\'ha acabat la partida</string>
+    <string name="txtYouWon">Has guanyat!</string>
+    <string name="txtYouLost">Has perdut</string>
+    <string name="txtWaitRobot">Espera que el robot faci la seva acció</string>
+    <string name="txtPositionFull">La posició està ocupada</string>
 
     <string name="txtGameStarted">El joc ha començat</string>
     <string name="txtEndGame">Finalitzar partida</string>
     <string name="txtFirstStartNewGame">Per poder jugar, primer inicia un nou joc.</string>
     <string name="txtYourTurn">El teu torn</string>
     <string name="txtHisTurn">El seu torn</string>
-
+    <string name="txtYouPlayWithX">Jugues amb: X</string>
+    <string name="txtYouPlayWithO">Jugues amb: O</string>
+    <string name="txtWaitingForPlayer">Esperant a l\'altre jugador</string>
+    <string name="txtCantPlayWaitingOtherPlayer">No pots jugar. Cal un altre jugador.</string>
+    <string name="txtNotYourTurn">No és el teu torn</string>
+    <string name="txtPhisicalLayout">Disposició per jugar al joc.</string>
+    <string name="txtClose">Tancar</string>
+    <string name="txtPermissionsPlayTicTacToe">Demana permisos per jugar al Tres en ratlla</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txtReset">Reset</string>

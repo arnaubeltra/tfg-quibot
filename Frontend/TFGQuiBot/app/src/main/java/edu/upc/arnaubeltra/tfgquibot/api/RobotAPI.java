@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.upc.arnaubeltra.tfgquibot.ui.ticTacToe.TicTacToeViewModel;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
 import edu.upc.arnaubeltra.tfgquibot.models.ListUsersAPI;
 import edu.upc.arnaubeltra.tfgquibot.models.User;
@@ -38,6 +39,7 @@ public class RobotAPI extends ViewModel {
     private NavigationViewModel navigationViewModel;
     private PermissionsViewModel permissionsViewModel;
     private UsersListViewModel usersListViewModel;
+    private TicTacToeViewModel ticTacToeViewModel;
 
     private ArrayList<User> loggedUsersList;
 
@@ -124,6 +126,25 @@ public class RobotAPI extends ViewModel {
         getRequest(url, "getLoggedInUsersList");
     }
 
+    public void startTicTacToe(String userIP) {
+        String url = BASE_URL + "/start-ticTacToe"; //?user=" + userIP;
+        getRequest(url, "ticTacToe");
+    }
+
+    public void ticTacToePosition(int player, int x, int y) {
+        String url = BASE_URL + "/ticTacToePosition?x=" + x + "&y=" + y + "&player=" + player;
+        getRequest(url, "ticTacToe");
+    }
+
+    public void checkStatusTicTacToe() {
+        String url = BASE_URL + "/status-ticTacToe";
+        getRequest(url, "ticTacToe");
+    }
+
+    public void finishGameTicTacToe() {
+        String url = BASE_URL + "/finish-ticTacToe";
+        getRequest(url, "");
+    }
 
     private void getRequest(String url, String callFun) {
         if (getRequestQueue == null)
@@ -146,6 +167,7 @@ public class RobotAPI extends ViewModel {
         navigationViewModel = new ViewModelProvider(Login.getContext()).get(NavigationViewModel.class);
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
         usersListViewModel = new ViewModelProvider(Login.getContext()).get(UsersListViewModel.class);
+        ticTacToeViewModel = new ViewModelProvider(Login.getContext()).get(TicTacToeViewModel.class);
 
         switch (callFun) {
             case "adminLogin":
@@ -177,6 +199,18 @@ public class RobotAPI extends ViewModel {
                     }
                 }
                 usersListViewModel.setLoggedInUsersListResponse(loggedUsersList);
+                break;
+            /*case "startTicTacToe":
+                ticTacToeViewModel.setStartNewGameResponse(response);
+                break;
+            case "ticTacToePosition":
+                ticTacToeViewModel.setTicTacToePositionResponse(response);
+                break;
+            case "checkStatusTicTacToe":
+                ticTacToeViewModel.setTicTacToeCheckStatusResponse(response);
+                break;*/
+            case "ticTacToe":
+                ticTacToeViewModel.setTicTacToeRequestResponse(response);
                 break;
         }
     }

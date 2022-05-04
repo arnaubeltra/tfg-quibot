@@ -1,8 +1,9 @@
-class User:
-    def __init__(self, name, surname, isAuthorized):
+class User(object):
+    def __init__(self, name, surname, isAuthorized, player = None):
         self.name = name
         self.surname = surname
         self.isAuthorized = isAuthorized
+        self.player = player
 
     def getName(self):
         return self.name
@@ -15,3 +16,9 @@ class User:
 
     def setIsAuthorized(self, value):
         self.isAuthorized =  value
+
+    def getPlayer(self):
+        return self.player
+
+    def setPlayer(self, newPlayer):
+        self.player = newPlayer
