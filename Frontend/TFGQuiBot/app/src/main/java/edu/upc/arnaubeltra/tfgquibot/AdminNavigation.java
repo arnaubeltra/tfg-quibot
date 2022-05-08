@@ -30,6 +30,8 @@ public class AdminNavigation extends AppCompatActivity {
 
     private NavigationViewModel navigationViewModel;
 
+    public static NavController navController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +46,18 @@ public class AdminNavigation extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.homeAdmin, R.id.experiments, R.id.interactWithRobot, R.id.usersList)
+                R.id.homeAdmin)
                 .setOpenableLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_admin_navigation);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_admin_navigation);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
+    }
+
+    public static NavController getNavController() {
+        return navController;
     }
 
     @Override

@@ -32,8 +32,14 @@ public class InteractWithRobot extends Fragment {
     public InteractWithRobot() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_interact_with_robot, container, false);
 
         v.findViewById(R.id.btnForward).setOnClickListener(view -> action("forward"));

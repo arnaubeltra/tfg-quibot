@@ -49,8 +49,14 @@ public class TicTacToe extends Fragment {
     public TicTacToe() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_tic_tac_toe, container, false);
 
         ticTacToeViewModel = new ViewModelProvider(Login.getContext()).get(TicTacToeViewModel.class);

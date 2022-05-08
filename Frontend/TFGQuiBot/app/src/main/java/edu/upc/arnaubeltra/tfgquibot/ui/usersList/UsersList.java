@@ -51,8 +51,14 @@ public class UsersList extends Fragment implements LoggedUsersListAdapter.ILogge
     public UsersList() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //super.onCreate(savedInstanceState);
         View v =  inflater.inflate(R.layout.fragment_users_list, container, false);
 
         textViewNoUsersLoggedIn = v.findViewById(R.id.textViewNoUsersLoggedIn);

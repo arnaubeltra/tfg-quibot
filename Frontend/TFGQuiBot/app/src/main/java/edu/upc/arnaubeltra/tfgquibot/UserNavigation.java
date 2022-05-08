@@ -41,7 +41,7 @@ public class UserNavigation extends AppCompatActivity {
     private NavigationViewModel navigationViewModel;
 
     private Button btnExperiments;
-    NavController navController;
+    public static NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class UserNavigation extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarUserNavigation.toolbar);
 
-        btnExperiments = findViewById(R.id.btnExperimentsHomeUser);
+        //btnExperiments = findViewById(R.id.btnExperimentsHomeUser);
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
@@ -68,19 +68,20 @@ public class UserNavigation extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-
-        btnExperiments.setOnClickListener(view -> {
+        /*btnExperiments.setOnClickListener(view -> {
+            Log.d("TAG", "pressed");
             navController.navigate(R.id.experiments);
-        });
+        });*/
 
         navigationViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
     }
 
-
-
     public static Context getInstance() {
         return instance.getApplicationContext();
+    }
+
+    public static NavController getNavController() {
+        return navController;
     }
 
     @Override
