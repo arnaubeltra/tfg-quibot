@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -76,8 +77,12 @@ public class UserNavigation extends AppCompatActivity {
         navigationViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
     }
 
-    public static Context getInstance() {
+    public static Context getContext() {
         return instance.getApplicationContext();
+    }
+
+    public static UserNavigation getInstance() {
+        return instance;
     }
 
     public static NavController getNavController() {

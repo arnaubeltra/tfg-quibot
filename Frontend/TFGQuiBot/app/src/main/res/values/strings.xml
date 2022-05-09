@@ -9,6 +9,7 @@
     <string name="menu_home">Inici</string>
     <string name="menu_experiments">Experiments</string>
     <string name="menu_interact">Interactua amb el robot</string>
+    <string name="menu_custom_program">Programa el robot</string>
     <string name="menu_tic_tac_toe">Tres en ratlla</string>
     <string name="menu_connect4">Connecta 4</string>
     <string name="menu_users_list">Llista d\'usuaris</string>
@@ -93,6 +94,23 @@
     <string name="txtQuitPermissions">Treure accés</string>
     <string name="txtNoUsersLoggedIn">Cap usuari ha accedit a l\'aplicació.</string>
     <string name="txtRefreshedList">Llista d\'usuaris refrescada</string>
+
+    <string name="txtSendProgram">Enviar programa</string>
+    <string name="txtAddAction">Afegir acció</string>
+    <string name="txtListOfActions">LLISTA D\'ACCIONS</string>
+    <string name="txtForward">Endavant</string>
+    <string name="txtBackwards">Enrere</string>
+    <string name="txtRight">Dreta</string>
+    <string name="txtLeft">Esquerra</string>
+    <string name="txtActionPipette">Accionar xeringa</string>
+
+
+    <string name="txtTitleDialogCustomProgram">Selecciona l\'acció a realitzar</string>
+    <string name="txtTitleEditDialogCustomProgram">Edita l\'acció a realitzar</string>
+    <string name="txtButonSave">Desa</string>
+    <string name="txtButonCancel">Cancel·lar</string>
+    <string name="txtNoActions">No hi ha cap acció programada.</string>
+
 
     <!--<string name="txtHomeAdmin">Benvingut a l\'aplicació Qui-Bot H2O.\n\nCom a administrador pots:\nConsultar la llista d\'experimentsInteractuar amb el robotVeure la llista d'usuaris no administradors que estan utilitzant l\'aplicació.</string>-->
 

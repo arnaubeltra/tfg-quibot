@@ -119,7 +119,7 @@ public class InteractWithRobot extends Fragment {
                     break;
             }
         } else
-            Toast.makeText(UserNavigation.getInstance(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
     }
 
     private void checkPermissions() {

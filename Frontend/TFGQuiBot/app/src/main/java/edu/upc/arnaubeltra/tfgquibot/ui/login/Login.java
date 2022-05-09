@@ -64,10 +64,9 @@ public class Login extends AppCompatActivity {
     }
 
     private void login() {
-        String name = nameUser.getText().toString();
+        goToHomeActivityUser();
+        /*String name = nameUser.getText().toString();
         String surname = surnameUser.getText().toString();
-
-
 
         if (name.isEmpty())
             nameUser.setError("El camp de nom no pot estar buit");
@@ -91,7 +90,7 @@ public class Login extends AppCompatActivity {
                     e.printStackTrace();
                 }
             });
-        }
+        }*/
     }
 
     private void goToHomeActivityUser() {

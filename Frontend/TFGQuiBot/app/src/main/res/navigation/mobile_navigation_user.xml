@@ -10,15 +10,20 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home_user" />
     <fragment
+        android:id="@+id/experiments"
+        android:name="edu.upc.arnaubeltra.tfgquibot.ui.experiments.ExperimentsList"
+        android:label="@string/menu_experiments"
+        tools:layout="@layout/fragment_experiments" />
+    <fragment
         android:id="@+id/interactWithRobot"
         android:name="edu.upc.arnaubeltra.tfgquibot.ui.interactWithRobot.InteractWithRobot"
         android:label="@string/menu_interact"
         tools:layout="@layout/fragment_interact_with_robot" />
     <fragment
-        android:id="@+id/experiments"
-        android:name="edu.upc.arnaubeltra.tfgquibot.ui.experiments.ExperimentsList"
-        android:label="@string/menu_experiments"
-        tools:layout="@layout/fragment_experiments" />
+        android:id="@+id/customProgram"
+        android:name="edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgram"
+        android:label="@string/menu_custom_program"
+        tools:layout="@layout/fragment_custom_program" />
     <fragment
         android:id="@+id/ticTacToe"
         android:name="edu.upc.arnaubeltra.tfgquibot.ui.ticTacToe.TicTacToe"

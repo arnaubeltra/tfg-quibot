@@ -17,6 +17,10 @@
             android:icon="@drawable/interact_icon"
             android:title="@string/menu_interact" />
         <item
+            android:id="@+id/customProgram"
+            android:icon="@drawable/custom_program_icon"
+            android:title="@string/menu_custom_program" />
+        <item
             android:id="@+id/ticTacToe"
             android:icon="@drawable/tic_tac_toe_icon"
             android:title="@string/menu_tic_tac_toe" />

@@ -58,15 +58,15 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     /* Firebase */
-    implementation 'com.google.firebase:firebase-auth:21.0.3'
+    /*implementation 'com.google.firebase:firebase-auth:21.0.3'
     implementation 'com.google.firebase:firebase-database:20.0.4'
-    implementation 'com.google.firebase:firebase-bom:29.3.0'
+    implementation 'com.google.firebase:firebase-bom:29.3.0'*/
 
     /* Internet API connection */
     implementation 'com.android.volley:volley:1.2.1'
 
     /* Material design */
-    implementation 'com.google.android.material:material:<version>'
+    /*implementation 'com.google.android.material:material:<version>'*/
 
     /* JSON parse */
     implementation 'com.google.code.gson:gson:2.8.6'

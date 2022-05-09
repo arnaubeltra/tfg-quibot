@@ -99,30 +99,45 @@ tools:context=".ui.homeUser.HomeUser">
                 app:layout_constraintTop_toTopOf="@+id/horizontalGuideline38" />
 
             <Button
+                android:id="@+id/btnCustomProgramHomeUser"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/menu_custom_program"
+                android:backgroundTint="#59b431"
+                android:drawableTint="@color/white"
+                android:drawableTop="@drawable/custom_program_icon_big"
+                app:layout_constraintEnd_toEndOf="@+id/btnExperimentsHomeUser"
+                app:layout_constraintStart_toStartOf="@+id/btnExperimentsHomeUser"
+                app:layout_constraintTop_toBottomOf="@+id/btnExperimentsHomeUser" />
+
+            <Button
                 android:id="@+id/btnTicTacToeHomeUser"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/menu_tic_tac_toe"
-                android:backgroundTint="#59b431"
+                android:backgroundTint="#094893"
                 android:drawableTint="@color/white"
                 android:drawableTop="@drawable/tic_tac_toe_icon_big"
-                app:layout_constraintEnd_toEndOf="@+id/btnExperimentsHomeUser"
-                app:layout_constraintStart_toStartOf="@+id/btnExperimentsHomeUser"
-                app:layout_constraintTop_toBottomOf="@+id/btnExperimentsHomeUser" />
+                app:layout_constraintEnd_toEndOf="@+id/btnInteractHomeUser"
+                app:layout_constraintStart_toStartOf="@+id/btnInteractHomeUser"
+                app:layout_constraintTop_toBottomOf="@+id/btnInteractHomeUser" />
 
             <Button
                 android:id="@+id/btnConnect4HomeUser"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/menu_connect4"
-                android:backgroundTint="#094893"
-                android:drawableTint="@color/white"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="#45666a"
                 android:drawableTop="@drawable/icon_connect4_big"
-                app:layout_constraintEnd_toEndOf="@+id/btnInteractHomeUser"
-                app:layout_constraintStart_toStartOf="@+id/btnInteractHomeUser"
-                app:layout_constraintTop_toBottomOf="@+id/btnInteractHomeUser" />
+                android:drawableTint="@color/white"
+                android:text="@string/menu_connect4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btnCustomProgramHomeUser"
+                app:layout_constraintStart_toStartOf="@+id/btnCustomProgramHomeUser"
+                app:layout_constraintTop_toBottomOf="@+id/btnCustomProgramHomeUser" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

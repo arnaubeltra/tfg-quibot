@@ -3,7 +3,6 @@ package edu.upc.arnaubeltra.tfgquibot.ui.homeUser;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +14,12 @@ import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 
 public class HomeUser extends Fragment {
 
-
     public HomeUser() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -31,6 +28,7 @@ public class HomeUser extends Fragment {
 
         v.findViewById(R.id.btnExperimentsHomeUser).setOnClickListener(view -> UserNavigation.getNavController().navigate(R.id.experiments));
         v.findViewById(R.id.btnInteractHomeUser).setOnClickListener(view -> UserNavigation.getNavController().navigate(R.id.interactWithRobot));
+        v.findViewById(R.id.btnCustomProgramHomeUser).setOnClickListener(view -> UserNavigation.getNavController().navigate(R.id.customProgram));
         v.findViewById(R.id.btnTicTacToeHomeUser).setOnClickListener(view -> UserNavigation.getNavController().navigate(R.id.ticTacToe));
         v.findViewById(R.id.btnConnect4HomeUser).setOnClickListener(view -> UserNavigation.getNavController().navigate(R.id.connect4));
 

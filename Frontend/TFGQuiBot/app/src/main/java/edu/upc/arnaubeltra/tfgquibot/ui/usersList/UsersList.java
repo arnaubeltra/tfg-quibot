@@ -63,12 +63,11 @@ public class UsersList extends Fragment implements LoggedUsersListAdapter.ILogge
 
         textViewNoUsersLoggedIn = v.findViewById(R.id.textViewNoUsersLoggedIn);
 
-        loggedUsersListAdapter = new LoggedUsersListAdapter(this);
         rcvListLoggedInUsers = v.findViewById(R.id.rcvListLoggedInUsers);
+
+        loggedUsersListAdapter = new LoggedUsersListAdapter(this);
         rcvListLoggedInUsers.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvListLoggedInUsers.setAdapter(loggedUsersListAdapter);
-
-
 
         usersListViewModel = new ViewModelProvider(this).get(UsersListViewModel.class);
         refreshUsersList();

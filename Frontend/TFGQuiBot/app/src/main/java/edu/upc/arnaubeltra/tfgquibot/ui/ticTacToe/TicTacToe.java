@@ -5,10 +5,8 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -134,11 +132,11 @@ public class TicTacToe extends Fragment {
                     else txtInfoPlayer.setText(getResources().getString(R.string.txtYouPlayWithO));
                     btnNewGame.setText(R.string.txtEndGame);
                     txtInfoGame.setText("");
-                    Toast.makeText(UserNavigation.getInstance(), R.string.txtGameStarted, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserNavigation.getContext(), R.string.txtGameStarted, Toast.LENGTH_SHORT).show();
                 }
 
                 else if (responseObject.getString("response").equals("game-is-full"))
-                    Toast.makeText(UserNavigation.getInstance(), R.string.txtGameIsFull, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserNavigation.getContext(), R.string.txtGameIsFull, Toast.LENGTH_SHORT).show();
 
                 else if (responseObject.getString("response").equals("waiting-for-player") && GAME_STARTED) {
                     txtInfoGame.setText(getResources().getString(R.string.txtWaitingForPlayer));
@@ -184,16 +182,16 @@ public class TicTacToe extends Fragment {
                 }
 
                 else if (responseObject.getString("response").equals("game-is-over") && GAME_STARTED) {
-                    Toast.makeText(UserNavigation.getInstance(), R.string.txtGameIsOver, Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserNavigation.getContext(), R.string.txtGameIsOver, Toast.LENGTH_LONG).show();
                 }
 
                 else if (responseObject.getString("response").equals("tic-tac-toe-position-success")) {
                     onNewMovement(responseObject.getInt("x"), responseObject.getInt("y"), player);
-                    Toast.makeText(UserNavigation.getInstance(), R.string.txtWaitRobot, Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserNavigation.getContext(), R.string.txtWaitRobot, Toast.LENGTH_LONG).show();
                 }
 
                 else if (responseObject.getString("response").equals("tic-tac-toe-position-full"))
-                    Toast.makeText(UserNavigation.getInstance(), R.string.txtPositionFull, Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserNavigation.getContext(), R.string.txtPositionFull, Toast.LENGTH_LONG).show();
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -216,13 +214,13 @@ public class TicTacToe extends Fragment {
     private void startFinishGame() {
         if (!GAME_STARTED)
             if (IS_AUTHORIZED) ticTacToeViewModel.startNewGameTicTacToe(Login.getIpAddress());
-            else Toast.makeText(UserNavigation.getInstance(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
+            else Toast.makeText(UserNavigation.getContext(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
         else {
             btnNewGame.setText(R.string.btnTxtNovaPartida);
             txtInfoGame.setText(R.string.txtGameNotStarted);
             txtInfoPlayer.setText("");
             finishGame();
-            Toast.makeText(UserNavigation.getInstance(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
+            Toast.makeText(UserNavigation.getContext(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -255,9 +253,9 @@ public class TicTacToe extends Fragment {
         if (GAME_STARTED) {
             if (PLAYERS_READY) {
                 if (YOUR_TURN) ticTacToeViewModel.ticTacToePosition(player, x, y);
-                else Toast.makeText(UserNavigation.getInstance(), R.string.txtNotYourTurn, Toast.LENGTH_SHORT).show();
-            } else Toast.makeText(UserNavigation.getInstance(), R.string.txtCantPlayWaitingOtherPlayer, Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(UserNavigation.getInstance(), R.string.txtFirstStartNewGame, Toast.LENGTH_SHORT).show();
+                else Toast.makeText(UserNavigation.getContext(), R.string.txtNotYourTurn, Toast.LENGTH_SHORT).show();
+            } else Toast.makeText(UserNavigation.getContext(), R.string.txtCantPlayWaitingOtherPlayer, Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(UserNavigation.getContext(), R.string.txtFirstStartNewGame, Toast.LENGTH_SHORT).show();
     }
 
     private void onNewMovement(int x, int y, int player) {
