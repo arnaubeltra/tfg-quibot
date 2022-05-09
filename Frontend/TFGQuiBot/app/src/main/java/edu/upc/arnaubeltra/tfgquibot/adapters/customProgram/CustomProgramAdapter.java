@@ -1,6 +1,5 @@
 package edu.upc.arnaubeltra.tfgquibot.adapters.customProgram;
 
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,6 @@ import java.util.Collections;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
-import edu.upc.arnaubeltra.tfgquibot.adapters.LoggedUsersListAdapter;
-import edu.upc.arnaubeltra.tfgquibot.models.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgram;
 
 public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdapter.CustomProgramViewHolder> implements ItemMoveCallback.ItemTouchHelperContract {

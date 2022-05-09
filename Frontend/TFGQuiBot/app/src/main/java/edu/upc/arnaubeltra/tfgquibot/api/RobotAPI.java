@@ -12,14 +12,18 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgramViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.ticTacToe.TicTacToeViewModel;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
-import edu.upc.arnaubeltra.tfgquibot.models.ListUsersAPI;
-import edu.upc.arnaubeltra.tfgquibot.models.User;
+import edu.upc.arnaubeltra.tfgquibot.models.user.ListUsersAPI;
+import edu.upc.arnaubeltra.tfgquibot.models.user.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersListViewModel;
@@ -42,6 +46,7 @@ public class RobotAPI extends ViewModel {
     private UsersListViewModel usersListViewModel;
     private TicTacToeViewModel ticTacToeViewModel;
     private RobotConnectionViewModel robotConnectionViewModel;
+    private CustomProgramViewModel customProgramViewModel;
 
     private ArrayList<User> loggedUsersList;
 
@@ -153,6 +158,19 @@ public class RobotAPI extends ViewModel {
         getRequest(url, "checkRobotConnection");
     }
 
+    public void sendListActions(ArrayList<String> actions) {
+        String url = BASE_URL + "/custom-program";
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        String actionsJSON = gson.toJson(actions);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("actions", actionsJSON);
+
+        postRequest(url, params, "sendListActions");
+    }
+
 
     private void getRequest(String url, String callFun) {
         if (getRequestQueue == null)
@@ -212,15 +230,6 @@ public class RobotAPI extends ViewModel {
                 }
                 usersListViewModel.setLoggedInUsersListResponse(loggedUsersList);
                 break;
-            /*case "startTicTacToe":
-                ticTacToeViewModel.setStartNewGameResponse(response);
-                break;
-            case "ticTacToePosition":
-                ticTacToeViewModel.setTicTacToePositionResponse(response);
-                break;
-            case "checkStatusTicTacToe":
-                ticTacToeViewModel.setTicTacToeCheckStatusResponse(response);
-                break;*/
             case "ticTacToe":
                 ticTacToeViewModel.setTicTacToeRequestResponse(response);
                 break;
@@ -232,7 +241,7 @@ public class RobotAPI extends ViewModel {
             postRequestQueue = Volley.newRequestQueue(Login.getInstance());
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                response -> parsePostResponse(response),
+                response -> parsePostResponse(response, callFun),
                 error -> Log.d(TAG, "onErrorResponse: " + error)
         ) {
             @Override
@@ -243,8 +252,16 @@ public class RobotAPI extends ViewModel {
         postRequestQueue.add(postRequest);
     }
 
-    private void parsePostResponse(String response) {
+    private void parsePostResponse(String response, String callFun) {
         loginViewModel = new ViewModelProvider(Login.getContext()).get(LoginViewModel.class);
-        loginViewModel.setNewUserLoginResponse(response);
+        customProgramViewModel = new ViewModelProvider(Login.getContext()).get(CustomProgramViewModel.class);
+        switch (callFun) {
+            case "userLogin":
+                loginViewModel.setNewUserLoginResponse(response);
+                break;
+            case "sendListActions":
+                customProgramViewModel.setSendListActionsRequestResponse(response);
+                break;
+        }
     }
 }

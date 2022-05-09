@@ -110,7 +110,9 @@
     <string name="txtButonSave">Desa</string>
     <string name="txtButonCancel">Cancel·lar</string>
     <string name="txtNoActions">No hi ha cap acció programada.</string>
-
+    <string name="txtProgramSentCorrectly">El programa s\'ha enviat correctament al robot.</string>
+    <string name="txtProgramError">S\'ha produit un error a l\'enviar el programa al robot.</string>
+    <string name="txtNoProgramToSend">No s\'ha definit cap programa per enviar al robot.</string>
 
     <!--<string name="txtHomeAdmin">Benvingut a l\'aplicació Qui-Bot H2O.\n\nCom a administrador pots:\nConsultar la llista d\'experimentsInteractuar amb el robotVeure la llista d'usuaris no administradors que estan utilitzant l\'aplicació.</string>-->
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 
 import edu.upc.arnaubeltra.tfgquibot.api.RobotAPI;
-import edu.upc.arnaubeltra.tfgquibot.models.User;
+import edu.upc.arnaubeltra.tfgquibot.models.user.User;
 
 public class UsersListViewModel extends ViewModel {
 

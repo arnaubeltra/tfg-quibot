@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +19,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +32,7 @@ import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.CustomProgramAdapter;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.ItemMoveCallback;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 
 public class CustomProgram extends Fragment implements CustomProgramAdapter.ICustomProgramRCVItemClicked, AdapterView.OnItemSelectedListener  {
 
@@ -35,6 +42,8 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     public TextView txtNoActionsCustomProgram;
 
     private static CustomProgram instance;
+
+    private CustomProgramViewModel customProgramViewModel;
 
     ArrayList<String> actionsList = new ArrayList<>();
 
@@ -70,14 +79,10 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
         txtNoActionsCustomProgram = v.findViewById(R.id.txtNoActionsCustomProgram);
 
+        customProgramViewModel = new ViewModelProvider(Login.getContext()).get(CustomProgramViewModel.class);
+        setupCustomProgramResponseListener();
+
         return v;
-    }
-
-    private void onSendCustomProgram() {
-    }
-
-    @Override
-    public void onUserClicked(int index) {
     }
 
     public void openDialogNewAction(int index, String value) {
@@ -92,7 +97,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         else builder.setTitle(R.string.txtTitleEditDialogCustomProgram);
 
         Spinner spinner = setupSpinner(view, value);
-        
+
         builder.setPositiveButton(R.string.txtButonSave, (dialogInterface, i) -> {
             if (value.equals("")) newActionAdded(String.valueOf(spinner.getSelectedItem()));
             else editAction(index, String.valueOf(spinner.getSelectedItem()));
@@ -144,5 +149,63 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+
+    private void onSendCustomProgram() {
+        if (actionsList.size() != 0) customProgramViewModel.onSendListActions(parseActions());
+        else Toast.makeText(UserNavigation.getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setupCustomProgramResponseListener() {
+        customProgramViewModel.onSendListActions(parseActions());
+        customProgramViewModel.getSendListActionsRequestResponse().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String response) {
+                try {
+                    JSONObject responseObject = new JSONObject(response);
+                    if (responseObject.getString("response").equals("custom-program-actions-success"))
+                        Toast.makeText(UserNavigation.getContext(), R.string.txtProgramSentCorrectly, Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(UserNavigation.getContext(), R.string.txtProgramError, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private ArrayList<String> parseActions() {
+        ArrayList<String> parsedActionsList = new ArrayList<>();
+        for (int i = 0; i < actionsList.size(); i++) {
+            switch (actionsList.get(i)) {
+                case "Endavant":
+                    parsedActionsList.add("up");
+                    break;
+                case "Enrere":
+                    parsedActionsList.add("down");
+                    break;
+                case "Dreta":
+                    parsedActionsList.add("right");
+                    break;
+                case "Esquerra":
+                    parsedActionsList.add("left");
+                    break;
+                case "Baixar xeringa":
+                    parsedActionsList.add("lower_pipette");
+                    break;
+                case "Pujar xeringa":
+                    parsedActionsList.add("raise_pipette");
+                    break;
+                case "Accionar xeringa":
+                    parsedActionsList.add("suck");
+                    break;
+            }
+        }
+        Log.d("TAG", "parseActions: " + parsedActionsList);
+        return parsedActionsList;
+    }
+
+    @Override
+    public void onUserClicked(int index) {
     }
 }

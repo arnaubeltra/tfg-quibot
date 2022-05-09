@@ -1,6 +1,5 @@
 package edu.upc.arnaubeltra.tfgquibot.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.models.User;
+import edu.upc.arnaubeltra.tfgquibot.models.user.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersList;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
 
 public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersListAdapter.LoggedUsersListViewHolder> {

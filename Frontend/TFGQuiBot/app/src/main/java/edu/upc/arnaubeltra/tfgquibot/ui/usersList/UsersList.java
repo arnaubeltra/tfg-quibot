@@ -9,30 +9,19 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
-import edu.upc.arnaubeltra.tfgquibot.AdminNavigation;
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.adapters.LoggedUsersListAdapter;
-import edu.upc.arnaubeltra.tfgquibot.models.ListUsersAPI;
-import edu.upc.arnaubeltra.tfgquibot.models.User;
+import edu.upc.arnaubeltra.tfgquibot.models.user.User;
 
 
 public class UsersList extends Fragment implements LoggedUsersListAdapter.ILoggedUserListRCVItemClicked {
