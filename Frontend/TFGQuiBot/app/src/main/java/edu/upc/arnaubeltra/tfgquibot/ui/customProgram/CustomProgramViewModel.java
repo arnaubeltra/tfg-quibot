@@ -14,10 +14,10 @@ public class CustomProgramViewModel extends ViewModel {
 
     private static MutableLiveData<String> customProgramRequestResponse;
 
-    public void onSendListActions(ArrayList<String> actions) {
+    public void onSendListActions(String actions) {
         if (customProgramRequestResponse == null)
             customProgramRequestResponse = new MutableLiveData<>();
-        if (actions.size() != 0)
+        if (!actions.equals(""))
             robotAPI.sendListActions(actions);
     }
 

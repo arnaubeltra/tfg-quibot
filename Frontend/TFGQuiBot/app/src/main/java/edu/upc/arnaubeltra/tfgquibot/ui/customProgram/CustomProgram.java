@@ -157,7 +157,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     }
 
     private void setupCustomProgramResponseListener() {
-        customProgramViewModel.onSendListActions(parseActions());
+        customProgramViewModel.onSendListActions("");
         customProgramViewModel.getSendListActionsRequestResponse().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String response) {
@@ -174,34 +174,41 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         });
     }
 
-    private ArrayList<String> parseActions() {
-        ArrayList<String> parsedActionsList = new ArrayList<>();
+    private String parseActions() {
+        String parsedActionsList = "";
         for (int i = 0; i < actionsList.size(); i++) {
             switch (actionsList.get(i)) {
                 case "Endavant":
-                    parsedActionsList.add("up");
+                    //parsedActionsList.add("up");
+                    parsedActionsList += "up";
                     break;
                 case "Enrere":
-                    parsedActionsList.add("down");
+                    //parsedActionsList.add("down");
+                    parsedActionsList += "down";
                     break;
                 case "Dreta":
-                    parsedActionsList.add("right");
+                    //parsedActionsList.add("right");
+                    parsedActionsList += "right";
                     break;
                 case "Esquerra":
-                    parsedActionsList.add("left");
+                    //parsedActionsList.add("left");
+                    parsedActionsList += "left";
                     break;
                 case "Baixar xeringa":
-                    parsedActionsList.add("lower_pipette");
+                    //parsedActionsList.add("lower_pipette");
+                    parsedActionsList += "lower_pipette";
                     break;
                 case "Pujar xeringa":
-                    parsedActionsList.add("raise_pipette");
+                    //parsedActionsList.add("raise_pipette");
+                    parsedActionsList += "raise_pipette";
                     break;
                 case "Accionar xeringa":
-                    parsedActionsList.add("suck");
+                    //parsedActionsList.add("suck");
+                    parsedActionsList += "suck";
                     break;
             }
+            parsedActionsList += ",";
         }
-        Log.d("TAG", "parseActions: " + parsedActionsList);
         return parsedActionsList;
     }
 

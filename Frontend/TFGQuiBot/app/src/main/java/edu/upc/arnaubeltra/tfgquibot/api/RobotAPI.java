@@ -158,15 +158,15 @@ public class RobotAPI extends ViewModel {
         getRequest(url, "checkRobotConnection");
     }
 
-    public void sendListActions(ArrayList<String> actions) {
+    public void sendListActions(String actions) {
         String url = BASE_URL + "/custom-program";
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
+        /*GsonBuilder gsonBuilder = new GsonBuilder();
         Gson gson = gsonBuilder.create();
-        String actionsJSON = gson.toJson(actions);
+        String actionsJSON = gson.toJson(actions);*/
 
         Map<String, String> params = new HashMap<>();
-        params.put("actions", actionsJSON);
+        params.put("actions", actions);
 
         postRequest(url, params, "sendListActions");
     }
