@@ -12,18 +12,15 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgramViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.ticTacToe.TicTacToeViewModel;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
-import edu.upc.arnaubeltra.tfgquibot.models.user.ListUsersAPI;
-import edu.upc.arnaubeltra.tfgquibot.models.user.User;
+import edu.upc.arnaubeltra.tfgquibot.models.ListUsersAPI;
+import edu.upc.arnaubeltra.tfgquibot.models.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersListViewModel;

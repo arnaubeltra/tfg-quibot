@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.ticTacToe.TicTacToe"
-    >
+    tools:context=".ui.ticTacToe.TicTacToe">
 
     <ImageView
         android:id="@+id/imageViewBackground"
@@ -19,171 +18,187 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnTicTacToe1"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="7dp"
-        android:backgroundTint="#413F43"
-        android:textColor="#ffffff"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/btnTicTacToe2"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:layout_editor_absoluteX="-197dp">
 
-    <Button
-        android:id="@+id/btnTicTacToe2"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:backgroundTint="#413F43"
-        android:textColor="#ffffff"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnTicTacToe1"
-        tools:ignore="SpeakableTextPresentCheck" />
 
-    <Button
-        android:id="@+id/btnTicTacToe3"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_marginStart="7dp"
-        android:backgroundTint="#413F43"
-        android:textColor="#ffffff"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/btnTicTacToe2"
-        app:layout_constraintTop_toTopOf="@+id/btnTicTacToe1"
-        tools:ignore="SpeakableTextPresentCheck" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/btnTicTacToe4"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="-5dp"
-        android:backgroundTint="#413F43"
-        android:textColor="#ffffff"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/btnTicTacToe1"
-        app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe1"
-        tools:ignore="SpeakableTextPresentCheck" />
+            <TextView
+                android:id="@+id/txtInfoPlayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnTicTacToe5"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="-5dp"
-        android:backgroundTint="#413F43"
-        android:textColor="#ffffff"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/btnTicTacToe2"
-        app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe1"
-        tools:ignore="SpeakableTextPresentCheck" />
+            <TextView
+                android:id="@+id/txtInfoGame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/txtGameNotStarted"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtInfoPlayer"
+                app:layout_constraintStart_toStartOf="@+id/txtInfoPlayer"
+                app:layout_constraintTop_toBottomOf="@+id/txtInfoPlayer" />
 
-    <Button
-        android:id="@+id/btnTicTacToe6"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="-5dp"
-        android:backgroundTint="#413F43"
-        android:textColor="#ffffff"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/btnTicTacToe3"
-        app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe2"
-        tools:ignore="SpeakableTextPresentCheck" />
+            <Button
+                android:id="@+id/btnTicTacToe1"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:layout_marginTop="150dp"
+                android:layout_marginEnd="7dp"
+                android:backgroundTint="#413F43"
+                android:textColor="#ffffff"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/btnTicTacToe2"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-    <Button
-        android:id="@+id/btnTicTacToe7"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="-5dp"
-        android:backgroundTint="#413F43"
-        android:textColor="#ffffff"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/btnTicTacToe4"
-        app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe4"
-        tools:ignore="SpeakableTextPresentCheck" />
+            <Button
+                android:id="@+id/btnTicTacToe2"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:backgroundTint="#413F43"
+                android:textColor="#ffffff"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btnTicTacToe1"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-    <Button
-        android:id="@+id/btnTicTacToe8"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="-5dp"
-        android:backgroundTint="#413F43"
-        android:textColor="#ffffff"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/btnTicTacToe5"
-        app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe5"
-        tools:ignore="SpeakableTextPresentCheck" />
+            <Button
+                android:id="@+id/btnTicTacToe3"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:layout_marginStart="7dp"
+                android:backgroundTint="#413F43"
+                android:textColor="#ffffff"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/btnTicTacToe2"
+                app:layout_constraintTop_toTopOf="@+id/btnTicTacToe1"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-    <Button
-        android:id="@+id/btnTicTacToe9"
-        android:layout_width="115dp"
-        android:layout_height="115dp"
-        android:layout_marginTop="-5dp"
-        android:backgroundTint="#413F43"
-        android:textColor="#ffffff"
-        android:textSize="60sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/btnTicTacToe6"
-        app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe6"
-        tools:ignore="SpeakableTextPresentCheck" />
+            <Button
+                android:id="@+id/btnTicTacToe4"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:layout_marginTop="-5dp"
+                android:backgroundTint="#413F43"
+                android:textColor="#ffffff"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btnTicTacToe1"
+                app:layout_constraintStart_toStartOf="@+id/btnTicTacToe1"
+                app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe1"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-    <Button
-        android:id="@+id/btnNewGame"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="#CB4335"
-        android:text="@string/btnTxtNovaPartida"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe7" />
+            <Button
+                android:id="@+id/btnTicTacToe5"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:backgroundTint="#413F43"
+                android:textColor="#ffffff"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btnTicTacToe2"
+                app:layout_constraintTop_toTopOf="@+id/btnTicTacToe4"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-    <Button
-        android:id="@+id/btnHowToPlay"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="#2E4053"
-        android:text="@string/btnTxtComJugar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnNewGame" />
+            <Button
+                android:id="@+id/btnTicTacToe6"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:backgroundTint="#413F43"
+                android:textColor="#ffffff"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btnTicTacToe3"
+                app:layout_constraintStart_toStartOf="@+id/btnTicTacToe3"
+                app:layout_constraintTop_toTopOf="@+id/btnTicTacToe5"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-    <TextView
-        android:id="@+id/txtInfoPlayer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/btnTicTacToe7"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:layout_marginTop="-5dp"
+                android:backgroundTint="#413F43"
+                android:textColor="#ffffff"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btnTicTacToe4"
+                app:layout_constraintStart_toStartOf="@+id/btnTicTacToe4"
+                app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe4"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-    <TextView
-        android:id="@+id/txtInfoGame"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/txtGameNotStarted"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/txtInfoPlayer"
-        app:layout_constraintStart_toStartOf="@+id/txtInfoPlayer"
-        app:layout_constraintTop_toBottomOf="@+id/txtInfoPlayer" />
+            <Button
+                android:id="@+id/btnTicTacToe8"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:backgroundTint="#413F43"
+                android:textColor="#ffffff"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btnTicTacToe5"
+                app:layout_constraintStart_toStartOf="@+id/btnTicTacToe5"
+                app:layout_constraintTop_toTopOf="@+id/btnTicTacToe7"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/btnTicTacToe9"
+                android:layout_width="115dp"
+                android:layout_height="115dp"
+                android:backgroundTint="#413F43"
+                android:textColor="#ffffff"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/btnTicTacToe6"
+                app:layout_constraintStart_toStartOf="@+id/btnTicTacToe6"
+                app:layout_constraintTop_toTopOf="@+id/btnTicTacToe8"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/btnNewGame"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="#CB4335"
+                android:text="@string/btnTxtNovaPartida"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnTicTacToe7" />
+
+            <Button
+                android:id="@+id/btnHowToPlay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="#2E4053"
+                android:text="@string/btnTxtComJugar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnNewGame" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

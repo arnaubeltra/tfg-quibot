@@ -66,7 +66,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
 
     /* Material design */
-    /*implementation 'com.google.android.material:material:<version>'*/
+    implementation 'com.google.android.material:material:<version>'
 
     /* JSON parse */
     implementation 'com.google.code.gson:gson:2.8.6'

@@ -114,7 +114,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         spinner.setOnItemSelectedListener(this);
 
         List<String> actions = new ArrayList<>();
-        Collections.addAll(actions, getResources().getString(R.string.txtForward), getResources().getString(R.string.txtBackwards), getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtActionPipette));
+        Collections.addAll(actions, getResources().getString(R.string.txtForward), getResources().getString(R.string.txtBackwards), getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtActionPipette), getResources().getString(R.string.txtRepeatPreviousActions));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(UserNavigation.getContext(), android.R.layout.simple_spinner_item, actions);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

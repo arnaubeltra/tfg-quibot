@@ -329,11 +329,6 @@ public class TicTacToe extends Fragment {
         dialog.setCancelable(true);
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_tic_tac_toe, null);
         dialog.setContentView(view);
-        view.findViewById(R.id.btnCloseDialog).setOnClickListener(v1 -> onCloseDialog(dialog));
         dialog.show();
-    }
-
-    private void onCloseDialog(Dialog dialog) {
-        dialog.dismiss();
     }
 }

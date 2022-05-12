@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.adapters.LoggedUsersListAdapter;
-import edu.upc.arnaubeltra.tfgquibot.models.user.User;
+import edu.upc.arnaubeltra.tfgquibot.models.User;
 
 
 public class UsersList extends Fragment implements LoggedUsersListAdapter.ILoggedUserListRCVItemClicked {

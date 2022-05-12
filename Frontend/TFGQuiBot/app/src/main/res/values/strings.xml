@@ -103,6 +103,7 @@
     <string name="txtRight">Dreta</string>
     <string name="txtLeft">Esquerra</string>
     <string name="txtActionPipette">Accionar xeringa</string>
+    <string name="txtRepeatPreviousActions">Repeteix</string>
 
 
     <string name="txtTitleDialogCustomProgram">Selecciona l\'acció a realitzar</string>
@@ -113,6 +114,20 @@
     <string name="txtProgramSentCorrectly">El programa s\'ha enviat correctament al robot.</string>
     <string name="txtProgramError">S\'ha produit un error a l\'enviar el programa al robot.</string>
     <string name="txtNoProgramToSend">No s\'ha definit cap programa per enviar al robot.</string>
+
+
+
+    <string name="titleSeriesDisolucio">Sèries de disolució</string>
+    <string name="txtExplanationSeriesDisolució">Ompliu la primera cubeta amb el color que més us agradi al 80% de capacitat i les 5 següents amb aigua fins al 60% de capacitat.\n\nAra el que farà el robot serà anar passant la solució d\'una cubeta a una altra. Cada vegada que això passi la solució s\'anirà diluint cada vegada més fins a ser gairebé transparent. Podeu repetir aquest experiment vosaltres mateixos amb "Interactua amb el robot" o amb "Fes el teu propi programa" per intentar aconseguir el mateix resultat.</string>
+
+    <string name="titleBarrejaColorsPrimaris">Barreja colors primaris</string>
+    <string name="txtExplanationColorsPrimaris">Ompliu la primera cubeta amb color blau i la tercera cubeta amb color groc al 80% de capacitat i la resta de cubetes deixeu-les buides.\n\nAra el que farà el robot serà buscar els dos colors primaris que hem posat per desprès barrejar-los i d\'aquesta manera obtenir un nou color secundari. Quin color serà? Podeu repetir aquest experiment vosaltres mateixos amb "Interactua amb el robot" o amb "Fes el teu propi programa" per intentar aconseguir el mateix resultat amb colors diferents!</string>
+
+    <string name="titleCapesDeDensitat">Capes de densitat</string>
+    <string name="txtExplanationCapesDeDensitat">Diluïu 18 g de sal en 50 ml d\'aigua en un got i afegiu-hi el colorant de color blau. Després diluïu 6 g de sal en 50 ml d\'aigua en un got i afegiu-hi el colorant de color vermell.\n\nOmpliu la primera cubeta amb la dissolució de color blau, la segona cubeta amb la dissolució de color vermell i la tercera cubeta amb aigua de color groc al 90% de capacitat i la resta de cubetes deixeu-les buides.\n\nAra el que farà el robot serà dipositar totes les dissolucions en una mateixa cubeta amb molta cura. Com les dissolucions tenen diferent densitat, amb l\'ajuda del colorant, podem veure com les dissolucions no es barregen entre elles.</string>
+
+    <string name="txtExecuteExperiment">Executar experiment</string>
+    <string name="txtHowToPrepareExperiment">Com preparar el tauler</string>
 
     <!--<string name="txtHomeAdmin">Benvingut a l\'aplicació Qui-Bot H2O.\n\nCom a administrador pots:\nConsultar la llista d\'experimentsInteractuar amb el robotVeure la llista d'usuaris no administradors que estan utilitzant l\'aplicació.</string>-->
 
