@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.NavigationViewModel;
 
 
 public class HomeUser extends Fragment {
@@ -38,10 +38,11 @@ public class HomeUser extends Fragment {
         return v;
     }
 
-    @Override
+    // problema login logout
+    /*@Override
     public void onDestroy() {
         super.onDestroy();
         NavigationViewModel navigationViewModel = new ViewModelProvider(Login.getContext()).get(NavigationViewModel.class);
         navigationViewModel.logoutUser(Login.getIpAddress());
-    }
+    }*/
 }

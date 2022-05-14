@@ -1,4 +1,4 @@
-package edu.upc.arnaubeltra.tfgquibot.viewModels;
+package edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -1,4 +1,6 @@
-package edu.upc.arnaubeltra.tfgquibot.viewModels;
+package edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels;
+
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -16,10 +18,13 @@ public class PermissionsViewModel extends ViewModel {
     private static MutableLiveData<String> robotActualActivityLiveData;
     private static MutableLiveData<String> userActualActivityLiveData;
 
-    public void checkUserPermissions(String user) {
+    public void checkUserPermissions(String user, String activity) {
         if (permissionsLiveData == null)
             permissionsLiveData = new MutableLiveData<>();
-        robotAPI.checkPermissionsUser(user);
+        if (!activity.equals("")) {
+            Log.d("TAG", "checkUserPermissions: ");
+            robotAPI.checkPermissionsUser(user, activity);
+        }
     }
 
     public LiveData<String> getUserPermissionsResponse() {
@@ -33,7 +38,7 @@ public class PermissionsViewModel extends ViewModel {
     public void changeUserPermissions(String user, String auth) {
         if (changePermissionsLiveData == null)
             changePermissionsLiveData = new MutableLiveData<>();
-        robotAPI.changePermissionsUser(user, auth);
+        if (!user.equals("")) robotAPI.changePermissionsUser(user, auth);
     }
 
     public LiveData<String> getUserPermissionsChangeResponse() {

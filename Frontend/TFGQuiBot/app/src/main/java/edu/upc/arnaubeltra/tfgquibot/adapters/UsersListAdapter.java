@@ -9,28 +9,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.models.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersList;
 
-public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersListAdapter.LoggedUsersListViewHolder> {
-
-    private PermissionsViewModel permissionsViewModel;
+public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder> {
 
     public interface ILoggedUserListRCVItemClicked {
         void onUserClicked(int index);
     }
 
     private ILoggedUserListRCVItemClicked listener;
+    public ArrayList<User> loggedUsersList = new ArrayList<>();
+    private PermissionsViewModel permissionsViewModel;
 
-    private ArrayList<User> loggedUsersList = new ArrayList<>();
-
-
-    public LoggedUsersListAdapter(ILoggedUserListRCVItemClicked listener) {
+    public UsersListAdapter(ILoggedUserListRCVItemClicked listener) {
         this.listener = listener;
     }
 
@@ -41,14 +38,13 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
 
     @NonNull
     @Override
-    public LoggedUsersListAdapter.LoggedUsersListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public UsersListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_list_users, parent, false);
-        LoggedUsersListViewHolder loggedUsersListViewHolder = new LoggedUsersListViewHolder(v, listener);
-        return loggedUsersListViewHolder;
+        return new UsersListViewHolder(v, listener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LoggedUsersListAdapter.LoggedUsersListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UsersListViewHolder holder, int position) {
         holder.txtUserNameSurname.setText(loggedUsersList.get(position).getName() + " " + loggedUsersList.get(position).getSurname());
 
         if (loggedUsersList.get(position).getAuthorized().equals("false")) {
@@ -63,19 +59,22 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
         return loggedUsersList.size();
     }
 
-    public class LoggedUsersListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    public class UsersListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView txtUserNameSurname;
         public Button btnGiveQuitAccess;
 
         ILoggedUserListRCVItemClicked listener;
 
-        public LoggedUsersListViewHolder(@NonNull View itemView, ILoggedUserListRCVItemClicked itemClickedListener) {
+        public UsersListViewHolder(@NonNull View itemView, ILoggedUserListRCVItemClicked itemClickedListener) {
             super(itemView);
+
+            permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
 
             txtUserNameSurname = itemView.findViewById(R.id.txtUserNameSurname);
             btnGiveQuitAccess = itemView.findViewById(R.id.btnGiveQuitAccess);
-            btnGiveQuitAccess.setOnClickListener(view -> changePermission(getAdapterPosition()));
+            btnGiveQuitAccess.setOnClickListener(view -> changePermissions(getAdapterPosition()));
 
             listener = itemClickedListener;
             itemView.setOnClickListener(this);
@@ -85,19 +84,13 @@ public class LoggedUsersListAdapter extends RecyclerView.Adapter<LoggedUsersList
         public void onClick(View view) {
             listener.onUserClicked(getAdapterPosition());
         }
+    }
 
-        private void changePermission(int index) {
-            permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
-
-            if (loggedUsersList.get(index).getAuthorized().equals("true")) {
-                loggedUsersList.get(index).setAuthorized("false");
-                permissionsViewModel.changeUserPermissions(loggedUsersList.get(index).getUid(), "false");
-            }
-            else {
-                loggedUsersList.get(index).setAuthorized("true");
-                permissionsViewModel.changeUserPermissions(loggedUsersList.get(index).getUid(), "true");
-            }
-            updateLoggedUsersList(loggedUsersList);
-        }
+    private void changePermissions(int index) {
+        if (loggedUsersList.get(index).getAuthorized().equals("true"))
+            permissionsViewModel.changeUserPermissions(loggedUsersList.get(index).getUid(), "false");
+        else
+            permissionsViewModel.changeUserPermissions(loggedUsersList.get(index).getUid(), "true");
+        UsersList.setIndex(index);
     }
 }

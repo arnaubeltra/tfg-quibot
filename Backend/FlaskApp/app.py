@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 
 from user import *
 from ticTacToe import *
+from activity import *
 
 import socket
 import threading
@@ -10,14 +11,18 @@ app = Flask(__name__)
 
 
 # IP and Ports for socket connections
-HOST_ROBOT = '192.168.100.15'
+HOST_ROBOT = '192.168.100.1'
 PORT_ROBOT = 9999
 
 # Global variables
 connectedUsers = {}
 connectedAdmins = 0
 ticTacToe = None
-actualActivity = None
+#actualActivity = None
+
+actualActivity = Activity()
+actualActivity.setActualActivity("")
+actualActivity.setNumberAuthorizedUsers(0)
 
 
 # General functionallities
@@ -81,7 +86,7 @@ def checkPermissionsUser():
         userIP = request.args.get('user')
         activity = request.args.get('activity')
         auth = connectedUsers[userIP].isAuthorized
-        if (activity != actualActivity):
+        if (activity != actualActivity.getActualActivity()):
             response = {'response': auth, 'activity': 'not-match'}
         else:
             response = {'response': auth, 'activity': 'match'}
@@ -92,19 +97,37 @@ def checkPermissionsUser():
 def specifyActualRobotActivity():
     global actualActivity
     if (request.method == 'GET'):
-        actualActivity = request.args.get('activity')
+        actualActivity.setActualActivity(request.args.get('activity'))
+        actualActivity.setNumberAuthorizedUsers(0)
+        for user in connectedUsers:
+            connectedUsers[user].setIsAuthorized("false")
     return ""
 
 @app.route('/user/change-permissions', methods = ['GET'])
 def changePermissionsUser():
     global connectedUsers
+    global actualActivity
     if (request.method == 'GET'):
         userIP = request.args.get('user')
         auth = request.args.get('isAuthorized')
+        activity = actualActivity.getActualActivity()
+        num = actualActivity.getNumberAuthorizedUsers()
+        print (userIP, auth, activity, num)
         userObject = connectedUsers[userIP]
-        userObject.setIsAuthorized(auth)
+        if (auth == "true" and ((activity == "experiments" and num < 1) or (activity == "interact" and num < 1) or (activity == "custom_program" and num < 1) or (activity == "tic_tac_toe" and num < 2) or (activity == "connect_4" and num < 2))):
+            userObject.setIsAuthorized("true")
+            actualActivity.setNumberAuthorizedUsers(num + 1)
+            response = {'response': 'change-permissions-success'}
+        elif (auth == "false" and num > 0):
+            userObject.setIsAuthorized("false")
+            actualActivity.setNumberAuthorizedUsers(num - 1)
+            response = {'response': 'change-permissions-success'}
+        else:
+            if (auth == "true" and ((activity == "experiments" and num == 1) or (activity == "interact" and num == 1) or (activity == "custom_program" and num == 1) or (activity == "tic_tac_toe" and num == 2) or (activity == "connect_4" and num == 2))):
+                response = {'response': 'max-number-of-users'}
+            else:
+                response = {'response': 'change-permissions-error'}
         connectedUsers[userIP] = userObject
-        response = {'response': 'change-permissions-success'}
         return jsonify(response)
     return ""
 

@@ -1,5 +1,6 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.experiments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -8,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,65 +21,46 @@ import org.json.JSONObject;
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
 
 public class Experiments extends Fragment {
 
-    private ExperimentsViewModel experimentsViewModel;
+    private RobotConnectionViewModel robotConnectionViewModel;
     private PermissionsViewModel permissionsViewModel;
-    private LoginViewModel loginViewModel;
+    private ExperimentsViewModel experimentsViewModel;
 
-    private Boolean isAuthorized = false;
-
-    int i = 0;
+    private Boolean robotConnected = false;
+    private String experimentName = "";
+    private int init = 0;
 
     // Required empty public constructor
-    public Experiments() {}
+    public Experiments() { }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_experiments, container, false);
 
-        v.findViewById(R.id.btnExecExperimentSeriesDisolucio).setOnClickListener(view -> onExecExperimentCheckPermissions(getResources().getString(R.string.titleSeriesDisolucio)));
-        v.findViewById(R.id.btnExecExperimentBarrejaColors).setOnClickListener(view -> onExecExperimentCheckPermissions(getResources().getString(R.string.titleBarrejaColorsPrimaris)));
-        v.findViewById(R.id.btnExecExperimentCapesDensitat).setOnClickListener(view -> onExecExperimentCheckPermissions(getResources().getString(R.string.titleCapesDeDensitat)));
+        v.findViewById(R.id.btnExecExperimentSeriesDisolucio).setOnClickListener(view -> sendExecutionExperiment(getResources().getString(R.string.titleSeriesDisolucio)));
+        v.findViewById(R.id.btnExecExperimentBarrejaColors).setOnClickListener(view -> sendExecutionExperiment(getResources().getString(R.string.titleBarrejaColorsPrimaris)));
+        v.findViewById(R.id.btnExecExperimentCapesDensitat).setOnClickListener(view -> sendExecutionExperiment(getResources().getString(R.string.titleCapesDeDensitat)));
 
         v.findViewById(R.id.btnBoardtSeriesDisolucio).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleSeriesDisolucio)));
         v.findViewById(R.id.btnBoardBarrejaColors).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleBarrejaColorsPrimaris)));
         v.findViewById(R.id.btnBoardCapesDensitat).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleCapesDeDensitat)));
 
+        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
-        loginViewModel = new ViewModelProvider(Login.getContext()).get(LoginViewModel.class);
-
         experimentsViewModel = new ViewModelProvider(Login.getContext()).get(ExperimentsViewModel.class);
 
-        Log.d("TAG", "onExecExperimentCheckPermissions: " + Login.getAdminLogged());
-
+        checkRobotConnection();
         return v;
-    }
-
-    private void onExecExperimentCheckPermissions(String experimentName) {
-        if (Login.getAdminLogged()) {
-            execExperiment(experimentName);
-        } else {
-            permissionsViewModel.checkUserPermissions(Login.getIpAddress());
-
-            if (i == 0) {
-                permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
-                    try {
-                        JSONObject responseObject = new JSONObject(auth);
-                        if (responseObject.getString("response").equals("true"))
-                            execExperiment(experimentName);
-                        else Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                });
-            } i++;
-        }
     }
 
     @Override
@@ -87,18 +68,61 @@ public class Experiments extends Fragment {
         super.onAttach(context);
     }
 
-    private void execExperiment(String experimentName) {
-        switch (experimentName) {
-            case "Sèries de disolució":
-                experimentsViewModel.startExperiment("series_de_dissolucio");
-                break;
-            case "Barreja colors primaris":
-                experimentsViewModel.startExperiment("barreja_colors");
-                break;
-            case "Capes de densitat":
-                experimentsViewModel.startExperiment("capes_de_densitat");
-                break;
+    private void checkRobotConnection() {
+        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("response").equals("robot-connection-failed")) {
+                    dialogWarningRobotNotConnected();
+                    robotConnected = false;
+                } robotConnected = true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void dialogWarningRobotNotConnected() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.txtRobotNotConnected)
+                .setMessage(R.string.txtCheckRobotConnection)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void setupPermissionsObserver() {
+        if (init == 0) {
+            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
+            permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
+                try {
+                    JSONObject responseObject = new JSONObject(auth);
+                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeExperiment();
+                    else Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        } init++;
+    }
+
+    private void sendExecutionExperiment(String experiment) {
+        if (robotConnected) {
+            setupPermissionsObserver();
+            experimentName = experiment;
+            if (Login.getAdminLogged()) executeExperiment();
+            else permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "experiments");
         }
+    }
+
+    private void executeExperiment() {
+        if (experimentName.equals(getResources().getString(R.string.titleSeriesDisolucio)))
+            experimentsViewModel.startExperiment("series_de_dissolucio");
+        else if (experimentName.equals(getResources().getString(R.string.titleBarrejaColorsPrimaris)))
+            experimentsViewModel.startExperiment("barreja_colors");
+        else if (experimentName.equals(getResources().getString(R.string.titleCapesDeDensitat)))
+            experimentsViewModel.startExperiment("capes_de_densitat");
     }
 
     private void dialogHowToPrepareExperiment(String experimentName) {          /*Todo: change images*/
@@ -108,17 +132,12 @@ public class Experiments extends Fragment {
 
         ImageView image = view.findViewById(R.id.imgBoardExperiment);
 
-        switch (experimentName) {
-            case "Sèries de disolució":
-                image.setImageResource(R.drawable.quibot_bg_light);
-                break;
-            case "Barreja colors primaris":
-                image.setImageResource(R.drawable.quibot_bg_light);
-                break;
-            case "Capes de densitat":
-                image.setImageResource(R.drawable.quibot_bg_light);
-                break;
-        }
+        if (experimentName.equals(getResources().getString(R.string.titleSeriesDisolucio)))
+            image.setImageResource(R.drawable.quibot_bg_light);
+        else if (experimentName.equals(getResources().getString(R.string.titleBarrejaColorsPrimaris)))
+            image.setImageResource(R.drawable.quibot_bg_light);
+        else if (experimentName.equals(getResources().getString(R.string.titleCapesDeDensitat)))
+            image.setImageResource(R.drawable.quibot_bg_light);
 
         dialog.setContentView(view);
         dialog.show();

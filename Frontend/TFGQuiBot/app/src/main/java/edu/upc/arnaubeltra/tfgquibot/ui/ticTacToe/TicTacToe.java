@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.RobotConnectionViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
 public class TicTacToe extends Fragment {
 
@@ -200,7 +200,7 @@ public class TicTacToe extends Fragment {
     }
 
     private void onGetUserPermissions() {
-        permissionsViewModel.checkUserPermissions(Login.getIpAddress());
+        permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe");
         permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), response -> {
             try {
                 JSONObject responseObject = new JSONObject(response);
@@ -229,7 +229,7 @@ public class TicTacToe extends Fragment {
             while (THREAD_RUNNING) {
                 while (!GAME_STARTED) {
                     if (!THREAD_RUNNING) break;
-                    permissionsViewModel.checkUserPermissions(Login.getIpAddress());
+                    permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe");
                     try {
                         TimeUnit.SECONDS.sleep(1);
                     } catch (InterruptedException e) {

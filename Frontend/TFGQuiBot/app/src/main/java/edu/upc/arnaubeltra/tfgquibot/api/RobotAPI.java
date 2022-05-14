@@ -18,14 +18,14 @@ import java.util.Map;
 
 import edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgramViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.ticTacToe.TicTacToeViewModel;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.NavigationViewModel;
 import edu.upc.arnaubeltra.tfgquibot.models.ListUsersAPI;
 import edu.upc.arnaubeltra.tfgquibot.models.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersListViewModel;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.RobotConnectionViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
 public class RobotAPI extends ViewModel {
 
@@ -121,8 +121,8 @@ public class RobotAPI extends ViewModel {
         getRequest(url, "adminLogout");
     }
 
-    public void checkPermissionsUser(String userIP) {
-        String url = BASE_URL + "/user/check-permissions?user=" + userIP;
+    public void checkPermissionsUser(String userIP, String activity) {
+        String url = BASE_URL + "/user/check-permissions?user=" + userIP + "&activity=" + activity;
         getRequest(url, "checkPermissionsUser");
     }
 
@@ -185,7 +185,7 @@ public class RobotAPI extends ViewModel {
     }
 
     public void sendRobotActualActivity(String activity) {
-        String url = BASE_URL + "/admin/actual-activity?activity" + activity;
+        String url = BASE_URL + "/admin/actual-activity?activity=" + activity;
         getRequest(url, "sendRobotActualActivity");
     }
 

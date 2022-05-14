@@ -95,6 +95,7 @@
     <string name="txtQuitPermissions">Treure accés</string>
     <string name="txtNoUsersLoggedIn">Cap usuari ha accedit a l\'aplicació.</string>
     <string name="txtRefreshedList">Llista d\'usuaris refrescada</string>
+    <string name="txtSelectActivityToAuthorize">Selecciona l\'activitat</string>
 
     <string name="txtSendProgram">Enviar programa</string>
     <string name="txtAddAction">Afegir acció</string>
@@ -105,6 +106,7 @@
     <string name="txtLeft">Esquerra</string>
     <string name="txtActionPipette">Accionar xeringa</string>
     <string name="txtRepeatPreviousActions">Repeteix</string>
+
 
 
     <string name="txtTitleDialogCustomProgram">Selecciona l\'acció a realitzar</string>
@@ -133,5 +135,7 @@
     <!--<string name="txtHomeAdmin">Benvingut a l\'aplicació Qui-Bot H2O.\n\nCom a administrador pots:\nConsultar la llista d\'experimentsInteractuar amb el robotVeure la llista d'usuaris no administradors que estan utilitzant l\'aplicació.</string>-->
 
     <string name="txtTitleDialogSelectBoard">Selecciona el tipus de tauler</string>
+    <string name="txtCannotChangePermission">Error canviant permisos per a l\'usuari. L\'activitat seleccionada té el màxim de usuaris permesos.</string>
+    <string name="txtErrorChangingPermissions">Error canviant permisos per a l\'usuari.</string>
 
 </resources>

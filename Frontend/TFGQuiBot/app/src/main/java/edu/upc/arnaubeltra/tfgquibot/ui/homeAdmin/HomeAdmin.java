@@ -3,21 +3,13 @@ package edu.upc.arnaubeltra.tfgquibot.ui.homeAdmin;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.material.navigation.NavigationView;
-
 import edu.upc.arnaubeltra.tfgquibot.AdminNavigation;
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
-import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
-import edu.upc.arnaubeltra.tfgquibot.ui.ticTacToe.TicTacToeViewModel;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
 
 public class HomeAdmin extends Fragment {
 

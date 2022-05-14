@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,24 +28,32 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
+import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.CustomProgramAdapter;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.ItemMoveCallback;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.BoardSize;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
 public class CustomProgram extends Fragment implements CustomProgramAdapter.ICustomProgramRCVItemClicked, AdapterView.OnItemSelectedListener  {
 
+    private static CustomProgram instance;
+
     private RecyclerView rcvCustomProgram;
     private CustomProgramAdapter customProgramAdapter;
+    private ArrayList<String> actionsList = new ArrayList<>();
 
     public TextView txtNoActionsCustomProgram;
 
-    private static CustomProgram instance;
-
+    private RobotConnectionViewModel robotConnectionViewModel;
+    private PermissionsViewModel permissionsViewModel;
     private CustomProgramViewModel customProgramViewModel;
 
-    ArrayList<String> actionsList = new ArrayList<>();
+    private Boolean robotConnected = false;
+    private int init = 0;
 
+    // Required empty public constructor
     public CustomProgram() { }
 
     public static CustomProgram getInstance() {
@@ -64,11 +73,11 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         instance = this;
         View v = inflater.inflate(R.layout.fragment_custom_program, container, false);
 
-        v.findViewById(R.id.btnSendCustomProgram).setOnClickListener(view -> onSendCustomProgram());
+        v.findViewById(R.id.btnSendCustomProgram).setOnClickListener(view -> sendCustomProgramToRobot());
         v.findViewById(R.id.btnAddActionCustomProgram).setOnClickListener(view -> openDialogNewAction(0,""));
+        txtNoActionsCustomProgram = v.findViewById(R.id.txtNoActionsCustomProgram);
 
         rcvCustomProgram = v.findViewById(R.id.rcvCustomProgram);
-
         customProgramAdapter = new CustomProgramAdapter(this);
 
         ItemTouchHelper.Callback callback = new ItemMoveCallback(customProgramAdapter);
@@ -78,15 +87,36 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         rcvCustomProgram.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvCustomProgram.setAdapter(customProgramAdapter);
 
-        txtNoActionsCustomProgram = v.findViewById(R.id.txtNoActionsCustomProgram);
-
+        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
+        permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
         customProgramViewModel = new ViewModelProvider(Login.getContext()).get(CustomProgramViewModel.class);
-        setupCustomProgramResponseListener();
 
-        BoardSize boardSize = BoardSize.getInstance();
-        boardSize.createDialogBoardSize(getActivity(), Login.getContext(), "Forats mitjans");
-
+        checkRobotConnection();
         return v;
+    }
+
+    private void checkRobotConnection() {
+        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("response").equals("robot-connection-failed")) {
+                    dialogWarningRobotNotConnected();
+                    robotConnected = false;
+                } robotConnected = true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void dialogWarningRobotNotConnected() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.txtRobotNotConnected)
+                .setMessage(R.string.txtCheckRobotConnection)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void openDialogNewAction(int index, String value) {
@@ -96,7 +126,6 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         View view = inflater.inflate(R.layout.dialog_with_spinner, null);
 
         builder.setView(view);
-
         if (value.equals("")) builder.setTitle(R.string.txtTitleDialogCustomProgram);
         else builder.setTitle(R.string.txtTitleEditDialogCustomProgram);
 
@@ -122,11 +151,10 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, actions);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinner.setAdapter(dataAdapter);
+
         if (!value.equals(""))
             spinner.setSelection(dataAdapter.getPosition(value));
-
         return spinner;
     }
 
@@ -147,67 +175,69 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        String item = adapterView.getItemAtPosition(position).toString();
-    }
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) { }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> adapterView) { }
+
+    private void setupPermissionsObserver() {
+        if (init == 0) {
+            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
+            permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
+                Log.d("TAG", "setupPermissionsObserver: " + auth);
+                try {
+                    JSONObject responseObject = new JSONObject(auth);
+                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) onSendCustomProgram();
+                    else Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        } init++;
+    }
+
+    private void sendCustomProgramToRobot() {
+        if (robotConnected) {
+            setupPermissionsObserver();
+            if (Login.getAdminLogged()) onSendCustomProgram();
+            else permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "custom_program");
+        }
     }
 
     private void onSendCustomProgram() {
-        if (actionsList.size() != 0) customProgramViewModel.onSendListActions(parseActions());
-        else Toast.makeText(getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
+        if (actionsList.size() != 0) {
+            setupCustomProgramResponseListener();
+            customProgramViewModel.onSendListActions(parseActions());
+        } else Toast.makeText(getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
     }
 
     private void setupCustomProgramResponseListener() {
-        customProgramViewModel.onSendListActions("");
-        customProgramViewModel.getSendListActionsRequestResponse().observe(getViewLifecycleOwner(), response -> {
-            try {
-                JSONObject responseObject = new JSONObject(response);
-                if (responseObject.getString("response").equals("custom-program-actions-success"))
-                    Toast.makeText(getContext(), R.string.txtProgramSentCorrectly, Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getContext(), R.string.txtProgramError, Toast.LENGTH_SHORT).show();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
+        if (init == 0) {
+            customProgramViewModel.onSendListActions("");
+            customProgramViewModel.getSendListActionsRequestResponse().observe(getViewLifecycleOwner(), response -> {
+                try {
+                    JSONObject responseObject = new JSONObject(response);
+                    if (responseObject.getString("response").equals("custom-program-actions-success"))
+                        Toast.makeText(getContext(), R.string.txtProgramSentCorrectly, Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getContext(), R.string.txtProgramError, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        } init++;
     }
 
     private String parseActions() {
         String parsedActionsList = "";
         for (int i = 0; i < actionsList.size(); i++) {
-            switch (actionsList.get(i)) {
-                case "Endavant":
-                    //parsedActionsList.add("up");
-                    parsedActionsList += "up";
-                    break;
-                case "Enrere":
-                    //parsedActionsList.add("down");
-                    parsedActionsList += "down";
-                    break;
-                case "Dreta":
-                    //parsedActionsList.add("right");
-                    parsedActionsList += "right";
-                    break;
-                case "Esquerra":
-                    //parsedActionsList.add("left");
-                    parsedActionsList += "left";
-                    break;
-                case "Baixar xeringa":
-                    //parsedActionsList.add("lower_pipette");
-                    parsedActionsList += "lower_pipette";
-                    break;
-                case "Pujar xeringa":
-                    //parsedActionsList.add("raise_pipette");
-                    parsedActionsList += "raise_pipette";
-                    break;
-                case "Accionar xeringa":
-                    //parsedActionsList.add("suck");
-                    parsedActionsList += "suck";
-                    break;
-            }
+            if (actionsList.get(i).equals(getResources().getString(R.string.txtForward))) parsedActionsList += "up";
+            else if (actionsList.get(i).equals(getResources().getString(R.string.txtBackwards))) parsedActionsList += "down";
+            else if (actionsList.get(i).equals(getResources().getString(R.string.txtRight))) parsedActionsList += "right";
+            else if (actionsList.get(i).equals(getResources().getString(R.string.txtLeft))) parsedActionsList += "left";
+            else if (actionsList.get(i).equals(getResources().getString(R.string.txtLowerPipette))) parsedActionsList += "lower_pipette";
+            else if (actionsList.get(i).equals(getResources().getString(R.string.txtRaisePipette))) parsedActionsList += "raise_pipette";
+            else if (actionsList.get(i).equals(getResources().getString(R.string.txtActionPipette))) parsedActionsList += "suck";
             parsedActionsList += ",";
         }
         return parsedActionsList;

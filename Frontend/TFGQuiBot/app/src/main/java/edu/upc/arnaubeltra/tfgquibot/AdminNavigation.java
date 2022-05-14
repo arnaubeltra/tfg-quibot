@@ -22,7 +22,7 @@ import org.json.JSONObject;
 import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityAdminNavigationBinding;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.NavigationViewModel;
 
 public class AdminNavigation extends AppCompatActivity {
 

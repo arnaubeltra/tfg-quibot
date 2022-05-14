@@ -86,6 +86,7 @@
         <entry key="..\:/Users/Arnau/Desktop/TODAY/TFGQuiBot/app/src/main/res/menu/user_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TODAY/TFGQuiBot/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.346" />
         <entry key="app/src/main/res/drawable/arrow_up_down.xml" value="0.1975" />
+        <entry key="app/src/main/res/drawable/box.xml" value="0.315" />
         <entry key="app/src/main/res/drawable/box_2.xml" value="0.174" />
         <entry key="app/src/main/res/drawable/ic_reload.xml" value="0.324" />
         <entry key="app/src/main/res/layout/activity_admin_login.xml" value="0.3101851851851852" />
@@ -96,12 +97,14 @@
         <entry key="app/src/main/res/layout/dialog_experiments.xml" value="0.3101851851851852" />
         <entry key="app/src/main/res/layout/dialog_select_board.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/dialog_tic_tac_toe.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/dialog_with_spinner.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_custom_program.xml" value="0.3101851851851852" />
         <entry key="app/src/main/res/layout/fragment_experiments.xml" value="0.3388888888888889" />
         <entry key="app/src/main/res/layout/fragment_home_admin.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_home_user.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/fragment_interact_with_robot.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_tic_tac_toe.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_users_list.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/layout_custom_program.xml" value="0.3572916666666667" />
         <entry key="app/src/main/res/layout/layout_list_users.xml" value="0.30462962962962964" />
         <entry key="app/src/main/res/layout/nav_header_navigation.xml" value="0.21354166666666666" />

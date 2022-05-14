@@ -40,7 +40,7 @@ public class AdminLogin extends AppCompatActivity {
     }
 
     private void login() {
-        //goToHomeActivityAdmin();
+        goToHomeActivityAdmin();
         String email = emailUser.getText().toString();
         String password = passwordUser.getText().toString();
 

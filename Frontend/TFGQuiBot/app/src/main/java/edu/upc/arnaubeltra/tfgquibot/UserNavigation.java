@@ -5,17 +5,12 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -30,7 +25,7 @@ import org.json.JSONObject;
 
 import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityUserNavigationBinding;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.NavigationViewModel;
 
 public class UserNavigation extends AppCompatActivity {
 

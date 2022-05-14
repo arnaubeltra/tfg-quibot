@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,60 +18,46 @@ import org.json.JSONObject;
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
-import edu.upc.arnaubeltra.tfgquibot.ui.shared.BoardSize;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
-import edu.upc.arnaubeltra.tfgquibot.viewModels.RobotConnectionViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
 public class InteractWithRobot extends Fragment {
 
-    private InteractWithRobotViewModel interactWithRobotViewModel;
-    private PermissionsViewModel permissionsViewModel;
     private RobotConnectionViewModel robotConnectionViewModel;
-    private LoginViewModel loginViewModel;
+    private PermissionsViewModel permissionsViewModel;
+    private InteractWithRobotViewModel interactWithRobotViewModel;
 
-    private Boolean isAuthorized = false;
+    private Boolean robotConnected = false;
+    private String interaction = "";
+    private int init = 0;
 
     // Required empty public constructor
-    public InteractWithRobot() {}
+    public InteractWithRobot() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_interact_with_robot, container, false);
 
-        v.findViewById(R.id.btnForward).setOnClickListener(view -> checkPermissions("forward"));
-        v.findViewById(R.id.btnBackwards).setOnClickListener(view -> checkPermissions("backwards"));
-        v.findViewById(R.id.btnLeft).setOnClickListener(view -> checkPermissions("left"));
-        v.findViewById(R.id.btnRight).setOnClickListener(view -> checkPermissions("right"));
-        v.findViewById(R.id.btnSuck).setOnClickListener(view -> checkPermissions("suck"));
-        v.findViewById(R.id.btnRaisePipette).setOnClickListener(view -> checkPermissions("raise_pipette"));
-        v.findViewById(R.id.btnLowerPipette).setOnClickListener(view -> checkPermissions("lower_pipette"));
-        v.findViewById(R.id.btnReset).setOnClickListener(view -> checkPermissions("reset"));
-        v.findViewById(R.id.btnReadColor).setOnClickListener(view -> checkPermissions("readColor"));
+        v.findViewById(R.id.btnForward).setOnClickListener(view -> sendActionToRobot("forward"));
+        v.findViewById(R.id.btnBackwards).setOnClickListener(view -> sendActionToRobot("backwards"));
+        v.findViewById(R.id.btnLeft).setOnClickListener(view -> sendActionToRobot("left"));
+        v.findViewById(R.id.btnRight).setOnClickListener(view -> sendActionToRobot("right"));
+        v.findViewById(R.id.btnSuck).setOnClickListener(view -> sendActionToRobot("suck"));
+        v.findViewById(R.id.btnRaisePipette).setOnClickListener(view -> sendActionToRobot("raise_pipette"));
+        v.findViewById(R.id.btnLowerPipette).setOnClickListener(view -> sendActionToRobot("lower_pipette"));
+        v.findViewById(R.id.btnReset).setOnClickListener(view -> sendActionToRobot("reset"));
+        v.findViewById(R.id.btnReadColor).setOnClickListener(view -> sendActionToRobot("readColor"));
 
+        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
+        permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
         interactWithRobotViewModel = new ViewModelProvider(Login.getContext()).get(InteractWithRobotViewModel.class);
 
-        permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
-        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
-
-        loginViewModel = new ViewModelProvider(Login.getContext()).get(LoginViewModel.class);
-
         checkRobotConnection();
-
-        //if (Login.getAdminLogged()) {
-
-        //}
-
-        //BoardSize boardSize = BoardSize.getInstance();
-        //boardSize.createDialogBoardSize(getActivity(), Login.getContext(), "Forats mitjans");
-
         return v;
     }
 
@@ -79,8 +66,10 @@ public class InteractWithRobot extends Fragment {
         robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
             try {
                 JSONObject responseObject = new JSONObject(response);
-                if (responseObject.getString("response").equals("robot-connection-failed"))
+                if (responseObject.getString("response").equals("robot-connection-failed")) {
                     dialogWarningRobotNotConnected();
+                    robotConnected = false;
+                } robotConnected = true;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -96,8 +85,31 @@ public class InteractWithRobot extends Fragment {
         dialog.show();
     }
 
-    private void action(String interaction) {
-        //checkPermissions();
+    private void setupPermissionsObserver() {
+        if (init == 0) {
+            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
+            permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
+                try {
+                    JSONObject responseObject = new JSONObject(auth);
+                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeAction();
+                    else Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        } init++;
+    }
+
+    private void sendActionToRobot(String action) {
+        if (robotConnected) {
+            setupPermissionsObserver();
+            interaction = action;
+            if (Login.getAdminLogged()) executeAction();
+            else permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "interact");
+        }
+    }
+
+    private void executeAction() {
         switch (interaction) {
             case "forward":
                 interactWithRobotViewModel.sendInteraction("forward");
@@ -126,31 +138,6 @@ public class InteractWithRobot extends Fragment {
             case "readColor":
                 interactWithRobotViewModel.sendInteraction("readColor");
                 break;
-            default:
-                break;
-        }
-    }
-
-    private int i = 0;
-    private void checkPermissions(String interaction) {
-        if (Login.getAdminLogged()) {
-            action(interaction);
-        } else {
-            permissionsViewModel.checkUserPermissions(Login.getIpAddress());
-
-            if (i == 0) {
-                permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
-                    try {
-                        JSONObject responseObject = new JSONObject(auth);
-                        if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match"))
-                            action(interaction);
-                        else
-                            Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
         }
     }
 }
