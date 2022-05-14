@@ -37,13 +37,6 @@ tools:context=".ui.homeUser.HomeUser">
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/horizontalGuideline38"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.38" />
-
             <ImageView
                 android:id="@+id/imageViewLogoUser"
                 android:layout_width="150dp"
@@ -74,29 +67,28 @@ tools:context=".ui.homeUser.HomeUser">
                 android:id="@+id/btnExperimentsHomeUser"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginTop="32dp"
                 android:backgroundTint="#f36717"
-                android:paddingTop="12dp"
                 android:drawableTop="@drawable/experiments_icon_big"
-                android:text="@string/menu_experiments"
                 android:drawableTint="@color/white"
+                android:paddingTop="12dp"
+                android:text="@string/menu_experiments"
                 app:layout_constraintEnd_toStartOf="@+id/verticalGuideline50"
-                app:layout_constraintTop_toTopOf="@+id/horizontalGuideline38" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewTitleUser" />
 
             <Button
                 android:id="@+id/btnInteractHomeUser"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/menu_interact"
                 android:backgroundTint="#c0053f"
-                android:paddingTop="5dp"
                 android:drawableTop="@drawable/interact_icon_big"
                 android:drawableTint="@color/white"
+                android:paddingTop="5dp"
+                android:text="@string/menu_interact"
                 app:layout_constraintStart_toStartOf="@+id/verticalGuideline50"
-                app:layout_constraintTop_toTopOf="@+id/horizontalGuideline38" />
+                app:layout_constraintTop_toTopOf="@+id/btnExperimentsHomeUser" />
 
             <Button
                 android:id="@+id/btnCustomProgramHomeUser"

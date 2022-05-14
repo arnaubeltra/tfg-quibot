@@ -37,6 +37,7 @@
     <string name="txtWaitLogin">Espera mentre s\'inicia sessió.</string>
     <string name="txtLoggingIn">Iniciant sessió</string>
     <string name="txtErrorLoggingIn">Error iniciant sessió.</string>
+    <string name="txtErrorAnotherAdminLogged">Error: un altre administrador ha iniciat sessió.</string>
 
     <!-- Register -->
     <string name="registering">Registrant</string>
@@ -130,5 +131,7 @@
     <string name="txtHowToPrepareExperiment">Com preparar el tauler</string>
 
     <!--<string name="txtHomeAdmin">Benvingut a l\'aplicació Qui-Bot H2O.\n\nCom a administrador pots:\nConsultar la llista d\'experimentsInteractuar amb el robotVeure la llista d'usuaris no administradors que estan utilitzant l\'aplicació.</string>-->
+
+    <string name="txtTitleDialogSelectBoard">Selecciona el tipus de tauler</string>
 
 </resources>

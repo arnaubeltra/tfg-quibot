@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -22,18 +21,22 @@ import org.json.JSONObject;
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
 
 
-public class ExperimentsList extends Fragment {
+public class Experiments extends Fragment {
 
+    private ExperimentsViewModel experimentsViewModel;
     private PermissionsViewModel permissionsViewModel;
+    private LoginViewModel loginViewModel;
+
     private Boolean isAuthorized = false;
 
     int i = 0;
 
     // Required empty public constructor
-    public ExperimentsList() {}
+    public Experiments() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,26 +52,34 @@ public class ExperimentsList extends Fragment {
         v.findViewById(R.id.btnBoardCapesDensitat).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleCapesDeDensitat)));
 
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
+        loginViewModel = new ViewModelProvider(Login.getContext()).get(LoginViewModel.class);
+
+        experimentsViewModel = new ViewModelProvider(Login.getContext()).get(ExperimentsViewModel.class);
+
+        Log.d("TAG", "onExecExperimentCheckPermissions: " + Login.getAdminLogged());
 
         return v;
     }
 
     private void onExecExperimentCheckPermissions(String experimentName) {
-        permissionsViewModel.checkUserPermissions(Login.getIpAddress());
+        if (Login.getAdminLogged()) {
+            execExperiment(experimentName);
+        } else {
+            permissionsViewModel.checkUserPermissions(Login.getIpAddress());
 
-        if (i == 0) {
-            permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
-                try {
-                    JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getString("response").equals("true"))
-                        execExperiment(experimentName);
-                    else Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            });
-        } i++;
-
+            if (i == 0) {
+                permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
+                    try {
+                        JSONObject responseObject = new JSONObject(auth);
+                        if (responseObject.getString("response").equals("true"))
+                            execExperiment(experimentName);
+                        else Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
+            } i++;
+        }
     }
 
     @Override
@@ -79,10 +90,13 @@ public class ExperimentsList extends Fragment {
     private void execExperiment(String experimentName) {
         switch (experimentName) {
             case "Sèries de disolució":
+                experimentsViewModel.startExperiment("series_de_dissolucio");
                 break;
             case "Barreja colors primaris":
+                experimentsViewModel.startExperiment("barreja_colors");
                 break;
             case "Capes de densitat":
+                experimentsViewModel.startExperiment("capes_de_densitat");
                 break;
         }
     }

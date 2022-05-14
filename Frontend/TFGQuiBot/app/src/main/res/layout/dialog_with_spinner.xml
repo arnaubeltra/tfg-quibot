@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <Spinner
-        android:id="@+id/spinnerSelectActions"
+        android:id="@+id/spinnerSelectPropertiesAndActions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

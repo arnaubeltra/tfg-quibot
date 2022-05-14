@@ -25,13 +25,6 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/horizontalGuideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.38" />
-
             <ImageView
                 android:id="@+id/imageViewBackground"
                 android:layout_width="450dp"
@@ -74,42 +67,54 @@
                 android:id="@+id/btnExperimentsHomeAdmin"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginTop="32dp"
                 android:backgroundTint="#f36717"
                 android:drawableTop="@drawable/experiments_icon_big"
                 android:drawableTint="@color/white"
                 android:paddingTop="12dp"
                 android:text="@string/menu_experiments"
                 app:layout_constraintEnd_toStartOf="@+id/verticalGuideline"
-                app:layout_constraintTop_toTopOf="@+id/horizontalGuideline" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewTitleAdmin" />
 
             <Button
                 android:id="@+id/btnInteractHomeAdmin"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
                 android:backgroundTint="#c0053f"
                 android:drawableTop="@drawable/interact_icon_big"
                 android:drawableTint="@color/white"
                 android:paddingTop="5dp"
                 android:text="@string/menu_interact"
                 app:layout_constraintStart_toStartOf="@+id/verticalGuideline"
-                app:layout_constraintTop_toTopOf="@+id/horizontalGuideline" />
+                app:layout_constraintTop_toTopOf="@+id/btnExperimentsHomeAdmin" />
+
+            <Button
+                android:id="@+id/btnCustomProgramHomeAdmin"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#59b431"
+                android:drawableTop="@drawable/custom_program_icon_big"
+                android:drawableTint="@color/white"
+                android:text="@string/menu_custom_program"
+                app:layout_constraintEnd_toEndOf="@+id/btnExperimentsHomeAdmin"
+                app:layout_constraintStart_toStartOf="@+id/btnExperimentsHomeAdmin"
+                app:layout_constraintTop_toBottomOf="@+id/btnExperimentsHomeAdmin" />
 
             <Button
                 android:id="@+id/btnUserListHomeAdmin"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="#59b431"
+                android:backgroundTint="#094893"
                 android:drawableTop="@drawable/icon_person_big"
                 android:drawableTint="@color/white"
                 android:text="@string/menu_users_list"
-                app:layout_constraintEnd_toEndOf="@+id/btnExperimentsHomeAdmin"
-                app:layout_constraintStart_toStartOf="@+id/btnExperimentsHomeAdmin"
-                app:layout_constraintTop_toBottomOf="@+id/btnExperimentsHomeAdmin" />
+                app:layout_constraintEnd_toEndOf="@+id/btnInteractHomeAdmin"
+                app:layout_constraintStart_toStartOf="@+id/btnInteractHomeAdmin"
+                app:layout_constraintTop_toBottomOf="@+id/btnInteractHomeAdmin" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

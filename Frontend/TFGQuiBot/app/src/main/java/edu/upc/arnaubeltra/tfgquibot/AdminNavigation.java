@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityAdminNavigationBinding;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
 
 public class AdminNavigation extends AppCompatActivity {
@@ -29,6 +30,7 @@ public class AdminNavigation extends AppCompatActivity {
     private ActivityAdminNavigationBinding binding;
 
     private NavigationViewModel navigationViewModel;
+    private LoginViewModel loginViewModel;
 
     public static NavController navController;
 
@@ -54,6 +56,7 @@ public class AdminNavigation extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
+        loginViewModel = new ViewModelProvider(Login.getContext()).get(LoginViewModel.class);
     }
 
     public static NavController getNavController() {
@@ -82,8 +85,10 @@ public class AdminNavigation extends AppCompatActivity {
                 navigationViewModel.getLogoutAdminResponse().observe(this, response -> {
                     try {
                         JSONObject responseObject = new JSONObject(response);
-                        if (responseObject.getString("response").equals("logout-admin-success"))
+                        if (responseObject.getString("response").equals("logout-admin-success")) {
+                            Login.setAdminLogged(false);
                             goToLoginActivity();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

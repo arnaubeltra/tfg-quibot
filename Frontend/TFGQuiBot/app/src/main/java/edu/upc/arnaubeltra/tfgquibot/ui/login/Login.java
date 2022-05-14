@@ -64,8 +64,8 @@ public class Login extends AppCompatActivity {
     }
 
     private void login() {
-        goToHomeActivityUser();
-        /*String name = nameUser.getText().toString();
+        //goToHomeActivityUser();
+        String name = nameUser.getText().toString();
         String surname = surnameUser.getText().toString();
 
         if (name.isEmpty())
@@ -90,7 +90,7 @@ public class Login extends AppCompatActivity {
                     e.printStackTrace();
                 }
             });
-        }*/
+        }
     }
 
     private void goToHomeActivityUser() {
@@ -101,5 +101,17 @@ public class Login extends AppCompatActivity {
 
     private void goToAdminLogin() {
         startActivity(new Intent(Login.this, AdminLogin.class));
+    }
+
+    public static boolean adminLogged;
+
+    public static boolean getAdminLogged() {
+        Log.d("TAG", "getAdminLogged: " + adminLogged);
+        return adminLogged;
+    }
+
+    public static void setAdminLogged(Boolean status) {
+        adminLogged = status;
+        Log.d("TAG", "setAdminLogged: " + adminLogged);
     }
 }

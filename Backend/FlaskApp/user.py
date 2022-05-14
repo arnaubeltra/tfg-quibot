@@ -1,5 +1,5 @@
 class User(object):
-    def __init__(self, name, surname, isAuthorized, player = None):
+    def __init__(self, name, surname, isAuthorized, player = None, activity = None):
         self.name = name
         self.surname = surname
         self.isAuthorized = isAuthorized
@@ -22,3 +22,9 @@ class User(object):
 
     def setPlayer(self, newPlayer):
         self.player = newPlayer
+
+    def getActivity(self):
+        return self.activity
+
+    def setActivity(self, newActivity):
+        self.activity = newActivity

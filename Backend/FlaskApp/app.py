@@ -8,17 +8,19 @@ import threading
 
 app = Flask(__name__)
 
-connectedUsers = {}
-connectedAdmins = 0
-
-ticTacToe = None
 
 # IP and Ports for socket connections
 HOST_ROBOT = '192.168.100.15'
-PORT_ROBOT = 10001
+PORT_ROBOT = 9999
+
+# Global variables
+connectedUsers = {}
+connectedAdmins = 0
+ticTacToe = None
+actualActivity = None
 
 
-# Mobile App API
+# General functionallities
 @app.route('/user/login', methods = ['POST'])
 def loginUser():
     global connectedUsers
@@ -35,6 +37,9 @@ def loginAdmin():
         if (connectedAdmins == 0):
             connectedAdmins += 1
             response = {'response': 'login-admin-success'}
+            return jsonify(response)
+        else: 
+            response = {'response': 'another-admin-loged'}
             return jsonify(response)
     return ""
 
@@ -63,18 +68,31 @@ def checkRobotConnection():
         try:
             robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
-            return {'response': 'robot-connection-success'}
+            response = {'response': 'robot-connection-success'}
         except socket.error:
-            return {'response': 'robot-connection-failed'}
+            response = {'response': 'robot-connection-failed'}
+        return jsonify(response)
 
 @app.route('/user/check-permissions', methods = ['GET'])
 def checkPermissionsUser():
     global connectedUsers
+    global actualActivity
     if (request.method == 'GET'):
         userIP = request.args.get('user')
+        activity = request.args.get('activity')
         auth = connectedUsers[userIP].isAuthorized
-        response = {'response': auth}
+        if (activity != actualActivity):
+            response = {'response': auth, 'activity': 'not-match'}
+        else:
+            response = {'response': auth, 'activity': 'match'}
         return jsonify(response)
+    return ""
+
+@app.route('/admin/actual-activity')
+def specifyActualRobotActivity():
+    global actualActivity
+    if (request.method == 'GET'):
+        actualActivity = request.args.get('activity')
     return ""
 
 @app.route('/user/change-permissions', methods = ['GET'])
@@ -104,6 +122,63 @@ def listUsers():
             return jsonify(response)
     return ""
 
+
+# Specific functionallities
+# Experiments
+@app.route("/experiment", methods = ['GET'])
+def experiment():
+    robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+    if (request.method == 'GET'):
+        name = request.args.get('name')
+        if (name == "series_de_dissolucio"):
+            send = b"experiment series_de_dissolucio"
+        elif (name == "barreja_colors"):
+            send = b"experiment barreja_colors"
+        elif (name == "capes_de_densitat"):
+            send = b"experiment capes_de_densitat"
+        robotSocket.sendall(send)
+        robotSocket.close()
+    return ""
+
+# Interact with robot
+@app.route("/startInteract", methods = ['GET'])
+def startInteract():
+    if (request.method == 'GET'):
+        robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+        send = "start_interact"
+        robotSocket.sendall(send)
+        robotSocket.close()
+    return ""
+
+@app.route("/sendInstruction", methods = ['GET'])
+def sendInstruction():
+    if (request.method == 'GET'):
+        robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+        send = b"action " + request.args.get('instruction').encode('UTF-8')
+        robotSocket.sendall(send)
+        robotSocket.close()
+    return ""
+
+# Custom program
+@app.route('/custom-program', methods = ['POST'])
+def customProgram():
+    if (request.method == 'POST'):
+        actions = request.form['actions']
+        if (len(actions) != 0):
+            print(actions)
+            robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+            send = b"program " + actions.encode('UTF-8')
+            robotSocket.sendall(send)
+            robotSocket.close()
+            response = {'response': 'custom-program-actions-success'}
+            return jsonify(response)
+    return ""
+
+# Tic tac toe
 @app.route("/start-ticTacToe")
 def startTicTacToe():
     global ticTacToe
@@ -147,19 +222,7 @@ def statusTicTacToe():
                 return {'response': 'game-is-over'}
             return {'response': 'no-winner', 'x': ticTacToe.getX(), 'y': ticTacToe.getY(), 'player': ticTacToe.getPlayer()}
     return ""
-
-
-# Interaction with robot
-@app.route("/sendInstruction", methods = ['GET'])
-def sendInstruction():
-    if (request.method == 'GET'):
-        robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
-        send = b"action " + request.args.get('instruction').encode('UTF-8')
-        robotSocket.sendall(send)
-        robotSocket.close()
-    return ""
-    
+ 
 @app.route("/ticTacToePosition", methods = ['GET'])
 def ticTacToePosition():
     global ticTacToe

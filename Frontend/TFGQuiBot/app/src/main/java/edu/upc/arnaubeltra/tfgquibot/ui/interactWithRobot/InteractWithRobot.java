@@ -17,6 +17,8 @@ import org.json.JSONObject;
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.LoginViewModel;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.BoardSize;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.viewModels.RobotConnectionViewModel;
 
@@ -25,6 +27,7 @@ public class InteractWithRobot extends Fragment {
     private InteractWithRobotViewModel interactWithRobotViewModel;
     private PermissionsViewModel permissionsViewModel;
     private RobotConnectionViewModel robotConnectionViewModel;
+    private LoginViewModel loginViewModel;
 
     private Boolean isAuthorized = false;
 
@@ -42,22 +45,31 @@ public class InteractWithRobot extends Fragment {
         //super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_interact_with_robot, container, false);
 
-        v.findViewById(R.id.btnForward).setOnClickListener(view -> action("forward"));
-        v.findViewById(R.id.btnBackwards).setOnClickListener(view -> action("backwards"));
-        v.findViewById(R.id.btnLeft).setOnClickListener(view -> action("left"));
-        v.findViewById(R.id.btnRight).setOnClickListener(view -> action("right"));
-        v.findViewById(R.id.btnSuck).setOnClickListener(view -> action("suck"));
-        v.findViewById(R.id.btnRaisePipette).setOnClickListener(view -> action("raise_pipette"));
-        v.findViewById(R.id.btnLowerPipette).setOnClickListener(view -> action("lower_pipette"));
-        v.findViewById(R.id.btnReset).setOnClickListener(view -> action("reset"));
-        v.findViewById(R.id.btnReadColor).setOnClickListener(view -> action("readColor"));
+        v.findViewById(R.id.btnForward).setOnClickListener(view -> checkPermissions("forward"));
+        v.findViewById(R.id.btnBackwards).setOnClickListener(view -> checkPermissions("backwards"));
+        v.findViewById(R.id.btnLeft).setOnClickListener(view -> checkPermissions("left"));
+        v.findViewById(R.id.btnRight).setOnClickListener(view -> checkPermissions("right"));
+        v.findViewById(R.id.btnSuck).setOnClickListener(view -> checkPermissions("suck"));
+        v.findViewById(R.id.btnRaisePipette).setOnClickListener(view -> checkPermissions("raise_pipette"));
+        v.findViewById(R.id.btnLowerPipette).setOnClickListener(view -> checkPermissions("lower_pipette"));
+        v.findViewById(R.id.btnReset).setOnClickListener(view -> checkPermissions("reset"));
+        v.findViewById(R.id.btnReadColor).setOnClickListener(view -> checkPermissions("readColor"));
 
         interactWithRobotViewModel = new ViewModelProvider(Login.getContext()).get(InteractWithRobotViewModel.class);
 
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
         robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
 
+        loginViewModel = new ViewModelProvider(Login.getContext()).get(LoginViewModel.class);
+
         checkRobotConnection();
+
+        //if (Login.getAdminLogged()) {
+
+        //}
+
+        //BoardSize boardSize = BoardSize.getInstance();
+        //boardSize.createDialogBoardSize(getActivity(), Login.getContext(), "Forats mitjans");
 
         return v;
     }
@@ -85,52 +97,60 @@ public class InteractWithRobot extends Fragment {
     }
 
     private void action(String interaction) {
-        checkPermissions();
-        if (isAuthorized) {
-            switch (interaction) {
-                case "forward":
-                    interactWithRobotViewModel.sendInteraction("forward");
-                    break;
-                case "backwards":
-                    interactWithRobotViewModel.sendInteraction("backwards");
-                    break;
-                case "left":
-                    interactWithRobotViewModel.sendInteraction("left");
-                    break;
-                case "right":
-                    interactWithRobotViewModel.sendInteraction("right");
-                    break;
-                case "raise_pipette":
-                    interactWithRobotViewModel.sendInteraction("raise_pipette");
-                    break;
-                case "lower_pipette":
-                    interactWithRobotViewModel.sendInteraction("lower_pipette");
-                    break;
-                case "suck":
-                    interactWithRobotViewModel.sendInteraction("suck");
-                    break;
-                case "reset":
-                    interactWithRobotViewModel.sendInteraction("reset");
-                    break;
-                case "readColor":
-                    interactWithRobotViewModel.sendInteraction("readColor");
-                    break;
-                default:
-                    break;
-            }
-        } else
-            Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+        //checkPermissions();
+        switch (interaction) {
+            case "forward":
+                interactWithRobotViewModel.sendInteraction("forward");
+                break;
+            case "backwards":
+                interactWithRobotViewModel.sendInteraction("backwards");
+                break;
+            case "left":
+                interactWithRobotViewModel.sendInteraction("left");
+                break;
+            case "right":
+                interactWithRobotViewModel.sendInteraction("right");
+                break;
+            case "raise_pipette":
+                interactWithRobotViewModel.sendInteraction("raise_pipette");
+                break;
+            case "lower_pipette":
+                interactWithRobotViewModel.sendInteraction("lower_pipette");
+                break;
+            case "suck":
+                interactWithRobotViewModel.sendInteraction("suck");
+                break;
+            case "reset":
+                interactWithRobotViewModel.sendInteraction("reset");
+                break;
+            case "readColor":
+                interactWithRobotViewModel.sendInteraction("readColor");
+                break;
+            default:
+                break;
+        }
     }
 
-    private void checkPermissions() {
-        permissionsViewModel.checkUserPermissions(Login.getIpAddress());
-        permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
-            try {
-                JSONObject responseObject = new JSONObject(auth);
-                isAuthorized = responseObject.getString("response").equals("true");
-            } catch (JSONException e) {
-                e.printStackTrace();
+    private int i = 0;
+    private void checkPermissions(String interaction) {
+        if (Login.getAdminLogged()) {
+            action(interaction);
+        } else {
+            permissionsViewModel.checkUserPermissions(Login.getIpAddress());
+
+            if (i == 0) {
+                permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
+                    try {
+                        JSONObject responseObject = new JSONObject(auth);
+                        if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match"))
+                            action(interaction);
+                        else
+                            Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
-        });
+        }
     }
 }

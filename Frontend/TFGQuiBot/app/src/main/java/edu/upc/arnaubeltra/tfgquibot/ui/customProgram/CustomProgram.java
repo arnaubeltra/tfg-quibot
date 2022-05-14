@@ -1,17 +1,15 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.customProgram;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +27,10 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.CustomProgramAdapter;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.ItemMoveCallback;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.BoardSize;
 
 public class CustomProgram extends Fragment implements CustomProgramAdapter.ICustomProgramRCVItemClicked, AdapterView.OnItemSelectedListener  {
 
@@ -51,6 +49,9 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
     public static CustomProgram getInstance() {
         return instance;
+    }
+    public Context getCustomProgramContext() {
+        return getContext();
     }
 
     @Override
@@ -82,6 +83,9 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         customProgramViewModel = new ViewModelProvider(Login.getContext()).get(CustomProgramViewModel.class);
         setupCustomProgramResponseListener();
 
+        BoardSize boardSize = BoardSize.getInstance();
+        boardSize.createDialogBoardSize(getActivity(), Login.getContext(), "Forats mitjans");
+
         return v;
     }
 
@@ -89,7 +93,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_custom_program, null);
+        View view = inflater.inflate(R.layout.dialog_with_spinner, null);
 
         builder.setView(view);
 
@@ -110,13 +114,13 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
     private Spinner setupSpinner(View view, String value) {
         //List picker (spinner) configuration
-        Spinner spinner = view.findViewById(R.id.spinnerSelectActions);
+        Spinner spinner = view.findViewById(R.id.spinnerSelectPropertiesAndActions);
         spinner.setOnItemSelectedListener(this);
 
         List<String> actions = new ArrayList<>();
         Collections.addAll(actions, getResources().getString(R.string.txtForward), getResources().getString(R.string.txtBackwards), getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtActionPipette), getResources().getString(R.string.txtRepeatPreviousActions));
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(UserNavigation.getContext(), android.R.layout.simple_spinner_item, actions);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, actions);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(dataAdapter);
@@ -153,23 +157,20 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
     private void onSendCustomProgram() {
         if (actionsList.size() != 0) customProgramViewModel.onSendListActions(parseActions());
-        else Toast.makeText(UserNavigation.getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
+        else Toast.makeText(getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
     }
 
     private void setupCustomProgramResponseListener() {
         customProgramViewModel.onSendListActions("");
-        customProgramViewModel.getSendListActionsRequestResponse().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(String response) {
-                try {
-                    JSONObject responseObject = new JSONObject(response);
-                    if (responseObject.getString("response").equals("custom-program-actions-success"))
-                        Toast.makeText(UserNavigation.getContext(), R.string.txtProgramSentCorrectly, Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(UserNavigation.getContext(), R.string.txtProgramError, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        customProgramViewModel.getSendListActionsRequestResponse().observe(getViewLifecycleOwner(), response -> {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("response").equals("custom-program-actions-success"))
+                    Toast.makeText(getContext(), R.string.txtProgramSentCorrectly, Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getContext(), R.string.txtProgramError, Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         });
     }

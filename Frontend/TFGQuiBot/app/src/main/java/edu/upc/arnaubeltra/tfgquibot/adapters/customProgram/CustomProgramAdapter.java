@@ -27,6 +27,8 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
 
     private ArrayList<String> actions = new ArrayList<>();
 
+    private CustomProgram customProgram = CustomProgram.getInstance();
+
     public CustomProgramAdapter(ICustomProgramRCVItemClicked listener) {
         this.listener = listener;
     }
@@ -39,7 +41,7 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
     @NonNull
     @Override
     public CustomProgramAdapter.CustomProgramViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(UserNavigation.getContext()).inflate(R.layout.layout_custom_program, parent, false);
+        View itemView = LayoutInflater.from(customProgram.getCustomProgramContext()).inflate(R.layout.layout_custom_program, parent, false);
         return new CustomProgramViewHolder(itemView, listener);
     }
 

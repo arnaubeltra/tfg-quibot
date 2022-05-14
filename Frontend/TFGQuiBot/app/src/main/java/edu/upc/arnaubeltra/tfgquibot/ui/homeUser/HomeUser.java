@@ -3,6 +3,7 @@ package edu.upc.arnaubeltra.tfgquibot.ui.homeUser;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.viewModels.NavigationViewModel;
 
 
 public class HomeUser extends Fragment {
@@ -33,5 +36,12 @@ public class HomeUser extends Fragment {
         v.findViewById(R.id.btnConnect4HomeUser).setOnClickListener(view -> UserNavigation.getNavController().navigate(R.id.connect4));
 
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        NavigationViewModel navigationViewModel = new ViewModelProvider(Login.getContext()).get(NavigationViewModel.class);
+        navigationViewModel.logoutUser(Login.getIpAddress());
     }
 }

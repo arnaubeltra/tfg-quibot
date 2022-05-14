@@ -40,17 +40,18 @@ public class AdminLogin extends AppCompatActivity {
     }
 
     private void login() {
-        goToHomeActivityAdmin();
-        /*String email = emailUser.getText().toString();
+        //goToHomeActivityAdmin();
+        String email = emailUser.getText().toString();
         String password = passwordUser.getText().toString();
 
-        if (!email.matches(emailPattern)) {
+        /*if (!email.matches(emailPattern)) {
             emailUser.setError("Entra un correu vàlid");
         } else if ((password.isEmpty()) || (password.length() < 6)) {
             passwordUser.setError("La longitud de la contrassenya ha de ser major que 6");
-        } else if (!email.matches("a@a.com")) {
+        } else if ((!email.matches("a@a.com")) || (!password.matches("111111"))) {
             Toast.makeText(AdminLogin.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
-        } else {
+        } else {*/
+            Login.setAdminLogged(true);
             loginDialog.setMessage("Espera mentre s'inicia sessió");
             loginDialog.setTitle(R.string.txtLoggingIn);
             loginDialog.setCanceledOnTouchOutside(false);
@@ -62,13 +63,15 @@ public class AdminLogin extends AppCompatActivity {
                     JSONObject responseObject = new JSONObject(response);
                     if (responseObject.getString("response").equals("login-admin-success"))
                         goToHomeActivityAdmin();
+                    else if (responseObject.getString("response").equals("another-admin-loged"))
+                        Toast.makeText(AdminLogin.this, R.string.txtErrorAnotherAdminLogged, Toast.LENGTH_SHORT).show();
                     else Toast.makeText(AdminLogin.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
                     loginDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             });
-        }*/
+        //}
     }
 
     private void goToHomeActivityAdmin() {

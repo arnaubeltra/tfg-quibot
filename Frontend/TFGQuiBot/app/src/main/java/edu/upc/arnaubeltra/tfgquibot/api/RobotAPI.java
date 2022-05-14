@@ -52,6 +52,12 @@ public class RobotAPI extends ViewModel {
         return instance;
     }
 
+    public void startInteract(String boardSize) {
+        String url = BASE_URL;
+        url += "/startInteract?board-size=" + boardSize;
+        getRequest(url, "");
+    }
+
     public void interactWithRobot(String interaction) {
         String url = BASE_URL;
         switch (interaction) {
@@ -155,6 +161,11 @@ public class RobotAPI extends ViewModel {
         getRequest(url, "checkRobotConnection");
     }
 
+    public void setBoardSize(String size) {
+        String url = BASE_URL + "/board-size?type=" + size;
+        getRequest(url, "");
+    }
+
     public void sendListActions(String actions) {
         String url = BASE_URL + "/custom-program";
 
@@ -168,6 +179,20 @@ public class RobotAPI extends ViewModel {
         postRequest(url, params, "sendListActions");
     }
 
+    public void startExperiment(String experiment) {
+        String url = BASE_URL + "/experiment?name=" + experiment;
+        getRequest(url, "");
+    }
+
+    public void sendRobotActualActivity(String activity) {
+        String url = BASE_URL + "/admin/actual-activity?activity" + activity;
+        getRequest(url, "sendRobotActualActivity");
+    }
+
+    public void sendUserActualActivity(String user, String activity) {
+        String url = BASE_URL + "/user/actual-activity?user=" + user + "&activity=" + activity;
+        getRequest(url, "sendUserActualActivity");
+    }
 
     private void getRequest(String url, String callFun) {
         if (getRequestQueue == null)
@@ -229,6 +254,12 @@ public class RobotAPI extends ViewModel {
                 break;
             case "ticTacToe":
                 ticTacToeViewModel.setTicTacToeRequestResponse(response);
+                break;
+            case "sendRobotActualActivity":
+                permissionsViewModel.setRobotActualActivityResponse(response);
+                break;
+            case "sendUserActualActivity":
+                permissionsViewModel.setUserActualActivityResponse(response);
                 break;
         }
     }

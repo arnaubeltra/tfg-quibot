@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_home_user" />
     <fragment
         android:id="@+id/experiments"
-        android:name="edu.upc.arnaubeltra.tfgquibot.ui.experiments.ExperimentsList"
+        android:name="edu.upc.arnaubeltra.tfgquibot.ui.experiments.Experiments"
         android:label="@string/menu_experiments"
         tools:layout="@layout/fragment_experiments" />
     <fragment

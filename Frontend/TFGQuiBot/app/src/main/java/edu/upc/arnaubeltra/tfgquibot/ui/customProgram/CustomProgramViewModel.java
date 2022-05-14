@@ -1,5 +1,7 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.customProgram;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -17,8 +19,10 @@ public class CustomProgramViewModel extends ViewModel {
     public void onSendListActions(String actions) {
         if (customProgramRequestResponse == null)
             customProgramRequestResponse = new MutableLiveData<>();
-        if (!actions.equals(""))
+        if (!actions.equals("")) {
+            Log.d("TAG", "onSendListActions: ");
             robotAPI.sendListActions(actions);
+        }
     }
 
     public LiveData<String> getSendListActionsRequestResponse() {
