@@ -15,6 +15,7 @@ import java.util.Collections;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
+import edu.upc.arnaubeltra.tfgquibot.models.Action;
 import edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgram;
 
 public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdapter.CustomProgramViewHolder> implements ItemMoveCallback.ItemTouchHelperContract {
@@ -25,7 +26,7 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
 
     private ICustomProgramRCVItemClicked listener;
 
-    private ArrayList<String> actions = new ArrayList<>();
+    private ArrayList<Action> actions = new ArrayList<>();
 
     private CustomProgram customProgram = CustomProgram.getInstance();
 
@@ -33,7 +34,7 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
         this.listener = listener;
     }
 
-    public void updateActionsList(ArrayList<String> actions) {
+    public void updateActionsList(ArrayList<Action> actions) {
         this.actions = actions;
         notifyDataSetChanged();
     }
@@ -47,29 +48,43 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
 
     @Override
     public void onBindViewHolder(@NonNull CustomProgramAdapter.CustomProgramViewHolder holder, int position) {
-        holder.iconAction.setImageResource(getIcon(actions.get(position)));
+        holder.iconAction.setImageResource(getIcon(actions.get(position).getName()));
         holder.iconEdit.setImageResource(R.drawable.icon_edit);
         holder.iconDelete.setImageResource(R.drawable.icon_delete);
-        holder.txtAction.setText(actions.get(position));
+
+        if (actions.get(position).getQuantity() != 0)
+            holder.txtAction.setText(actions.get(position).getName() + "\n" + actions.get(position).getQuantity() + "ml");
+        else if (actions.get(position).getRepetitions() != 0)
+            holder.txtAction.setText(actions.get(position).getName() + " "+ actions.get(position).getRepetitions() + " " + CustomProgram.getInstance().getResources().getString(R.string.txtTimes) + "\n" +
+                    CustomProgram.getInstance().getResources().getString(R.string.txtLast2) + " " + actions.get(position).getLastNInstructions() + " " + CustomProgram.getInstance().getResources().getString(R.string.txtActions));
+        else
+            holder.txtAction.setText(actions.get(position).getName());
+
     }
 
     private int getIcon(String action) {
-        switch (action) {
-            case "Endavant":
-                return R.drawable.ic_arrow_up_2;
-            case "Enrere":
-                return R.drawable.ic_arrow_down_2;
-            case "Dreta":
-                return R.drawable.ic_arrow_right_2;
-            case "Esquerra":
-                return R.drawable.ic_arrow_left_2;
-            case "Baixar xeringa":
-                return R.drawable.ic_lower_pipette;
-            case "Pujar xeringa":
-                return R.drawable.ic_raise_pipette;
-            case "Accionar xeringa":
-                return R.drawable.icon_suck_2;
-        }
+        if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtForward)))
+            return R.drawable.ic_arrow_up_2;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtBackwards)))
+            return R.drawable.ic_arrow_down_2;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtRight)))
+            return R.drawable.ic_arrow_right_2;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtLeft)))
+            return R.drawable.ic_arrow_left_2;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtLowerPipette)))
+            return R.drawable.ic_lower_pipette;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtRaisePipette)))
+            return R.drawable.ic_raise_pipette;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtSuck)))
+            return R.drawable.icon_suck_2;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtUnsuck)))
+            return R.drawable.icon_suck_2;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtSuckXMl)))
+            return R.drawable.icon_suck_2;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtUnsuckXMl)))
+            return R.drawable.icon_suck_2;
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtRepeatNTimes)))
+            return R.drawable.icon_reload;
         return R.drawable.ic_arrow_up_2;
     }
 
@@ -132,7 +147,7 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
     }
 
     private void onEditAction(int index) {
-        CustomProgram.getInstance().openDialogNewAction(index, actions.get(index));
+        CustomProgram.getInstance().openDialogNewAction(index, "edit_action");
     }
 
     private void onDeleteAction(int index) {

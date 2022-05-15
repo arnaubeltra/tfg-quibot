@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.ui.interactWithRobot.InteractWithRobotViewModel;
@@ -33,7 +32,7 @@ public class BoardSize implements AdapterView.OnItemSelectedListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
         LayoutInflater inflater = activity.getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_with_spinner, null);
+        View view = inflater.inflate(R.layout.dialog_custom_program, null);
 
         builder.setView(view);
         builder.setTitle(R.string.txtTitleDialogSelectBoard);

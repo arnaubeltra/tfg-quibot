@@ -195,6 +195,7 @@ public class TicTacToe extends Fragment {
 
                 else if (responseObject.getString("response").equals("board-is-full") && GAME_STARTED) {
                     resetUIGameFinished();
+                    ticTacToeViewModel.finishGameTicTacToe();
                     Toast.makeText(UserNavigation.getContext(), R.string.txtBoardIsFull, Toast.LENGTH_LONG).show();
                 }
 

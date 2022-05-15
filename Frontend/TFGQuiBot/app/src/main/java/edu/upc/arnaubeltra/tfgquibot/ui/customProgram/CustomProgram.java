@@ -1,5 +1,6 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.customProgram;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,11 +30,10 @@ import java.util.Collections;
 import java.util.List;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.CustomProgramAdapter;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.ItemMoveCallback;
+import edu.upc.arnaubeltra.tfgquibot.models.Action;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.ui.shared.BoardSize;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
@@ -42,16 +43,20 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
     private RecyclerView rcvCustomProgram;
     private CustomProgramAdapter customProgramAdapter;
-    private ArrayList<String> actionsList = new ArrayList<>();
+    private ArrayList<Action> actionsList = new ArrayList<>();
 
-    public TextView txtNoActionsCustomProgram;
+    private TextView txtNoActionsCustomProgram, textViewStartSentence, textViewFinishSentence, textStartSentence2, textViewFinishSentence2;
+    private Spinner spinner, spinnerSelectQuantity;
+    private EditText inputInstructionsRepetition;
 
     private RobotConnectionViewModel robotConnectionViewModel;
     private PermissionsViewModel permissionsViewModel;
     private CustomProgramViewModel customProgramViewModel;
 
     private Boolean robotConnected = false;
-    private int init = 0;
+    private int init = 0, init2 = 0;
+    private int position = 0;
+    private String typeAction = "";
 
     // Required empty public constructor
     public CustomProgram() { }
@@ -59,9 +64,14 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     public static CustomProgram getInstance() {
         return instance;
     }
+    
     public Context getCustomProgramContext() {
         return getContext();
     }
+
+    /*public Resources getValues() {
+        return getResources();
+    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +84,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         View v = inflater.inflate(R.layout.fragment_custom_program, container, false);
 
         v.findViewById(R.id.btnSendCustomProgram).setOnClickListener(view -> sendCustomProgramToRobot());
-        v.findViewById(R.id.btnAddActionCustomProgram).setOnClickListener(view -> openDialogNewAction(0,""));
+        v.findViewById(R.id.btnAddActionCustomProgram).setOnClickListener(view -> openDialogNewAction(actionsList.size(),"new_action"));
         txtNoActionsCustomProgram = v.findViewById(R.id.txtNoActionsCustomProgram);
 
         rcvCustomProgram = v.findViewById(R.id.rcvCustomProgram);
@@ -119,53 +129,147 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         dialog.show();
     }
 
-    public void openDialogNewAction(int index, String value) {
+    public void openDialogNewAction(int index, String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_with_spinner, null);
+        View view = inflater.inflate(R.layout.dialog_custom_program, null);
+
+        spinner = view.findViewById(R.id.spinnerSelectPropertiesAndActions);
+        textViewStartSentence = view.findViewById(R.id.textViewStartSentence);
+        spinnerSelectQuantity = view.findViewById(R.id.spinnerSelectQuantity);
+        textViewFinishSentence = view.findViewById(R.id.textViewFinishSentence);
+        textStartSentence2 = view.findViewById(R.id.textStartSentence2);
+        inputInstructionsRepetition = view.findViewById(R.id.inputInstructionsRepetition);
+        textViewFinishSentence2 = view.findViewById(R.id.textViewFinishSentence2);
+        textStartSentence2.setText(R.string.txtLast);
+        textViewFinishSentence2.setText(R.string.txtActions);
+        inputInstructionsRepetition.setText("0");
 
         builder.setView(view);
-        if (value.equals("")) builder.setTitle(R.string.txtTitleDialogCustomProgram);
+
+        position = index;
+
+        if (index == 0) builder.setTitle(R.string.txtTitleDialogCustomProgram);
         else builder.setTitle(R.string.txtTitleEditDialogCustomProgram);
 
-        Spinner spinner = setupSpinner(view, value);
+        setupSpinner(index, type);
+        typeAction = type;
 
-        builder.setPositiveButton(R.string.txtButonSave, (dialogInterface, i) -> {
-            if (value.equals("")) newActionAdded(String.valueOf(spinner.getSelectedItem()));
-            else editAction(index, String.valueOf(spinner.getSelectedItem()));
-        });
+        builder.setPositiveButton(R.string.txtButonSave, (dialogInterface, i) -> onAccept(type, index));
         builder.setNegativeButton(R.string.txtButonCancel, (dialogInterface, i) -> { });
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
-    private Spinner setupSpinner(View view, String value) {
+    private void onAccept(String type, int index) {
+        String action = String.valueOf(spinner.getSelectedItem());
+        if (type.equals("new_action")) {
+            if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl)))
+                newActionAdded(action, Float.parseFloat(String.valueOf(spinnerSelectQuantity.getSelectedItem())), 0, 0);
+            else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+                if (checkInputs(index))
+                    newActionAdded(action, 0, Integer.parseInt(String.valueOf(spinnerSelectQuantity.getSelectedItem())), Integer.parseInt(inputInstructionsRepetition.getText().toString()));
+            } else newActionAdded(action, 0, 0, 0);
+        }
+        else if (type.equals("edit_action")) {
+            if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl)))
+                editAction(index, action, Float.parseFloat(String.valueOf(spinnerSelectQuantity.getSelectedItem())), 0, 0);
+            else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+                if (checkInputs(index))
+                    editAction(index, action, 0, Integer.parseInt(String.valueOf(spinnerSelectQuantity.getSelectedItem())), Integer.parseInt(inputInstructionsRepetition.getText().toString()));
+            } else editAction(index, action, 0, 0, 0);
+        }
+    }
+
+    private boolean checkInputs(int index) {
+        if (inputInstructionsRepetition.getText().toString().equals("")) {
+            Toast.makeText(getContext(), R.string.txtValueCannotBeEmpty, Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (Integer.parseInt(inputInstructionsRepetition.getText().toString()) > index) {
+            Toast.makeText(getContext(), R.string.txtNotEnughInstructions, Toast.LENGTH_LONG).show();
+            return false;
+        } else if (Integer.parseInt(inputInstructionsRepetition.getText().toString()) <= 0) {
+            Toast.makeText(getContext(), R.string.txtValueMustBeGreaterThanZero, Toast.LENGTH_SHORT).show();
+            return false;
+        } return true;
+    }
+
+    private void setupSpinner(int index, String type) {
         //List picker (spinner) configuration
-        Spinner spinner = view.findViewById(R.id.spinnerSelectPropertiesAndActions);
         spinner.setOnItemSelectedListener(this);
 
         List<String> actions = new ArrayList<>();
-        Collections.addAll(actions, getResources().getString(R.string.txtForward), getResources().getString(R.string.txtBackwards), getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtActionPipette), getResources().getString(R.string.txtRepeatPreviousActions));
+        Collections.addAll(actions, getResources().getString(R.string.txtForward), getResources().getString(R.string.txtBackwards), getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtSuck), getResources().getString(R.string.txtUnsuck), getResources().getString(R.string.txtSuckXMl), getResources().getString(R.string.txtUnsuckXMl),getResources().getString(R.string.txtRepeatPreviousActions));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, actions);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
-        if (!value.equals(""))
-            spinner.setSelection(dataAdapter.getPosition(value));
-        return spinner;
+        if (type.equals("edit_action"))
+            spinner.setSelection(dataAdapter.getPosition(actionsList.get(index).getName()));
     }
 
-    private void newActionAdded(String optionSelected) {
-        actionsList.add(optionSelected);
+    private void setupSpinnerQuantity(String action) {
+        spinnerSelectQuantity.setOnItemSelectedListener(this);
+
+        textViewStartSentence.setVisibility(View.VISIBLE);
+        textViewFinishSentence.setVisibility(View.VISIBLE);
+        spinnerSelectQuantity.setVisibility(View.VISIBLE);
+
+        List<String> quantity = new ArrayList<>();
+        if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
+            textViewStartSentence.setText(R.string.txtGetLiquidQuantity);
+            Collections.addAll(quantity, "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0");
+            textViewFinishSentence.setText(R.string.txtMl);
+        }
+        else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+            textViewStartSentence.setText(R.string.txtRepeatNTimes);
+            Collections.addAll(quantity, "1", "2", "3", "4", "5");
+            textViewFinishSentence.setText(R.string.txtTimes);
+        }
+
+        ArrayAdapter<String> quantityAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, quantity);
+        quantityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSelectQuantity.setAdapter(quantityAdapter);
+
+        if (typeAction.equals("edit_action")) {
+            if (actionsList.get(position).getName().equals(getResources().getString(R.string.txtSuckXMl)) || actionsList.get(position).getName().equals(getResources().getString(R.string.txtUnsuckXMl)))
+                spinnerSelectQuantity.setSelection(quantityAdapter.getPosition(Float.toString(actionsList.get(position).getQuantity())));
+            else if (actionsList.get(position).getName().equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+                spinnerSelectQuantity.setSelection(quantityAdapter.getPosition(String.valueOf(actionsList.get(position).getRepetitions())));
+                inputInstructionsRepetition.setText(String.valueOf(actionsList.get(position).getLastNInstructions()));
+            }
+        }
+    }
+
+    private void newActionAdded(String action, float quantity, int repetitions, int repeatLast) {
+        Action actionObj = new Action(action);
+        if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
+            actionObj.setName(action);
+            actionObj.setQuantity(quantity);
+        } else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+            actionObj.setName(action);
+            actionObj.setRepetitions(repetitions);
+            actionObj.setLastNInstructions(repeatLast);
+        }
+        actionsList.add(actionObj);
         customProgramAdapter.updateActionsList(actionsList);
         checkListIsEmpty();
     }
 
-    private void editAction(int index, String value) {
-        actionsList.set(index, value);
+    private void editAction(int index, String action, float quantity, int repetitions, int repeatLast) {
+        Action actionObj = actionsList.get(index);
+        if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
+            actionObj.setName(action);
+            actionObj.setQuantity(quantity);
+        } else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+            actionObj.setName(action);
+            actionObj.setRepetitions(repetitions);
+            actionObj.setLastNInstructions(repeatLast);
+        } else actionObj.setName(action);
+        actionsList.set(index, actionObj);
         customProgramAdapter.updateActionsList(actionsList);
     }
 
@@ -174,8 +278,34 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         else CustomProgram.getInstance().txtNoActionsCustomProgram.setVisibility(View.INVISIBLE);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) { }
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+        String action = adapterView.getItemAtPosition(position).toString();
+        switch (adapterView.getId()) {
+            case R.id.spinnerSelectPropertiesAndActions:
+                if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
+                    setupSpinnerQuantity(action);
+                    textStartSentence2.setVisibility(View.GONE);
+                    inputInstructionsRepetition.setVisibility(View.GONE);
+                    textViewFinishSentence2.setVisibility(View.GONE);
+                }
+                else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+                    setupSpinnerQuantity(action);
+                    textStartSentence2.setVisibility(View.VISIBLE);
+                    inputInstructionsRepetition.setVisibility(View.VISIBLE);
+                    textViewFinishSentence2.setVisibility(View.VISIBLE);
+                }
+                else {
+                    textViewStartSentence.setVisibility(View.GONE);
+                    textViewFinishSentence.setVisibility(View.GONE);
+                    spinnerSelectQuantity.setVisibility(View.GONE);
+                    textStartSentence2.setVisibility(View.GONE);
+                    inputInstructionsRepetition.setVisibility(View.GONE);
+                    textViewFinishSentence2.setVisibility(View.GONE);
+                }
+        }
+    }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) { }
@@ -184,11 +314,10 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         if (init == 0) {
             permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
-                Log.d("TAG", "setupPermissionsObserver: " + auth);
                 try {
                     JSONObject responseObject = new JSONObject(auth);
                     if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) onSendCustomProgram();
-                    else Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -207,12 +336,14 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     private void onSendCustomProgram() {
         if (actionsList.size() != 0) {
             setupCustomProgramResponseListener();
-            customProgramViewModel.onSendListActions(parseActions());
+            String programmedActions = parseActions();
+            if (!programmedActions.equals("parseError"))
+                customProgramViewModel.onSendListActions(programmedActions);
         } else Toast.makeText(getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
     }
 
     private void setupCustomProgramResponseListener() {
-        if (init == 0) {
+        if (init2 == 0) {
             customProgramViewModel.onSendListActions("");
             customProgramViewModel.getSendListActionsRequestResponse().observe(getViewLifecycleOwner(), response -> {
                 try {
@@ -225,22 +356,47 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
                     e.printStackTrace();
                 }
             });
-        } init++;
+        } init2++;
     }
 
     private String parseActions() {
-        String parsedActionsList = "";
+        StringBuilder parsedActionsList = new StringBuilder();
         for (int i = 0; i < actionsList.size(); i++) {
-            if (actionsList.get(i).equals(getResources().getString(R.string.txtForward))) parsedActionsList += "up";
-            else if (actionsList.get(i).equals(getResources().getString(R.string.txtBackwards))) parsedActionsList += "down";
-            else if (actionsList.get(i).equals(getResources().getString(R.string.txtRight))) parsedActionsList += "right";
-            else if (actionsList.get(i).equals(getResources().getString(R.string.txtLeft))) parsedActionsList += "left";
-            else if (actionsList.get(i).equals(getResources().getString(R.string.txtLowerPipette))) parsedActionsList += "lower_pipette";
-            else if (actionsList.get(i).equals(getResources().getString(R.string.txtRaisePipette))) parsedActionsList += "raise_pipette";
-            else if (actionsList.get(i).equals(getResources().getString(R.string.txtActionPipette))) parsedActionsList += "suck";
-            parsedActionsList += ",";
+            if (actionsList.get(i).getName().equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+                int repetitions = actionsList.get(i).getRepetitions();
+                int nInstructions = actionsList.get(i).getLastNInstructions();
+
+                    for (int rep = 0; rep < repetitions; rep ++) {
+                        try {
+                            for (int nIns = i-nInstructions; nIns < i; nIns++) {
+                                parsedActionsList.append(translator(actionsList.get(nIns).getName(), nIns));
+                                parsedActionsList.append(", ");
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(getContext(), R.string.txtErrorLoop, Toast.LENGTH_SHORT).show();
+                            return "parseError";
+                        }
+                    }
+            } else {
+                parsedActionsList.append(translator(actionsList.get(i).getName(), i));
+                parsedActionsList.append(", ");
+            }
         }
-        return parsedActionsList;
+        return parsedActionsList.toString();
+    }
+
+    private String translator(String instruction, int i) {
+        if (instruction.equals(getResources().getString(R.string.txtForward))) return "up";
+        else if (instruction.equals(getResources().getString(R.string.txtBackwards))) return "down";
+        else if (instruction.equals(getResources().getString(R.string.txtRight))) return "right";
+        else if (instruction.equals(getResources().getString(R.string.txtLeft))) return "left";
+        else if (instruction.equals(getResources().getString(R.string.txtLowerPipette))) return "lower_pipette";
+        else if (instruction.equals(getResources().getString(R.string.txtRaisePipette))) return "raise_pipette";
+        else if (instruction.equals(getResources().getString(R.string.txtSuck))) return "suck";
+        else if (instruction.equals(getResources().getString(R.string.txtUnsuck))) return "unsuck";
+        else if (instruction.equals(getResources().getString(R.string.txtSuckXMl))) return "suck_" + actionsList.get(i).getQuantity();
+        else if (instruction.equals(getResources().getString(R.string.txtUnsuckXMl))) return "unsuck_" + actionsList.get(i).getQuantity();
+        return "";
     }
 
     @Override

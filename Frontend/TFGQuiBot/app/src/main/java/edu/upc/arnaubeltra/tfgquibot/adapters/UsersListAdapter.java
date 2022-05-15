@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.models.User;
+import edu.upc.arnaubeltra.tfgquibot.models.listUsers.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersList;

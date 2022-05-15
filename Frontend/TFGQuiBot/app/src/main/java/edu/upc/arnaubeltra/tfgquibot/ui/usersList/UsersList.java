@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +29,6 @@ import java.util.List;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.adapters.UsersListAdapter;
-import edu.upc.arnaubeltra.tfgquibot.models.User;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 

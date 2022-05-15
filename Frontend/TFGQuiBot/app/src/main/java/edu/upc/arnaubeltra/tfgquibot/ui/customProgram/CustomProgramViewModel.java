@@ -20,7 +20,6 @@ public class CustomProgramViewModel extends ViewModel {
         if (customProgramRequestResponse == null)
             customProgramRequestResponse = new MutableLiveData<>();
         if (!actions.equals("")) {
-            Log.d("TAG", "onSendListActions: ");
             robotAPI.sendListActions(actions);
         }
     }

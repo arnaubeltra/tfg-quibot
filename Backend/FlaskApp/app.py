@@ -196,8 +196,8 @@ def customProgram():
             send = b"program " + actions.encode('UTF-8')
             robotSocket.sendall(send)
             robotSocket.close()
-            response = {'response': 'custom-program-actions-success'}
-            return jsonify(response)
+            #response = {'response': 'custom-program-actions-success'}
+            return {'response': 'custom-program-actions-success'}#jsonify(response)
     return ""
 
 # Tic tac toe

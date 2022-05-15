@@ -106,6 +106,8 @@
     <string name="txtRight">Dreta</string>
     <string name="txtLeft">Esquerra</string>
     <string name="txtActionPipette">Accionar xeringa</string>
+    <string name="txtSuck">Xuclar líquid</string>
+    <string name="txtUnsuck">Expulsar líquid</string>
     <string name="txtRepeatPreviousActions">Repeteix</string>
 
 
@@ -138,5 +140,23 @@
     <string name="txtTitleDialogSelectBoard">Selecciona el tipus de tauler</string>
     <string name="txtCannotChangePermission">Error canviant permisos per a l\'usuari. L\'activitat seleccionada té el màxim de usuaris permesos.</string>
     <string name="txtErrorChangingPermissions">Error canviant permisos per a l\'usuari.</string>
+
+    <string name="txtRepeatNTimes">Repeteix:</string>
+    <string name="txtGetLiquidQuantity">Xuclar:</string>
+    <string name="txtTimes">vegades</string>
+    <string name="txtMl">ml</string>
+    <string name="txtSuckXMl">Xuclar quantitat</string>
+    <string name="txtUnsuckXMl">Expulsar quantitat</string>
+    <string name="txtLast">Ultimes:</string>
+    <string name="txtLast2">Últimes</string>
+    <string name="txtActions">accions</string>
+    <string name="txtAction">Acció:</string>
+
+    <string name="txtNotEnughInstructions">No hi ha suficients instruccions a repetir.</string>
+    <string name="txtValueMustBeGreaterThanZero">El valor d\'instruccions a repetir ha de ser més gran que zero.</string>
+    <string name="txtValueCannotBeEmpty">El valor d\'instruccions a repetir no pot estar buit.</string>
+
+
+    <string name="txtErrorLoop">L\'acció \"repeteix\" no pot estar en aquesta posició de la llista d\'accions.</string>
 
 </resources>

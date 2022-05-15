@@ -1,4 +1,4 @@
-package edu.upc.arnaubeltra.tfgquibot.models;
+package edu.upc.arnaubeltra.tfgquibot.models.listUsers;
 
 import java.util.List;
 

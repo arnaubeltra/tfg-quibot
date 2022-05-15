@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/quibot_logo"
@@ -14,6 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TFGQuiBot"
         android:usesCleartextTraffic="true">
+        <!--android:networkSecurityConfig="@xml/network_security_config">
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>-->
         <activity
             android:name=".ui.login.AdminLogin"
             android:exported="false"

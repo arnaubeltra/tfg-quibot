@@ -1,4 +1,4 @@
-package edu.upc.arnaubeltra.tfgquibot.models;
+package edu.upc.arnaubeltra.tfgquibot.models.listUsers;
 
 public class User {
     private String uid, name, surname, isAuthorized;
