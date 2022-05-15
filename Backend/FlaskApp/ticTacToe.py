@@ -53,10 +53,10 @@ class TicTacToe(object):
                 return 2
 
         for j in range(3):
-            if ((ticTacToeBoard[0][j] == 1) and (ticTacToeBoard[1][j] == 1) and (ticTacToeBoard[1][j] == 1)):
+            if ((ticTacToeBoard[0][j] == 1) and (ticTacToeBoard[1][j] == 1) and (ticTacToeBoard[2][j] == 1)):
                 return 1
         for j in range(3):
-            if ((ticTacToeBoard[0][j] == 2) and (ticTacToeBoard[1][j] == 2) and (ticTacToeBoard[1][j] == 2)):
+            if ((ticTacToeBoard[0][j] == 2) and (ticTacToeBoard[1][j] == 2) and (ticTacToeBoard[2][j] == 2)):
                 return 2
 
         if ((ticTacToeBoard[0][0] == 1) and (ticTacToeBoard[1][1] == 1) and (ticTacToeBoard[2][2] == 1)):
@@ -69,4 +69,13 @@ class TicTacToe(object):
         if ((ticTacToeBoard[0][2] == 2) and (ticTacToeBoard[1][1] == 2) and (ticTacToeBoard[2][0] == 2)):
                 return 2
         return 0
+
+    def checkBoardFull(self):
+        counter = 0
+        for i in range(3):
+            for j in range(3):
+                if (self.ticTacToeBoard[i][j] == 0):
+                    counter += 1
+        return (not counter > 0)
+
 

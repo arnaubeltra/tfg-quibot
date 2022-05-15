@@ -67,9 +67,9 @@ public class InteractWithRobot extends Fragment {
             try {
                 JSONObject responseObject = new JSONObject(response);
                 if (responseObject.getString("response").equals("robot-connection-failed")) {
-                    dialogWarningRobotNotConnected();
                     robotConnected = false;
-                } robotConnected = true;
+                    dialogWarningRobotNotConnected();
+                } else robotConnected = true;
             } catch (JSONException e) {
                 e.printStackTrace();
             }

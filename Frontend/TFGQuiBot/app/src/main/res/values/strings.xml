@@ -76,6 +76,7 @@
     <string name="txtPhisicalLayout">Disposició per jugar al joc.</string>
     <string name="txtClose">Tancar</string>
     <string name="txtPermissionsPlayTicTacToe">Demana permisos per jugar al Tres en ratlla</string>
+    <string name="txtBoardIsFull">El tauler està ple. Es finalitza la partida.</string>
     <string name="txtRobotNotConnected">El robot no està connectat!</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

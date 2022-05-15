@@ -18,7 +18,6 @@ PORT_ROBOT = 9999
 connectedUsers = {}
 connectedAdmins = 0
 ticTacToe = None
-#actualActivity = None
 
 actualActivity = Activity()
 actualActivity.setActualActivity("")
@@ -209,6 +208,7 @@ def startTicTacToe():
         if (ticTacToe is None):
             ticTacToe = TicTacToe()
         ticTacToe.setTicTacToeStatus(1)
+        ticTacToe.setTicTacToeBoard([[0,0,0],[0,0,0],[0,0,0]])      ##
         if (ticTacToe.getTicTacToePlayers() == 0):
             ticTacToe.setTicTacToePlayers(1)
             return {'response': 'tic-tac-toe-start-success', 'player': 1}
@@ -230,19 +230,23 @@ def finishTicTacToe():
 def statusTicTacToe():
     global ticTacToe
     if (request.method == 'GET'):
-        status = ticTacToe.checkBoard()
+        try:
+            status = ticTacToe.checkBoard()
+        except:
+            return {'response': 'game-is-over'}
         if (status == 1):
             return {'response': 'winner-1'}
         elif (status == 2):
             return {'response': 'winner-2'}
         else:
             if (ticTacToe.getTicTacToePlayers() != 2):
-                print 
                 return {'response': 'waiting-for-player'}
             elif (ticTacToe.getTicTacToeBoard() == [[0,0,0],[0,0,0],[0,0,0]]): 
                 return {'response': 'tic-tac-toe-init', 'player': ticTacToe.getPlayer()}
             elif (ticTacToe.getTicTacToeStatus() == 0): 
                 return {'response': 'game-is-over'}
+            elif (ticTacToe.checkBoardFull()):
+                return {'response': 'board-is-full'}
             return {'response': 'no-winner', 'x': ticTacToe.getX(), 'y': ticTacToe.getY(), 'player': ticTacToe.getPlayer()}
     return ""
  
@@ -250,10 +254,12 @@ def statusTicTacToe():
 def ticTacToePosition():
     global ticTacToe
     if (request.method == 'GET'):
-        ticTacToe.setX(request.args.get('x')) 
-        ticTacToe.setY(request.args.get('y')) 
-        ticTacToe.setPlayer(request.args.get('player'))
-        if (ticTacToe.getTicTacToeBoard()[int(ticTacToe.getX())][int(ticTacToe.getY())] == 0):
+        x = request.args.get('x')
+        y = request.args.get('y')
+        if (ticTacToe.getTicTacToeBoard()[int(x)][int(y)] == 0):
+            ticTacToe.setX(x) 
+            ticTacToe.setY(y)
+            ticTacToe.setPlayer(request.args.get('player'))
             board = ticTacToe.getTicTacToeBoard()
             board[int(ticTacToe.getX())][int(ticTacToe.getY())] = int(ticTacToe.getPlayer())
             ticTacToe.setTicTacToeBoard(board)
@@ -266,6 +272,11 @@ def ticTacToePosition():
         else:
             return {'response': 'tic-tac-toe-position-full'}
     return ""
+
+@app.after_request
+def after(response):
+    print(response.get_data())
+    return response
 
 if __name__ == '__main__':
     app.run(host = '0.0.0.0', port = 10000, debug = True)
