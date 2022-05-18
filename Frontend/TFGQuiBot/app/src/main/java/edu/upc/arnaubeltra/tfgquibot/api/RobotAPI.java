@@ -60,37 +60,7 @@ public class RobotAPI extends ViewModel {
 
     public void interactWithRobot(String interaction) {
         String url = BASE_URL;
-        switch (interaction) {
-            case "forward":
-                url += "/sendInstruction?instruction=up";
-                break;
-            case "backwards":
-                url += "/sendInstruction?instruction=down";
-                break;
-            case "left":
-                url += "/sendInstruction?instruction=left";
-                break;
-            case "right":
-                url += "/sendInstruction?instruction=right";
-                break;
-            case "raise_pipette":
-                url += "/sendInstruction?instruction=raise_pipette";
-                break;
-            case "lower_pipette":
-                url += "/sendInstruction?instruction=lower_pipette";
-                break;
-            case "suck":
-                url += "/sendInstruction?instruction=suck";
-                break;
-            case "reset":
-                url += "/sendInstruction?instruction=reset";
-                break;
-            case "readColor":
-                url += "/sendInstruction?instruction=readColor";
-                break;
-            default:
-                break;
-        }
+        url += "/sendInstruction?instruction=" + interaction;
         getRequest(url, "interactWithRobot");
     }
 

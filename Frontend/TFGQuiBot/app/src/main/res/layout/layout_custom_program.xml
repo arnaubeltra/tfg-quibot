@@ -36,6 +36,7 @@
             android:layout_marginEnd="8dp"
             android:textColor="@color/white"
             android:textSize="18sp"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iconEditCustomProgram"
             app:layout_constraintStart_toEndOf="@+id/iconActionCustomProgram"

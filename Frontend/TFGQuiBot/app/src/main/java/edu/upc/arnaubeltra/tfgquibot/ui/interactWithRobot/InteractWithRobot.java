@@ -50,8 +50,9 @@ public class InteractWithRobot extends Fragment {
         v.findViewById(R.id.btnSuck).setOnClickListener(view -> sendActionToRobot("suck"));
         v.findViewById(R.id.btnRaisePipette).setOnClickListener(view -> sendActionToRobot("raise_pipette"));
         v.findViewById(R.id.btnLowerPipette).setOnClickListener(view -> sendActionToRobot("lower_pipette"));
+        v.findViewById(R.id.btnSuckLiquid).setOnClickListener(view -> sendActionToRobot("suck_liquid"));
+        v.findViewById(R.id.btnUnsuckLiquid).setOnClickListener(view -> sendActionToRobot("unsuck_liquid"));
         v.findViewById(R.id.btnReset).setOnClickListener(view -> sendActionToRobot("reset"));
-        v.findViewById(R.id.btnReadColor).setOnClickListener(view -> sendActionToRobot("readColor"));
 
         robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
@@ -112,10 +113,10 @@ public class InteractWithRobot extends Fragment {
     private void executeAction() {
         switch (interaction) {
             case "forward":
-                interactWithRobotViewModel.sendInteraction("forward");
+                interactWithRobotViewModel.sendInteraction("up");
                 break;
             case "backwards":
-                interactWithRobotViewModel.sendInteraction("backwards");
+                interactWithRobotViewModel.sendInteraction("down");
                 break;
             case "left":
                 interactWithRobotViewModel.sendInteraction("left");
@@ -132,11 +133,14 @@ public class InteractWithRobot extends Fragment {
             case "suck":
                 interactWithRobotViewModel.sendInteraction("suck");
                 break;
+            case "suck_liquid":
+                interactWithRobotViewModel.sendInteraction("suck_liquid");
+                break;
+            case "unsuck_liquid":
+                interactWithRobotViewModel.sendInteraction("unsuck_liquid");
+                break;
             case "reset":
                 interactWithRobotViewModel.sendInteraction("reset");
-                break;
-            case "readColor":
-                interactWithRobotViewModel.sendInteraction("readColor");
                 break;
         }
     }

@@ -51,15 +51,18 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
         holder.iconAction.setImageResource(getIcon(actions.get(position).getName()));
         holder.iconEdit.setImageResource(R.drawable.icon_edit);
         holder.iconDelete.setImageResource(R.drawable.icon_delete);
-
-        if (actions.get(position).getQuantity() != 0)
+        if (actions.get(position).getQuantity() != 0) {
+            holder.txtAction.setMaxLines(2);
             holder.txtAction.setText(actions.get(position).getName() + "\n" + actions.get(position).getQuantity() + "ml");
-        else if (actions.get(position).getRepetitions() != 0)
-            holder.txtAction.setText(actions.get(position).getName() + " "+ actions.get(position).getRepetitions() + " " + CustomProgram.getInstance().getResources().getString(R.string.txtTimes) + "\n" +
+        } else if (actions.get(position).getRepetitions() != 0) {
+            holder.txtAction.setMaxLines(2);
+            holder.txtAction.setText(actions.get(position).getName() + " " + actions.get(position).getRepetitions() + " " + CustomProgram.getInstance().getResources().getString(R.string.txtTimes) + "\n" +
                     CustomProgram.getInstance().getResources().getString(R.string.txtLast2) + " " + actions.get(position).getLastNInstructions() + " " + CustomProgram.getInstance().getResources().getString(R.string.txtActions));
-        else
-            holder.txtAction.setText(actions.get(position).getName());
 
+        }else {
+            holder.txtAction.setMaxLines(1);
+            holder.txtAction.setText(actions.get(position).getName() + "\n");
+        }
     }
 
     private int getIcon(String action) {
@@ -83,9 +86,10 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
             return R.drawable.icon_suck_2;
         else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtUnsuckXMl)))
             return R.drawable.icon_suck_2;
-        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtRepeatNTimes)))
+        else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtRepeatPreviousActions)))
             return R.drawable.icon_reload;
-        return R.drawable.ic_arrow_up_2;
+        else
+            return R.drawable.ic_arrow_up_2;
     }
 
     @Override

@@ -370,7 +370,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
                         try {
                             for (int nIns = i-nInstructions; nIns < i; nIns++) {
                                 parsedActionsList.append(translator(actionsList.get(nIns).getName(), nIns));
-                                parsedActionsList.append(", ");
+                                parsedActionsList.append(",");
                             }
                         } catch (Exception e) {
                             Toast.makeText(getContext(), R.string.txtErrorLoop, Toast.LENGTH_SHORT).show();
@@ -379,7 +379,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
                     }
             } else {
                 parsedActionsList.append(translator(actionsList.get(i).getName(), i));
-                parsedActionsList.append(", ");
+                parsedActionsList.append(",");
             }
         }
         return parsedActionsList.toString();
