@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/homeUser"
+            android:icon="@drawable/icon_home"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/experiments"
+            android:icon="@drawable/experiments_icon"
+            android:title="@string/menu_experiments" />
+        <item
+            android:id="@+id/interactWithRobot"
+            android:icon="@drawable/interact_icon"
+            android:title="@string/menu_interact" />
+        <item
+            android:id="@+id/customProgram"
+            android:icon="@drawable/custom_program_icon"
+            android:title="@string/menu_custom_program" />
+    </group>
+</menu>

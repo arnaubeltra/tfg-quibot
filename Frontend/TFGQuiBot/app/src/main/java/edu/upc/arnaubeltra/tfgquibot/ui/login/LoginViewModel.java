@@ -41,4 +41,8 @@ public class LoginViewModel extends ViewModel {
     public void setNewAdminLoginResponse(String response) {
         newAdminLoginLiveData.setValue(response);
     }
+
+    public void selectRobot(int robot) {
+        robotAPI.selectRobot(robot);
+    }
 }

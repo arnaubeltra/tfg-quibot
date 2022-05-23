@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+tools:context=".ui.homeUser.robot2d.HomeUserRobot2d">
+
+    <ImageView
+        android:id="@+id/imageViewBackground"
+        android:layout_width="450dp"
+        android:layout_height="636dp"
+        android:alpha="0.1"
+        android:background="@drawable/quibot_bg_light"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalGuideline50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <ImageView
+                android:id="@+id/imageViewLogoUser"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/quibot_logotip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewTitleUser"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
+                android:text="Benvingut a l\'aplicació\nQui-Bot H2O"
+                android:textColor="@color/black"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewLogoUser" />
+
+            <Button
+                android:id="@+id/btnExperimentsHomeUser"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="#f36717"
+                android:drawableTop="@drawable/experiments_icon_big"
+                android:drawableTint="@color/white"
+                android:paddingTop="12dp"
+                android:text="@string/menu_experiments"
+                app:layout_constraintEnd_toStartOf="@+id/verticalGuideline50"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTitleUser" />
+
+            <Button
+                android:id="@+id/btnInteractHomeUser"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#c0053f"
+                android:drawableTop="@drawable/interact_icon_big"
+                android:drawableTint="@color/white"
+                android:paddingTop="5dp"
+                android:text="@string/menu_interact"
+                app:layout_constraintStart_toStartOf="@+id/verticalGuideline50"
+                app:layout_constraintTop_toTopOf="@+id/btnExperimentsHomeUser" />
+
+            <Button
+                android:id="@+id/btnCustomProgramHomeUser"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/menu_custom_program"
+                android:backgroundTint="#59b431"
+                android:drawableTint="@color/white"
+                android:drawableTop="@drawable/custom_program_icon_big"
+                app:layout_constraintEnd_toEndOf="@+id/btnExperimentsHomeUser"
+                app:layout_constraintStart_toStartOf="@+id/btnExperimentsHomeUser"
+                app:layout_constraintTop_toBottomOf="@+id/btnExperimentsHomeUser" />
+
+            <Button
+                android:id="@+id/btnTicTacToeHomeUser"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/menu_tic_tac_toe"
+                android:backgroundTint="#094893"
+                android:drawableTint="@color/white"
+                android:drawableTop="@drawable/tic_tac_toe_icon_big"
+                app:layout_constraintEnd_toEndOf="@+id/btnInteractHomeUser"
+                app:layout_constraintStart_toStartOf="@+id/btnInteractHomeUser"
+                app:layout_constraintTop_toBottomOf="@+id/btnInteractHomeUser" />
+
+            <Button
+                android:id="@+id/btnConnect4HomeUser"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="#45666a"
+                android:drawableTop="@drawable/icon_connect4_big"
+                android:drawableTint="@color/white"
+                android:text="@string/menu_connect4"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btnCustomProgramHomeUser"
+                app:layout_constraintStart_toStartOf="@+id/btnCustomProgramHomeUser"
+                app:layout_constraintTop_toBottomOf="@+id/btnCustomProgramHomeUser" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

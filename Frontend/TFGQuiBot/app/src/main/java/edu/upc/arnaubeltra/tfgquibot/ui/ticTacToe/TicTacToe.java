@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import java.util.concurrent.TimeUnit;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
+import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot2d;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
@@ -136,11 +136,11 @@ public class TicTacToe extends Fragment {
                     else txtInfoPlayer.setText(getResources().getString(R.string.txtYouPlayWithO));
                     btnNewGame.setText(R.string.txtEndGame);
                     txtInfoGame.setText("");
-                    Toast.makeText(UserNavigation.getContext(), R.string.txtGameStarted, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameStarted, Toast.LENGTH_SHORT).show();
                 }
 
                 else if (responseObject.getString("response").equals("game-is-full"))
-                    Toast.makeText(UserNavigation.getContext(), R.string.txtGameIsFull, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsFull, Toast.LENGTH_SHORT).show();
 
                 else if (responseObject.getString("response").equals("waiting-for-player") && GAME_STARTED) {
                     txtInfoGame.setText(getResources().getString(R.string.txtWaitingForPlayer));
@@ -190,22 +190,22 @@ public class TicTacToe extends Fragment {
 
                 else if (responseObject.getString("response").equals("game-is-over") && GAME_STARTED) {
                     resetUIGameFinished();
-                    Toast.makeText(UserNavigation.getContext(), R.string.txtGameIsOver, Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsOver, Toast.LENGTH_LONG).show();
                 }
 
                 else if (responseObject.getString("response").equals("board-is-full") && GAME_STARTED) {
                     resetUIGameFinished();
                     ticTacToeViewModel.finishGameTicTacToe();
-                    Toast.makeText(UserNavigation.getContext(), R.string.txtBoardIsFull, Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtBoardIsFull, Toast.LENGTH_LONG).show();
                 }
 
                 else if (responseObject.getString("response").equals("tic-tac-toe-position-success")) {
                     onNewMovement(responseObject.getInt("x"), responseObject.getInt("y"), player);
-                    Toast.makeText(UserNavigation.getContext(), R.string.txtWaitRobot, Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtWaitRobot, Toast.LENGTH_LONG).show();
                 }
 
                 else if (responseObject.getString("response").equals("tic-tac-toe-position-full"))
-                    Toast.makeText(UserNavigation.getContext(), R.string.txtPositionFull, Toast.LENGTH_LONG).show();
+                    Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtPositionFull, Toast.LENGTH_LONG).show();
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -221,7 +221,7 @@ public class TicTacToe extends Fragment {
                     JSONObject responseObject = new JSONObject(auth);
                     if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match"))
                         ticTacToeViewModel.startNewGameTicTacToe(Login.getIpAddress());
-                    else Toast.makeText(UserNavigation.getContext(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
+                    else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -255,7 +255,7 @@ public class TicTacToe extends Fragment {
                 txtInfoPlayer.setText("");
                 finishGame();
                 ticTacToeViewModel.finishGameTicTacToe();
-                Toast.makeText(UserNavigation.getContext(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -311,9 +311,9 @@ public class TicTacToe extends Fragment {
         if (GAME_STARTED) {
             if (PLAYERS_READY) {
                 if (YOUR_TURN) ticTacToeViewModel.ticTacToePosition(player, x, y);
-                else Toast.makeText(UserNavigation.getContext(), R.string.txtNotYourTurn, Toast.LENGTH_SHORT).show();
-            } else Toast.makeText(UserNavigation.getContext(), R.string.txtCantPlayWaitingOtherPlayer, Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(UserNavigation.getContext(), R.string.txtFirstStartNewGame, Toast.LENGTH_SHORT).show();
+                else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtNotYourTurn, Toast.LENGTH_SHORT).show();
+            } else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtCantPlayWaitingOtherPlayer, Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtFirstStartNewGame, Toast.LENGTH_SHORT).show();
     }
 
     private void onNewMovement(int x, int y, int player) {

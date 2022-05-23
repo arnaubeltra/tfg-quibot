@@ -91,28 +91,59 @@
         <entry key="app/src/main/res/drawable/button.xml" value="0.1905" />
         <entry key="app/src/main/res/drawable/ic_reload.xml" value="0.324" />
         <entry key="app/src/main/res/layout/activity_admin_login.xml" value="0.3101851851851852" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.3101851851851852" />
+        <entry key="app/src/main/res/layout/activity_admin_navigation.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/activity_admin_navigation_robot1d.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/activity_admin_navigation_robot2d.xml" value="0.37025641025641026" />
+        <entry key="app/src/main/res/layout/activity_interact_with_robot1d.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_user_navigation.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/activity_user_navigation_robot1d.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/activity_user_navigation_robot2d.xml" value="0.2984375" />
         <entry key="app/src/main/res/layout/app_bar_admin_navigation.xml" value="0.3101851851851852" />
+        <entry key="app/src/main/res/layout/app_bar_user_navigation.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/app_bar_user_navigation_robot1d.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/content_admin_navigation.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/content_admin_navigation_robot1d.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/content_user_navigation.xml" value="0.3101851851851852" />
+        <entry key="app/src/main/res/layout/content_user_navigation_robot1d.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/content_user_navigation_robot2d.xml" value="0.2984375" />
         <entry key="app/src/main/res/layout/dialog_custom_program.xml" value="0.3101851851851852" />
         <entry key="app/src/main/res/layout/dialog_experiments.xml" value="0.3101851851851852" />
         <entry key="app/src/main/res/layout/dialog_select_board.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/dialog_tic_tac_toe.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_with_spinner.xml" value="0.309375" />
+        <entry key="app/src/main/res/layout/fragment_connect4.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_custom_program.xml" value="0.3101851851851852" />
         <entry key="app/src/main/res/layout/fragment_experiments.xml" value="0.3388888888888889" />
+        <entry key="app/src/main/res/layout/fragment_gallery.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/fragment_home_admin.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_home_user.xml" value="0.21354166666666666" />
-        <entry key="app/src/main/res/layout/fragment_interact_with_robot.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_home_user_robot1d.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_interact_with_robot.xml" value="0.5762170790103751" />
+        <entry key="app/src/main/res/layout/fragment_interact_with_robot1d.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/fragment_tic_tac_toe.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_users_list.xml" value="0.37604166666666666" />
-        <entry key="app/src/main/res/layout/layout_custom_program.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/layout_custom_program.xml" value="0.25" />
         <entry key="app/src/main/res/layout/layout_list_experiments.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/layout_list_users.xml" value="0.30462962962962964" />
         <entry key="app/src/main/res/layout/nav_header_navigation.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/nav_header_user_navigation.xml" value="0.30462962962962964" />
+        <entry key="app/src/main/res/layout/nav_header_user_navigation_robot1d.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/layout/spinner_layout.xml" value="0.22" />
         <entry key="app/src/main/res/menu/activity_admin_navigation_drawer.xml" value="0.3572916666666667" />
-        <entry key="app/src/main/res/menu/admin_navigation.xml" value="0.3572916666666667" />
+        <entry key="app/src/main/res/menu/activity_main_drawer.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/menu/activity_user_navigation_drawer.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/menu/activity_user_navigation_drawer_robot1d.xml" value="0.26979166666666665" />
+        <entry key="app/src/main/res/menu/activity_user_robot1d_navigation_drawer.xml" value="0.33" />
+        <entry key="app/src/main/res/menu/admin_navigation.xml" value="0.22" />
+        <entry key="app/src/main/res/menu/user_navigation.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/menu/user_navigation_robot1d.xml" value="0.21354166666666666" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3535" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3535" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/quibot_logo.xml" value="0.3535" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/quibot_logo_round.xml" value="0.3535" />
         <entry key="app/src/main/res/xml/network_security_config.xml" value="0.18125" />
       </map>
     </option>

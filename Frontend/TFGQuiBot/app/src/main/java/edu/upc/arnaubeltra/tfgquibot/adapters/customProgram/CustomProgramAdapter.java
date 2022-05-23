@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
 import edu.upc.arnaubeltra.tfgquibot.models.Action;
 import edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgram;
 

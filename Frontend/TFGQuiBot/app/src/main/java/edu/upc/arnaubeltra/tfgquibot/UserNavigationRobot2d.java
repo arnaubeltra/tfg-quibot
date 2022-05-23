@@ -23,16 +23,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityUserNavigationBinding;
+import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityUserNavigationRobot2dBinding;
+import edu.upc.arnaubeltra.tfgquibot.databinding.ActivityUserNavigationRobot2dBinding;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.NavigationViewModel;
 
-public class UserNavigation extends AppCompatActivity {
+public class UserNavigationRobot2d extends AppCompatActivity {
 
-    public static UserNavigation instance;
+    public static UserNavigationRobot2d instance;
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityUserNavigationBinding binding;
+    private ActivityUserNavigationRobot2dBinding binding;
 
     private NavigationViewModel navigationViewModel;
 
@@ -45,7 +46,7 @@ public class UserNavigation extends AppCompatActivity {
 
         instance = this;
 
-        binding = ActivityUserNavigationBinding.inflate(getLayoutInflater());
+        binding = ActivityUserNavigationRobot2dBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarUserNavigation.toolbar);
@@ -76,7 +77,7 @@ public class UserNavigation extends AppCompatActivity {
         return instance.getApplicationContext();
     }
 
-    public static UserNavigation getInstance() {
+    public static UserNavigationRobot2d getInstance() {
         return instance;
     }
 
@@ -119,7 +120,7 @@ public class UserNavigation extends AppCompatActivity {
     }
 
     private void goToLoginActivity() {
-        Intent intent = new Intent(UserNavigation.this, Login.class);
+        Intent intent = new Intent(UserNavigationRobot2d.this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

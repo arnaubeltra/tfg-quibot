@@ -6,17 +6,18 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
+import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot2d;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.AdminLogin;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
@@ -30,6 +31,9 @@ public class InteractWithRobot extends Fragment {
     private Boolean robotConnected = false;
     private String interaction = "";
     private int init = 0;
+    private int robot = 0;
+
+    private Button btnMulti1, btnMulti2;
 
     // Required empty public constructor
     public InteractWithRobot() { }
@@ -43,16 +47,35 @@ public class InteractWithRobot extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_interact_with_robot, container, false);
 
-        v.findViewById(R.id.btnForward).setOnClickListener(view -> sendActionToRobot("forward"));
-        v.findViewById(R.id.btnBackwards).setOnClickListener(view -> sendActionToRobot("backwards"));
+        robot = getRobot();
+
         v.findViewById(R.id.btnLeft).setOnClickListener(view -> sendActionToRobot("left"));
         v.findViewById(R.id.btnRight).setOnClickListener(view -> sendActionToRobot("right"));
         v.findViewById(R.id.btnSuck).setOnClickListener(view -> sendActionToRobot("suck"));
         v.findViewById(R.id.btnRaisePipette).setOnClickListener(view -> sendActionToRobot("raise_pipette"));
         v.findViewById(R.id.btnLowerPipette).setOnClickListener(view -> sendActionToRobot("lower_pipette"));
-        v.findViewById(R.id.btnSuckLiquid).setOnClickListener(view -> sendActionToRobot("suck_liquid"));
-        v.findViewById(R.id.btnUnsuckLiquid).setOnClickListener(view -> sendActionToRobot("unsuck_liquid"));
         v.findViewById(R.id.btnReset).setOnClickListener(view -> sendActionToRobot("reset"));
+
+        if (robot == 1) {
+            v.findViewById(R.id.btnUp).setOnClickListener(view -> sendActionToRobot("raise_pipette"));
+            v.findViewById(R.id.btnDown).setOnClickListener(view -> sendActionToRobot("lower_pipette"));
+            btnMulti1 = v.findViewById(R.id.btnMultifunctions1);
+            btnMulti1.setOnClickListener(view -> sendActionToRobot("infrared_control"));
+            btnMulti1.setText(R.string.txtInfraredControl);
+            btnMulti1 = v.findViewById(R.id.btnMultifunctions2);
+            btnMulti1.setOnClickListener(view -> sendActionToRobot("color"));
+            btnMulti1.setText(R.string.txtReadColor);
+
+        } else if (robot == 2) {
+            v.findViewById(R.id.btnUp).setOnClickListener(view -> sendActionToRobot("forward"));
+            v.findViewById(R.id.btnDown).setOnClickListener(view -> sendActionToRobot("backwards"));
+            btnMulti1 = v.findViewById(R.id.btnMultifunctions1);
+            btnMulti1.setOnClickListener(view -> sendActionToRobot("suck_liquid"));
+            btnMulti1.setText(R.string.txtSuck);
+            btnMulti1 = v.findViewById(R.id.btnMultifunctions2);
+            btnMulti1.setOnClickListener(view -> sendActionToRobot("unsuck_liquid"));
+            btnMulti1.setText(R.string.txtUnsuck);
+        }
 
         robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
@@ -60,6 +83,13 @@ public class InteractWithRobot extends Fragment {
 
         checkRobotConnection();
         return v;
+    }
+
+    private int getRobot() {
+        if (Login.getAdminLogged())
+            return AdminLogin.getRobotAdmin();
+        else
+            return Login.getRobotUser();
     }
 
     private void checkRobotConnection() {
@@ -92,8 +122,10 @@ public class InteractWithRobot extends Fragment {
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeAction();
-                    else Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                    if (responseObject.getInt("robot") != robot) {
+                        Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
+                    } else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeAction();
+                    else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

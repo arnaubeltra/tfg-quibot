@@ -6,9 +6,9 @@
     app:startDestination="@id/homeUser">
     <fragment
         android:id="@+id/homeUser"
-        android:name="edu.upc.arnaubeltra.tfgquibot.ui.homeUser.HomeUser"
+        android:name="edu.upc.arnaubeltra.tfgquibot.ui.homeUser.robot1d.HomeUserRobot1d"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home_user" />
+        tools:layout="@layout/fragment_home_user_robot1d" />
     <fragment
         android:id="@+id/experiments"
         android:name="edu.upc.arnaubeltra.tfgquibot.ui.experiments.Experiments"
@@ -24,14 +24,4 @@
         android:name="edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgram"
         android:label="@string/menu_custom_program"
         tools:layout="@layout/fragment_custom_program" />
-    <fragment
-        android:id="@+id/ticTacToe"
-        android:name="edu.upc.arnaubeltra.tfgquibot.ui.ticTacToe.TicTacToe"
-        android:label="@string/menu_tic_tac_toe"
-        tools:layout="@layout/fragment_tic_tac_toe" />
-    <fragment
-        android:id="@+id/connect4"
-        android:name="edu.upc.arnaubeltra.tfgquibot.ui.connect4.Connect4"
-        android:label="@string/menu_connect4"
-        tools:layout="@layout/fragment_connect4" />
 </navigation>

@@ -33,11 +33,4 @@ public class HomeAdmin extends Fragment {
 
         return v;
     }
-
-    /*@Override
-    public void onDestroy() {
-        super.onDestroy();
-        NavigationViewModel navigationViewModel = new ViewModelProvider(Login.getContext()).get(NavigationViewModel.class);
-        navigationViewModel.logoutAdmin();
-    }*/
 }

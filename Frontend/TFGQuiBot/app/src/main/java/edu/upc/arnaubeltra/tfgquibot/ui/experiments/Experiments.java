@@ -19,7 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigation;
+import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot2d;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.AdminLogin;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
@@ -34,6 +35,7 @@ public class Experiments extends Fragment {
     private Boolean robotConnected = false;
     private String experimentName = "";
     private int init = 0;
+    private int robot = 0;
 
     // Required empty public constructor
     public Experiments() { }
@@ -46,6 +48,8 @@ public class Experiments extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_experiments, container, false);
+
+        robot = getRobot();
 
         v.findViewById(R.id.btnExecExperimentSeriesDisolucio).setOnClickListener(view -> sendExecutionExperiment(getResources().getString(R.string.titleSeriesDisolucio)));
         v.findViewById(R.id.btnExecExperimentBarrejaColors).setOnClickListener(view -> sendExecutionExperiment(getResources().getString(R.string.titleBarrejaColorsPrimaris)));
@@ -66,6 +70,13 @@ public class Experiments extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+    }
+
+    private int getRobot() {
+        if (Login.getAdminLogged())
+            return AdminLogin.getRobotAdmin();
+        else
+            return Login.getRobotUser();
     }
 
     private void checkRobotConnection() {
@@ -98,8 +109,10 @@ public class Experiments extends Fragment {
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeExperiment();
-                    else Toast.makeText(UserNavigation.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                    if (responseObject.getInt("robot") != robot) {
+                        Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
+                    } else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeExperiment();
+                    else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -133,11 +146,20 @@ public class Experiments extends Fragment {
         ImageView image = view.findViewById(R.id.imgBoardExperiment);
 
         if (experimentName.equals(getResources().getString(R.string.titleSeriesDisolucio)))
-            image.setImageResource(R.drawable.quibot_bg_light);
+            if (robot == 1)
+                image.setImageResource(R.drawable.quibot_bg_light);
+            else if (robot == 2)
+                image.setImageResource(R.drawable.quibot_bg_light);
         else if (experimentName.equals(getResources().getString(R.string.titleBarrejaColorsPrimaris)))
-            image.setImageResource(R.drawable.quibot_bg_light);
+                if (robot == 1)
+                    image.setImageResource(R.drawable.quibot_bg_light);
+                else if (robot == 2)
+                    image.setImageResource(R.drawable.quibot_bg_light);
         else if (experimentName.equals(getResources().getString(R.string.titleCapesDeDensitat)))
-            image.setImageResource(R.drawable.quibot_bg_light);
+            if (robot == 1)
+                image.setImageResource(R.drawable.quibot_bg_light);
+            else if (robot == 2)
+                image.setImageResource(R.drawable.quibot_bg_light);
 
         dialog.setContentView(view);
         dialog.show();

@@ -33,6 +33,7 @@ import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.CustomProgramAdapter;
 import edu.upc.arnaubeltra.tfgquibot.adapters.customProgram.ItemMoveCallback;
 import edu.upc.arnaubeltra.tfgquibot.models.Action;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.AdminLogin;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
@@ -58,6 +59,8 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     private int position = 0;
     private String typeAction = "";
 
+    private int robot = 0;
+
     // Required empty public constructor
     public CustomProgram() { }
 
@@ -69,10 +72,6 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         return getContext();
     }
 
-    /*public Resources getValues() {
-        return getResources();
-    }*/
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +81,8 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         instance = this;
         View v = inflater.inflate(R.layout.fragment_custom_program, container, false);
+
+        robot = getRobot();
 
         v.findViewById(R.id.btnSendCustomProgram).setOnClickListener(view -> sendCustomProgramToRobot());
         v.findViewById(R.id.btnAddActionCustomProgram).setOnClickListener(view -> openDialogNewAction(actionsList.size(),"new_action"));
@@ -104,6 +105,14 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         checkRobotConnection();
         return v;
     }
+
+    private int getRobot() {
+        if (Login.getAdminLogged())
+            return AdminLogin.getRobotAdmin();
+        else
+            return Login.getRobotUser();
+    }
+
 
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
@@ -201,7 +210,11 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         spinner.setOnItemSelectedListener(this);
 
         List<String> actions = new ArrayList<>();
-        Collections.addAll(actions, getResources().getString(R.string.txtForward), getResources().getString(R.string.txtBackwards), getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtSuck), getResources().getString(R.string.txtUnsuck), getResources().getString(R.string.txtSuckXMl), getResources().getString(R.string.txtUnsuckXMl),getResources().getString(R.string.txtRepeatPreviousActions));
+        Log.d("TAG", "setupSpinner: " + robot);
+        if (robot == 2)
+            Collections.addAll(actions, getResources().getString(R.string.txtForward), getResources().getString(R.string.txtBackwards), getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtSuck), getResources().getString(R.string.txtUnsuck), getResources().getString(R.string.txtSuckXMl), getResources().getString(R.string.txtUnsuckXMl),getResources().getString(R.string.txtRepeatPreviousActions));
+        else if (robot == 1)
+            Collections.addAll(actions, getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtSuck), getResources().getString(R.string.txtUnsuck), getResources().getString(R.string.txtRepeatPreviousActions));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, actions);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -281,29 +294,36 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        String action = adapterView.getItemAtPosition(position).toString();
-        switch (adapterView.getId()) {
-            case R.id.spinnerSelectPropertiesAndActions:
-                if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
-                    setupSpinnerQuantity(action);
-                    textStartSentence2.setVisibility(View.GONE);
-                    inputInstructionsRepetition.setVisibility(View.GONE);
-                    textViewFinishSentence2.setVisibility(View.GONE);
-                }
-                else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
-                    setupSpinnerQuantity(action);
-                    textStartSentence2.setVisibility(View.VISIBLE);
-                    inputInstructionsRepetition.setVisibility(View.VISIBLE);
-                    textViewFinishSentence2.setVisibility(View.VISIBLE);
-                }
-                else {
-                    textViewStartSentence.setVisibility(View.GONE);
-                    textViewFinishSentence.setVisibility(View.GONE);
-                    spinnerSelectQuantity.setVisibility(View.GONE);
-                    textStartSentence2.setVisibility(View.GONE);
-                    inputInstructionsRepetition.setVisibility(View.GONE);
-                    textViewFinishSentence2.setVisibility(View.GONE);
-                }
+        if (robot == 2) {
+            String action = adapterView.getItemAtPosition(position).toString();
+            switch (adapterView.getId()) {
+                case R.id.spinnerSelectPropertiesAndActions:
+                    if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
+                        setupSpinnerQuantity(action);
+                        textStartSentence2.setVisibility(View.GONE);
+                        inputInstructionsRepetition.setVisibility(View.GONE);
+                        textViewFinishSentence2.setVisibility(View.GONE);
+                    } else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+                        setupSpinnerQuantity(action);
+                        textStartSentence2.setVisibility(View.VISIBLE);
+                        inputInstructionsRepetition.setVisibility(View.VISIBLE);
+                        textViewFinishSentence2.setVisibility(View.VISIBLE);
+                    } else {
+                        textViewStartSentence.setVisibility(View.GONE);
+                        textViewFinishSentence.setVisibility(View.GONE);
+                        spinnerSelectQuantity.setVisibility(View.GONE);
+                        textStartSentence2.setVisibility(View.GONE);
+                        inputInstructionsRepetition.setVisibility(View.GONE);
+                        textViewFinishSentence2.setVisibility(View.GONE);
+                    }
+            }
+        } else {
+            textViewStartSentence.setVisibility(View.GONE);
+            textViewFinishSentence.setVisibility(View.GONE);
+            spinnerSelectQuantity.setVisibility(View.GONE);
+            textStartSentence2.setVisibility(View.GONE);
+            inputInstructionsRepetition.setVisibility(View.GONE);
+            textViewFinishSentence2.setVisibility(View.GONE);
         }
     }
 
@@ -316,7 +336,9 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) onSendCustomProgram();
+                    if (responseObject.getInt("robot") != robot) {
+                        Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
+                    } else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) onSendCustomProgram();
                     else Toast.makeText(getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();

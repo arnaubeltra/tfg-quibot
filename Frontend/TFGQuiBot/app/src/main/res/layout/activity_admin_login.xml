@@ -82,6 +82,17 @@
                 app:layout_constraintStart_toStartOf="@+id/inputTxtEmail"
                 app:layout_constraintTop_toBottomOf="@+id/inputTxtEmail" />
 
+            <Spinner
+                android:id="@+id/spinnerSelectRobotAdmin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/background_inputs_square"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="@+id/inputTxtPassword"
+                app:layout_constraintStart_toStartOf="@+id/inputTxtPassword"
+                app:layout_constraintTop_toBottomOf="@+id/inputTxtPassword" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnLoginAdmin"
                 android:layout_width="0dp"
@@ -94,7 +105,7 @@
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputTxtPassword" />
+                app:layout_constraintTop_toBottomOf="@+id/spinnerSelectRobotAdmin" />
 
             <TextView
                 android:id="@+id/textViewGoBackLogin"

@@ -164,6 +164,11 @@ public class RobotAPI extends ViewModel {
         getRequest(url, "sendUserActualActivity");
     }
 
+    public void selectRobot(int robot) {
+        String url = BASE_URL + "/admin/set-robot?robot=" + robot;
+        getRequest(url, "");
+    }
+
     private void getRequest(String url, String callFun) {
         if (getRequestQueue == null)
             getRequestQueue = Volley.newRequestQueue(Login.getInstance());

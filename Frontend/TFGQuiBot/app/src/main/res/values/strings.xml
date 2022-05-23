@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Qui-Bot 2D</string>
+    <string name="app_name">Qui-Bot H20</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
@@ -159,4 +159,9 @@
 
     <string name="txtErrorLoop">L\'acció \"repeteix\" no pot estar en aquesta posició de la llista d\'accions.</string>
 
+    <string name="txtRobot1D">Robot 1D</string>
+    <string name="txtRobot2D">Robot 2D</string>
+
+    <string name="txtDifferentRobot">Error. Actualment s\'està usant un altre robot. Tanca la sessió i selecciona el robot correctament.</string>
+    <string name="txtInfraredControl">Comandament a distància</string>
 </resources>
