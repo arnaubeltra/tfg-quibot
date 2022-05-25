@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class InteractWithRobot extends Fragment {
 
     private Boolean robotConnected = false;
     private String interaction = "";
-    private int init = 0;
+    private int init = 0, init2 = 0;
     private int robot = 0;
 
     private Button btnMulti1, btnMulti2;
@@ -94,17 +95,19 @@ public class InteractWithRobot extends Fragment {
 
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
-        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
-            try {
-                JSONObject responseObject = new JSONObject(response);
-                if (responseObject.getString("response").equals("robot-connection-failed")) {
-                    robotConnected = false;
-                    dialogWarningRobotNotConnected();
-                } else robotConnected = true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
+        if (init2 == 0) {
+            robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+                try {
+                    JSONObject responseObject = new JSONObject(response);
+                    if (responseObject.getString("response").equals("robot-connection-failed")) {
+                        robotConnected = false;
+                        dialogWarningRobotNotConnected();
+                    } else robotConnected = true;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        } init2++;
     }
 
     private void dialogWarningRobotNotConnected() {
@@ -140,6 +143,7 @@ public class InteractWithRobot extends Fragment {
             if (Login.getAdminLogged()) executeAction();
             else permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "interact");
         }
+        else Toast.makeText(getContext(), R.string.txtRobotNotConnected, Toast.LENGTH_SHORT).show();
     }
 
     private void executeAction() {
@@ -173,6 +177,12 @@ public class InteractWithRobot extends Fragment {
                 break;
             case "reset":
                 interactWithRobotViewModel.sendInteraction("reset");
+                break;
+            case "infrared_control":
+                interactWithRobotViewModel.sendInteraction("infrared_control");
+                break;
+            case "color":
+                interactWithRobotViewModel.sendInteraction("color");
                 break;
         }
     }

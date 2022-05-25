@@ -99,7 +99,7 @@ public class AdminNavigation extends AppCompatActivity {
 
     private void goToLoginActivity() {
         Intent intent = new Intent(AdminNavigation.this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

@@ -8,6 +8,7 @@ import android.text.format.Formatter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -106,7 +107,7 @@ public class UserNavigationRobot1d extends AppCompatActivity {
                 navigationViewModel.getLogoutUserResponse().observe(this, response -> {
                     try {
                         JSONObject responseObject = new JSONObject(response);
-                        if (responseObject.getString("response").equals("logout-user-success"))
+                        if (!responseObject.getString("response").equals("logout-user-success"))
                             finish();
                         goToLoginActivity();
                     } catch (JSONException e) {
@@ -119,7 +120,7 @@ public class UserNavigationRobot1d extends AppCompatActivity {
 
     private void goToLoginActivity() {
         Intent intent = new Intent(UserNavigationRobot1d.this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

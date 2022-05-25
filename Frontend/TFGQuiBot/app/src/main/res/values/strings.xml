@@ -133,7 +133,7 @@
     <string name="txtExplanationCapesDeDensitat">Diluïu 18 g de sal en 50 ml d\'aigua en un got i afegiu-hi el colorant de color blau. Després diluïu 6 g de sal en 50 ml d\'aigua en un got i afegiu-hi el colorant de color vermell.\n\nOmpliu la primera cubeta amb la dissolució de color blau, la segona cubeta amb la dissolució de color vermell i la tercera cubeta amb aigua de color groc al 90% de capacitat i la resta de cubetes deixeu-les buides.\n\nAra el que farà el robot serà dipositar totes les dissolucions en una mateixa cubeta amb molta cura. Com les dissolucions tenen diferent densitat, amb l\'ajuda del colorant, podem veure com les dissolucions no es barregen entre elles.</string>
 
     <string name="txtExecuteExperiment">Executar experiment</string>
-    <string name="txtHowToPrepareExperiment">Com preparar el tauler</string>
+    <string name="txtHowToPrepareExperiment">Com preparar l\'experiment</string>
 
     <!--<string name="txtHomeAdmin">Benvingut a l\'aplicació Qui-Bot H2O.\n\nCom a administrador pots:\nConsultar la llista d\'experimentsInteractuar amb el robotVeure la llista d'usuaris no administradors que estan utilitzant l\'aplicació.</string>-->
 
@@ -164,4 +164,10 @@
 
     <string name="txtDifferentRobot">Error. Actualment s\'està usant un altre robot. Tanca la sessió i selecciona el robot correctament.</string>
     <string name="txtInfraredControl">Comandament a distància</string>
+
+    <string name="txtWifiConnectionAlertTitle">Connexió WiFi</string>
+    <string name="txtWifiConnectionAlert">El WiFi està parat o desconnectat. Recorda que t\'has de connectar a la xarxa "QuiBotH2O" per poder controlar el robot.</string>
+    <string name="txtSuckUnsuck">Xuclar/Expulsar líquid</string>
+
+    <string name="txtLogoutError">Error de connexió amb el servidor. Tancament de sessió només local.</string>
 </resources>

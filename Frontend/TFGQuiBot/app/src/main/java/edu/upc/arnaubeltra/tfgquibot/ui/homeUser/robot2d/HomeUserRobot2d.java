@@ -3,6 +3,7 @@ package edu.upc.arnaubeltra.tfgquibot.ui.homeUser.robot2d;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot2d;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.NavigationViewModel;
 
 
 public class HomeUserRobot2d extends Fragment {

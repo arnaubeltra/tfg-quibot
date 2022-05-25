@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,21 +146,25 @@ public class Experiments extends Fragment {
 
         ImageView image = view.findViewById(R.id.imgBoardExperiment);
 
-        if (experimentName.equals(getResources().getString(R.string.titleSeriesDisolucio)))
+
+        Log.d("TAG", "dialogHowToPrepareExperiment: " + experimentName +  " " + robot);
+
+        if (experimentName.equals(getResources().getString(R.string.titleSeriesDisolucio))) {
             if (robot == 1)
-                image.setImageResource(R.drawable.quibot_bg_light);
+                image.setImageResource(R.drawable.exp_series_dissolucio);
+            else if (robot == 2)
+                image.setImageResource(R.drawable.board_series_dissolucio);
+        } else if (experimentName.equals(getResources().getString(R.string.titleBarrejaColorsPrimaris))) {
+            if (robot == 1)
+                image.setImageResource(R.drawable.exp_barreja_colors);
+            else if (robot == 2)
+                image.setImageResource(R.drawable.board_barreja_colors_primaris);
+        } else if (experimentName.equals(getResources().getString(R.string.titleCapesDeDensitat))) {
+            if (robot == 1)
+                image.setImageResource(R.drawable.exp_capes_de_densitat);
             else if (robot == 2)
                 image.setImageResource(R.drawable.quibot_bg_light);
-        else if (experimentName.equals(getResources().getString(R.string.titleBarrejaColorsPrimaris)))
-                if (robot == 1)
-                    image.setImageResource(R.drawable.quibot_bg_light);
-                else if (robot == 2)
-                    image.setImageResource(R.drawable.quibot_bg_light);
-        else if (experimentName.equals(getResources().getString(R.string.titleCapesDeDensitat)))
-            if (robot == 1)
-                image.setImageResource(R.drawable.quibot_bg_light);
-            else if (robot == 2)
-                image.setImageResource(R.drawable.quibot_bg_light);
+        }
 
         dialog.setContentView(view);
         dialog.show();

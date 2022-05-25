@@ -14,9 +14,9 @@
         android:roundIcon="@mipmap/quibot_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TFGQuiBot"
-        android:usesCleartextTraffic="true">
-        <!--android:networkSecurityConfig="@xml/network_security_config">
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>-->
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
+
         <activity
             android:name=".ui.login.AdminLogin"
             android:exported="false"
@@ -33,13 +33,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--
-<activity
-            android:name=".ui.login.Login"
-            android:exported="false"
-            android:windowSoftInputMode="stateVisible|adjustPan">
-        </activity>
-        -->
         <activity
             android:name=".UserNavigationRobot1d"
             android:exported="false"
@@ -50,18 +43,6 @@
             android:exported="false"
             android:theme="@style/Theme.TFGQuiBot.NoActionBar"
             android:screenOrientation="portrait"/>
-        <!--
-<activity
-            android:name=".UserNavigation"
-            android:exported="true"
-            android:theme="@style/Theme.TFGQuiBot.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
         <activity
             android:name=".AdminNavigation"
             android:exported="false"

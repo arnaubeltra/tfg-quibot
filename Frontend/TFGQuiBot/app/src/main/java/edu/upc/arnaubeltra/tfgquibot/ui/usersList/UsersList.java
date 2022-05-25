@@ -29,6 +29,7 @@ import java.util.List;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.adapters.UsersListAdapter;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.AdminLogin;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 
@@ -46,6 +47,8 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
     private UsersListViewModel usersListViewModel;
     private PermissionsViewModel permissionsViewModel;
 
+    private int robot = 0;
+
     // Required empty public constructor
     public UsersList() {}
 
@@ -57,6 +60,8 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_users_list, container, false);
+
+        robot = getRobot();
 
         spinner = v.findViewById(R.id.spinnerSelectActivity);
         textViewNoUsersLoggedIn = v.findViewById(R.id.textViewNoUsersLoggedIn);
@@ -74,6 +79,13 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
 
         setHasOptionsMenu(true);
         return v;
+    }
+
+    private int getRobot() {
+        if (Login.getAdminLogged())
+            return AdminLogin.getRobotAdmin();
+        else
+            return Login.getRobotUser();
     }
 
     @Override
@@ -104,9 +116,12 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
 
     private void setupSpinnerSelectActivity() {
         spinner.setOnItemSelectedListener(this);
-
         List<String> activities = new ArrayList<>();
-        Collections.addAll(activities, getResources().getString(R.string.menu_experiments), getResources().getString(R.string.menu_interact), getResources().getString(R.string.menu_custom_program), getResources().getString(R.string.menu_tic_tac_toe), getResources().getString(R.string.menu_connect4));
+
+        if (robot == 1)
+            Collections.addAll(activities, getResources().getString(R.string.menu_experiments), getResources().getString(R.string.menu_interact), getResources().getString(R.string.menu_custom_program));
+        else if (robot == 2)
+            Collections.addAll(activities, getResources().getString(R.string.menu_experiments), getResources().getString(R.string.menu_interact), getResources().getString(R.string.menu_custom_program), getResources().getString(R.string.menu_tic_tac_toe), getResources().getString(R.string.menu_connect4));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, activities);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

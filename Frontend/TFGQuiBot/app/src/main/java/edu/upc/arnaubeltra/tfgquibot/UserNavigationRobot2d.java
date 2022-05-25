@@ -110,7 +110,7 @@ public class UserNavigationRobot2d extends AppCompatActivity {
                         JSONObject responseObject = new JSONObject(response);
                         if (responseObject.getString("response").equals("logout-user-success"))
                             finish();
-                            goToLoginActivity();
+                        goToLoginActivity();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -121,7 +121,7 @@ public class UserNavigationRobot2d extends AppCompatActivity {
 
     private void goToLoginActivity() {
         Intent intent = new Intent(UserNavigationRobot2d.this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 }

@@ -102,7 +102,7 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
 
     private void goToHomeActivityAdmin() {
         Intent intent = new Intent(AdminLogin.this, AdminNavigation.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 

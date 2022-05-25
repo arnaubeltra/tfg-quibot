@@ -3,10 +3,13 @@ package edu.upc.arnaubeltra.tfgquibot.ui.login;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 import android.net.NetworkRequest;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -67,6 +70,10 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
                 .build();
 
         setupSpinnerSelectRobot();
+
+        Log.d("TAG", "onCreate: " + checkWifiConnection());
+        if (!checkWifiConnection())
+            dialogWifiConnection();
     }
 
     public static Context getInstance() {
@@ -122,11 +129,11 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
     private void goToHomeActivityUser() {
         if (robot == 1) {
             Intent intent = new Intent(Login.this, UserNavigationRobot1d.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } else if (robot == 2) {
             Intent intent = new Intent(Login.this, UserNavigationRobot2d.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
     }
@@ -165,5 +172,20 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    private boolean checkWifiConnection() {
+        ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
+    }
+
+    private void dialogWifiConnection() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.txtWifiConnectionAlertTitle)
+                .setMessage(R.string.txtWifiConnectionAlert)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

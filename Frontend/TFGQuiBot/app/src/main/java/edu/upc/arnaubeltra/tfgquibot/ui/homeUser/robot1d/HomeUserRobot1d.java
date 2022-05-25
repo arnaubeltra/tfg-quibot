@@ -6,10 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot1d;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot2d;
+import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
+import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.NavigationViewModel;
 
 
 public class HomeUserRobot1d extends Fragment {
@@ -35,8 +38,8 @@ public class HomeUserRobot1d extends Fragment {
 
     // problema login logout
     /*@Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         NavigationViewModel navigationViewModel = new ViewModelProvider(Login.getContext()).get(NavigationViewModel.class);
         navigationViewModel.logoutUser(Login.getIpAddress());
     }*/
