@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
 
         findViewById(R.id.btnLoginAdmin).setOnClickListener(view -> login());
         findViewById(R.id.textViewGoBackLogin).setOnClickListener(view -> goBack());
+        findViewById(R.id.imgHelpLoginAdmin).setOnClickListener(view -> openHelpDialog());
 
         spinnerSelectRobot = findViewById(R.id.spinnerSelectRobotAdmin);
 
@@ -128,5 +130,14 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    private void openHelpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.txtTitleHelpLoginAdmin)
+                .setMessage(R.string.txtHelpLoginAdmin)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

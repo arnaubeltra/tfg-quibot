@@ -1,9 +1,11 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.homeUser.robot1d;
 
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +34,8 @@ public class HomeUserRobot1d extends Fragment {
         v.findViewById(R.id.btnExperimentsHomeUser).setOnClickListener(view -> UserNavigationRobot1d.getNavController().navigate(R.id.experiments));
         v.findViewById(R.id.btnInteractHomeUser).setOnClickListener(view -> UserNavigationRobot1d.getNavController().navigate(R.id.interactWithRobot));
         v.findViewById(R.id.btnCustomProgramHomeUser).setOnClickListener(view -> UserNavigationRobot1d.getNavController().navigate(R.id.customProgram));
+
+        ((TextView) v.findViewById(R.id.textViewTitleUser)).setText(Html.fromHtml(getString(R.string.txtTitleHome) + "<br>Qui-Bot H<sub>2</sub>O"));
 
         return v;
     }

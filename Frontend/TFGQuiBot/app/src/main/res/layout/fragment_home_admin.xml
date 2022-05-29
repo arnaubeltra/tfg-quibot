@@ -55,7 +55,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="32dp"
                 android:gravity="center"
-                android:text="Benvingut a l\'aplicació\nQui-Bot H2O"
+                android:text="@string/txtTitleHome"
                 android:textColor="@color/black"
                 android:textSize="23sp"
                 android:textStyle="bold"

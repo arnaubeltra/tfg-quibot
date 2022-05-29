@@ -79,6 +79,9 @@
     <string name="txtBoardIsFull">El tauler està ple. Es finalitza la partida.</string>
     <string name="txtRobotNotConnected">El robot no està connectat!</string>
 
+    <string name="txtPermissionsPlayConnect4">Demana permisos per jugar al Connecta 4</string>
+
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txtReset">Reset</string>
     <string name="txtReadColor">Llegeix color</string>
@@ -170,4 +173,27 @@
     <string name="txtSuckUnsuck">Xuclar/Expulsar líquid</string>
 
     <string name="txtLogoutError">Error de connexió amb el servidor. Tancament de sessió només local.</string>
+
+    <string name="txtColFull">La columna està plena!</string>
+    <string name="txtVermelles">Jugues amb: Vermelles</string>
+    <string name="txtGrogues">Jugues amb: Grogues</string>
+
+    <string name="txtTitleHelpLogin">Inici de sessió</string>
+    <string name="txtHelpLogin">Assegura\'t que el dispositiu mòbil té la connectivitat Wi-fi activada i s\'ha connectat a la xarxa QuiBotH2O.\nContrassenya: 12345678.\n\nUna vegada connectat pots iniciar sessió introduïnt el nom, cognom i seleccionant el robot que es desitja controlar.</string>
+
+    <string name="txtTitleHelpLoginAdmin">Inici de sessió (Administrador)</string>
+    <string name="txtHelpLoginAdmin">Assegura\'t que el dispositiu mòbil té la connectivitat Wi-fi activada i s\'ha connectat a la xarxa QuiBotH2O.\nContrassenya: 12345678.\n\nUna vegada connectat pots iniciar sessió introduïnt l\'usuari i contrassenya que es pot trobar en el manual de la App Qui-Bot H2O i seleccionant el robot que es desitja controlar.\nMolt important: només pot haver-hi un sol administrador amb la sessió iniciada.</string>
+
+
+    <string name="txtTitleHome">Benvingut a l\'aplicació</string>
+
+    <string name="txtAdmin">Administrador</string>
+
+    <string name="txtHelpExperiments">Selecciona l\'experiment que vols realitzar.\n\nConsulta com s\'ha de preparar cada un d\'ells per realitzar-los correctament.\n\nPer tal d\'executar els experiments caldrà que s\'hagin assignat els permisos corresponents a l\'usuari. L\'administrador sempre pot executar els experiments.\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
+    <string name="txtHelpInteract">Interacciona amb el robot utilitzant aquesta pantalla com si fos un comandament a distància d\'una televisió.\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
+    <string name="txtHelpCustomProgram">Crea un programa personalitzat per fer realitzar al robot d\'una forma interactiva.\n\nAquesta pantalla permet anar afegint accions de tota mena, algunes amb un nivell de personalització bastant elevat.\n\nEs pot canviar l\'ordre de les accions seleccionant-ne una i arrossegant amunt o avall.\n\nPer modificar accions de la llista cal clicar a l\'icona de llapis. Per el·liminar accions cal clicar a l\'icona de la creu.\n\nUn cop el programa estigui complert, s\'ha de clicar \"Enviar al robot\".\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
+    <string name="txtHelpTicTacToe">Joc interactiu per a dos usuaris. Cal que aquests usuaris hagin estat autoritzats per l\'administrador per tal de poder jugar.\n\nQuan s\'inicia una partida, s\'espera al segon jugador i en la pantalla s\'indica quina és la fitxa de cada jugador.\n\nEn cada moviment, el robot anirà canviant el tauler físic. És important esperar a que el robot acabi per disfrutar de l\'experiència.\n\nUn cop finalitzada la partida, cal que es netegi el tauler físic per tornar a jugar.\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
+    <string name="txtHelpConnect4">Joc interactiu per a dos usuaris. Cal que aquests usuaris hagin estat autoritzats per l\'administrador per tal de poder jugar.\n\nQuan s\'inicia una partida, s\'espera al segon jugador i en la pantalla s\'indica quin és el color de cada jugador.\n\nEn cada moviment, el robot anirà canviant el tauler físic. És important esperar a que el robot acabi per disfrutar de l\'experiència.\n\nUn cop finalitzada la partida, cal que es netegi el tauler físic per tornar a jugar.\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
+    <string name="txtHelpUsersList">Controla els usuaris que tenen permís per controlar el robot.\n\nPrimerament, cal refrescar la llista d\'usuaris quan un nou usuari entri a l\'aplicació pitjant l\'icona de recarregar.\nA continuació, cal seleccionar l\'activitat a controlar.\nFinalment cal seleccionar els usuaris autoritzats per a cada activitat, donant-los accés pitjant \"Donar accés\".\n\nEn algunes de les activitats, només es podrà autoritzar un usuari a la vegada, i en el cas dels jocs només se\'n podràn autoritzar dos.\n\nPer treure l\'autorització a un usuari, cal clicar a \"Treure accés\".</string>
+
 </resources>

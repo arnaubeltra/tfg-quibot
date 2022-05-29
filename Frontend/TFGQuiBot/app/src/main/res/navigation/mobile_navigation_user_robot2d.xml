@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/homeUser"
         android:name="edu.upc.arnaubeltra.tfgquibot.ui.homeUser.robot2d.HomeUserRobot2d"
-        android:label="@string/menu_home"
+        android:label="@string/txtRobot2D"
         tools:layout="@layout/fragment_home_user_robot2d" />
     <fragment
         android:id="@+id/experiments"

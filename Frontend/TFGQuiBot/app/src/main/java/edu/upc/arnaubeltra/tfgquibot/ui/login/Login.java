@@ -55,6 +55,7 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
 
         findViewById(R.id.btnLogin).setOnClickListener(view -> login());
         findViewById(R.id.textViewEnterAsAdmin).setOnClickListener(view -> goToAdminLogin());
+        findViewById(R.id.imgHelpLogin).setOnClickListener(view -> openHelpDialog());
 
         spinnerSelectRobot = findViewById(R.id.spinnerSelectRobot);
 
@@ -184,6 +185,15 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.txtWifiConnectionAlertTitle)
                 .setMessage(R.string.txtWifiConnectionAlert)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void openHelpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.txtTitleHelpLogin)
+                .setMessage(R.string.txtHelpLogin)
                 .setPositiveButton(R.string.txtAccept, null);
         AlertDialog dialog = builder.create();
         dialog.show();

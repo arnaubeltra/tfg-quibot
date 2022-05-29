@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -13,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -102,6 +105,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
         customProgramViewModel = new ViewModelProvider(Login.getContext()).get(CustomProgramViewModel.class);
 
+        setHasOptionsMenu(true);
         checkRobotConnection();
         return v;
     }
@@ -414,5 +418,27 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
     @Override
     public void onUserClicked(int index) {
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        menu.findItem(R.id.help).setVisible(true);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.help)
+            openHelpDialog();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openHelpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.menu_custom_program)
+                .setMessage(R.string.txtHelpCustomProgram)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

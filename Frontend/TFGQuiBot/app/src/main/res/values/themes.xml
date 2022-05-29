@@ -24,4 +24,6 @@
     <style name="Theme.TFGQuiBot.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.TFGQuiBot.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
 </resources>

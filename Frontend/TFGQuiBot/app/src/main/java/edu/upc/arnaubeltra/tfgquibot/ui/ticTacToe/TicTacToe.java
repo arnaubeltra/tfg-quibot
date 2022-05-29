@@ -4,11 +4,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -96,7 +99,7 @@ public class TicTacToe extends Fragment {
         checkRobotConnection();
         setupRequestResponseObserver();
         //onGetUserPermissions();
-
+        setHasOptionsMenu(true);
         return v;
     }
 
@@ -129,6 +132,7 @@ public class TicTacToe extends Fragment {
         ticTacToeViewModel.getTicTacToeRequestResponse().observe(getViewLifecycleOwner(), response -> {
             try {
                 JSONObject responseObject = new JSONObject(response);
+
                 if (responseObject.getString("response").equals("tic-tac-toe-start-success")) {
                     GAME_STARTED = true;
                     player = responseObject.getInt("player");
@@ -229,20 +233,6 @@ public class TicTacToe extends Fragment {
         } init++;
     }
 
-
-
-    /*private void onGetUserPermissions() {
-        permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe");
-        permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), response -> {
-            try {
-                JSONObject responseObject = new JSONObject(response);
-                IS_AUTHORIZED = responseObject.getString("response").equals("true");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-    }*/
-
     private void startFinishGame() {
         if (robotConnected) {
             if (!GAME_STARTED) {
@@ -258,17 +248,6 @@ public class TicTacToe extends Fragment {
                 Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
             }
         }
-
-        /*if (!GAME_STARTED)
-            if (IS_AUTHORIZED) ticTacToeViewModel.startNewGameTicTacToe(Login.getIpAddress());
-            else Toast.makeText(UserNavigation.getContext(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
-        else {
-            btnNewGame.setText(R.string.btnTxtNovaPartida);
-            txtInfoGame.setText(R.string.txtGameNotStarted);
-            txtInfoPlayer.setText("");
-            finishGame();
-            Toast.makeText(UserNavigation.getContext(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
-        }*/
     }
 
     private void startThreadGame() {
@@ -392,8 +371,30 @@ public class TicTacToe extends Fragment {
     private void howToPlayDialog() {
         Dialog dialog = new Dialog(getActivity());
         dialog.setCancelable(true);
-        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_tic_tac_toe, null);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_how_to_play, null);
         dialog.setContentView(view);
+        dialog.show();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        menu.findItem(R.id.help).setVisible(true);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.help)
+            openHelpDialog();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openHelpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.menu_tic_tac_toe)
+                .setMessage(R.string.txtHelpTicTacToe)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 }

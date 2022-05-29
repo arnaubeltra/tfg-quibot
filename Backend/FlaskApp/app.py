@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify
 
 from user import *
 from ticTacToe import *
-from activity import *
+from connect4 import *
+from robot import *
 
 import socket
 import threading
@@ -11,18 +12,19 @@ app = Flask(__name__)
 
 
 # IP and Ports for socket connections
-HOST_ROBOT = '192.168.100.1'
+HOST_ROBOT = '192.168.100.10'
 PORT_ROBOT = 9999
 
 # Global variables
 connectedUsers = {}
 connectedAdmins = 0
 ticTacToe = None
+connect4 = None
 
-actualActivity = Activity()
-actualActivity.setActualActivity("")
-actualActivity.setNumberAuthorizedUsers(0)
-
+robot = Robot()
+robot.setActualRobot(2)
+robot.setActualActivity("connect4")
+robot.setNumberAuthorizedUsers(0)
 
 # General functionallities
 @app.route('/user/login', methods = ['POST'])
@@ -47,11 +49,22 @@ def loginAdmin():
             return jsonify(response)
     return ""
 
+@app.route('/admin/set-robot', methods = ['GET'])
+def setRobot():
+    global admin
+    if (request.method == 'GET'):
+        robot.setActualRobot(request.args.get('robot'))
+    return ""
+
 @app.route('/user/logout', methods = ['GET'])
 def userLogout():
     global connectedUsers
+    global robot
     if (request.method == 'GET'):
         userIP = request.args.get('user')
+        user = connectedUsers[userIP]
+        if (user.getIsAuthorized() == "true"):
+            robot.setNumberAuthorizedUsers(robot.getNumberAuthorizedUsers() - 1)
         connectedUsers.pop(userIP)
         response = {'response': 'logout-user-success'}
         return jsonify(response)
@@ -60,8 +73,10 @@ def userLogout():
 @app.route('/admin/logout', methods = ['GET'])
 def adminLogout():
     global connectedAdmins
+    global robot
     if (request.method == 'GET'):
         connectedAdmins = 0 
+        robot.setActualRobot(0)
         response = {'response': 'logout-admin-success'}
         return jsonify(response)
     return ""
@@ -80,24 +95,25 @@ def checkRobotConnection():
 @app.route('/user/check-permissions', methods = ['GET'])
 def checkPermissionsUser():
     global connectedUsers
-    global actualActivity
+    global robot
     if (request.method == 'GET'):
         userIP = request.args.get('user')
         activity = request.args.get('activity')
         auth = connectedUsers[userIP].isAuthorized
-        if (activity != actualActivity.getActualActivity()):
-            response = {'response': auth, 'activity': 'not-match'}
+        actRobot = robot.getActualRobot()
+        if (activity != robot.getActualActivity()):
+            response = {'response': auth, 'activity': 'not-match', 'robot': actRobot}
         else:
-            response = {'response': auth, 'activity': 'match'}
+            response = {'response': auth, 'activity': 'match', 'robot': actRobot}
         return jsonify(response)
     return ""
 
 @app.route('/admin/actual-activity')
 def specifyActualRobotActivity():
-    global actualActivity
+    global robot
     if (request.method == 'GET'):
-        actualActivity.setActualActivity(request.args.get('activity'))
-        actualActivity.setNumberAuthorizedUsers(0)
+        robot.setActualActivity(request.args.get('activity'))
+        robot.setNumberAuthorizedUsers(0)
         for user in connectedUsers:
             connectedUsers[user].setIsAuthorized("false")
     return ""
@@ -105,24 +121,24 @@ def specifyActualRobotActivity():
 @app.route('/user/change-permissions', methods = ['GET'])
 def changePermissionsUser():
     global connectedUsers
-    global actualActivity
+    global robot
     if (request.method == 'GET'):
         userIP = request.args.get('user')
         auth = request.args.get('isAuthorized')
-        activity = actualActivity.getActualActivity()
-        num = actualActivity.getNumberAuthorizedUsers()
+        activity = robot.getActualActivity()
+        num = robot.getNumberAuthorizedUsers()
         print (userIP, auth, activity, num)
         userObject = connectedUsers[userIP]
-        if (auth == "true" and ((activity == "experiments" and num < 1) or (activity == "interact" and num < 1) or (activity == "custom_program" and num < 1) or (activity == "tic_tac_toe" and num < 2) or (activity == "connect_4" and num < 2))):
+        if (auth == "true" and ((activity == "experiments" and num < 1) or (activity == "interact" and num < 1) or (activity == "custom_program" and num < 1) or (activity == "tic_tac_toe" and num < 2) or (activity == "connect4" and num < 2))):
             userObject.setIsAuthorized("true")
-            actualActivity.setNumberAuthorizedUsers(num + 1)
+            robot.setNumberAuthorizedUsers(num + 1)
             response = {'response': 'change-permissions-success'}
         elif (auth == "false" and num > 0):
             userObject.setIsAuthorized("false")
-            actualActivity.setNumberAuthorizedUsers(num - 1)
+            robot.setNumberAuthorizedUsers(num - 1)
             response = {'response': 'change-permissions-success'}
         else:
-            if (auth == "true" and ((activity == "experiments" and num == 1) or (activity == "interact" and num == 1) or (activity == "custom_program" and num == 1) or (activity == "tic_tac_toe" and num == 2) or (activity == "connect_4" and num == 2))):
+            if (auth == "true" and ((activity == "experiments" and num == 1) or (activity == "interact" and num == 1) or (activity == "custom_program" and num == 1) or (activity == "tic_tac_toe" and num == 2) or (activity == "connect4" and num == 2))):
                 response = {'response': 'max-number-of-users'}
             else:
                 response = {'response': 'change-permissions-error'}
@@ -177,6 +193,7 @@ def startInteract():
 @app.route("/sendInstruction", methods = ['GET'])
 def sendInstruction():
     if (request.method == 'GET'):
+        #print ("aaa", robot.getRobotIP())
         robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
         send = b"action " + request.args.get('instruction').encode('UTF-8')
@@ -222,6 +239,7 @@ def startTicTacToe():
 @app.route("/finish-ticTacToe")
 def finishTicTacToe():
     global ticTacToe
+    #ticTacToe.setTicTacToePlayers(0)
     if (request.method == 'GET'):
         ticTacToe = None
     return ""
@@ -243,9 +261,14 @@ def statusTicTacToe():
                 return {'response': 'waiting-for-player'}
             elif (ticTacToe.getTicTacToeBoard() == [[0,0,0],[0,0,0],[0,0,0]]): 
                 return {'response': 'tic-tac-toe-init', 'player': ticTacToe.getPlayer()}
-            elif (ticTacToe.getTicTacToeStatus() == 0): 
+            elif (ticTacToe.getTicTacToeStatus() == 0):
+                #try:
+                #    ticTacToe.setTicTacToePlayers(0)        ###
+                #except:
+                #    pass
                 return {'response': 'game-is-over'}
             elif (ticTacToe.checkBoardFull()):
+                #ticTacToe.setTicTacToePlayers(0)            ###
                 return {'response': 'board-is-full'}
             return {'response': 'no-winner', 'x': ticTacToe.getX(), 'y': ticTacToe.getY(), 'player': ticTacToe.getPlayer()}
     return ""
@@ -273,9 +296,90 @@ def ticTacToePosition():
             return {'response': 'tic-tac-toe-position-full'}
     return ""
 
+#Connect 4
+@app.route("/start-connect4")
+def startConnect4():
+    global connect4
+    if (request.method == 'GET'):
+        if (connect4 is None):
+            print ("INIT CONNECT 4")
+            connect4 = Connect4()
+        connect4.setConnect4Status(1)
+        connect4.setConnect4Board([[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]])
+        if (connect4.getConnect4Players() == 0):
+            connect4.setConnect4Players(1)
+            return {'response': 'connect4-start-success', 'player': 1}
+        elif (connect4.getConnect4Players() == 1):
+            connect4.setConnect4Players(2)
+            return {'response': 'connect4-start-success', 'player': 2}
+        else:
+            return {'response': 'game-is-full'}
+    return ""
+
+@app.route("/finish-connect4")
+def finishConnect4():
+    global connect4
+    if (request.method == 'GET'):
+        connect4 = None
+    return ""
+
+@app.route("/status-connect4")
+def statusConnect4():
+    global connect4
+    status = 0
+    if (request.method == 'GET'):
+        try:
+            status = int(connect4.checkBoard())
+            if (status == 1):
+                return {'response': 'winner-1'}
+            elif (status == 2):
+                return {'response': 'winner-2'}
+            else:
+                if (connect4.getConnect4Players() != 2):
+                    return {'response': 'waiting-for-player'}
+                elif (connect4.getConnect4Board() == [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]): 
+                    return {'response': 'connect4-init', 'player': connect4.getPlayer()}
+                elif (connect4.getConnect4Status() == 0):
+                    connect4.setConnect4Players(0)
+                    return {'response': 'game-is-over'}
+                elif (connect4.checkBoardFull()):
+                    connect4.setConnect4Players(0)
+                    return {'response': 'board-is-full'}
+                return {'response': 'no-winner', 'x': connect4.getX() + 1, 'y': connect4.getY() + 1, 'player': connect4.getPlayer()}
+        except:
+            return {'response': 'game-is-over'}
+    return ""
+
+@app.route("/connect4Position", methods = ['GET'])
+def connect4Position():
+    global connect4
+    if (request.method == 'GET'):
+        column = int(request.args.get('column')) - 1
+        print("Column ", column)
+        row = int(connect4.checkRowPosition(column)) - 1
+        print("row ", row)
+        if (connect4.getConnect4Board()[row][column] == 0):
+            connect4.setX(row) 
+            connect4.setY(column)
+            connect4.setPlayer(request.args.get('player'))
+            board = connect4.getConnect4Board()
+            board[int(connect4.getX())][int(connect4.getY())] = int(connect4.getPlayer())
+            connect4.setConnect4Board(board)
+            #robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            #robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+            #send = b"connect4_put_chip " + " ".join([connect4.getX(), connect4.getY(), connect4.getPlayer()]).encode('UTF-8')
+            #robotSocket.sendall(send)
+            #robotSocket.close()
+            return {'response': 'connect4-position-success', 'x': connect4.getX() + 1, 'y': connect4.getY() + 1}       
+        else:
+            return {'response': 'connect4-position-full'}
+    return ""
+
 @app.after_request
 def after(response):
+    print ("")
     print(response.get_data())
+    print ("")
     return response
 
 if __name__ == '__main__':

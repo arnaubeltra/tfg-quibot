@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -65,6 +67,8 @@ public class Experiments extends Fragment {
         experimentsViewModel = new ViewModelProvider(Login.getContext()).get(ExperimentsViewModel.class);
 
         checkRobotConnection();
+
+        setHasOptionsMenu(true);
         return v;
     }
 
@@ -167,6 +171,28 @@ public class Experiments extends Fragment {
         }
 
         dialog.setContentView(view);
+        dialog.show();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        menu.findItem(R.id.help).setVisible(true);
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.help)
+            openHelpDialog();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openHelpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.menu_experiments)
+                .setMessage(R.string.txtHelpExperiments)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
         dialog.show();
     }
 }

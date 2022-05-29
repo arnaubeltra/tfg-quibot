@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.upc.arnaubeltra.tfgquibot.ui.connect4.Connect4ViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgramViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.ticTacToe.TicTacToeViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.NavigationViewModel;
@@ -44,6 +45,7 @@ public class RobotAPI extends ViewModel {
     private TicTacToeViewModel ticTacToeViewModel;
     private RobotConnectionViewModel robotConnectionViewModel;
     private CustomProgramViewModel customProgramViewModel;
+    private Connect4ViewModel connect4ViewModel;
 
     private ArrayList<User> loggedUsersList;
 
@@ -169,6 +171,27 @@ public class RobotAPI extends ViewModel {
         getRequest(url, "");
     }
 
+    public void startConnect4(String userIP) {
+        String url = BASE_URL + "/start-connect4";
+        getRequest(url, "connect4");
+    }
+
+    public void connect4Position(int player, int y) {
+        String url = BASE_URL + "/connect4Position?column=" + y + "&player=" + player;
+        getRequest(url, "connect4");
+    }
+
+    public void checkStatusConnect4() {
+        String url = BASE_URL + "/status-connect4";
+        getRequest(url, "connect4");
+    }
+
+    public void finishGameConnect4() {
+        String url = BASE_URL + "/finish-connect4";
+        getRequest(url, "");
+    }
+
+
     private void getRequest(String url, String callFun) {
         if (getRequestQueue == null)
             getRequestQueue = Volley.newRequestQueue(Login.getInstance());
@@ -191,6 +214,7 @@ public class RobotAPI extends ViewModel {
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
         usersListViewModel = new ViewModelProvider(Login.getContext()).get(UsersListViewModel.class);
         ticTacToeViewModel = new ViewModelProvider(Login.getContext()).get(TicTacToeViewModel.class);
+        connect4ViewModel = new ViewModelProvider(Login.getContext()).get(Connect4ViewModel.class);
         robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
 
         switch (callFun) {
@@ -229,6 +253,9 @@ public class RobotAPI extends ViewModel {
                 break;
             case "ticTacToe":
                 ticTacToeViewModel.setTicTacToeRequestResponse(response);
+                break;
+            case "connect4":
+                connect4ViewModel.setConnect4RequestResponse(response);
                 break;
             case "sendRobotActualActivity":
                 permissionsViewModel.setRobotActualActivityResponse(response);

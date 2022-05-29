@@ -1,58 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintMainConnect4"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.connect4.Connect4">
 
+    <ImageView
+        android:id="@+id/imageViewBackground"
+        android:layout_width="450dp"
+        android:layout_height="636dp"
+        android:alpha="0.1"
+        android:background="@drawable/quibot_bg_light"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ScrollView
+        android:id="@+id/scrollViewConnect4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="-197dp">
-
+        tools:layout_editor_absoluteX="206dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintScrollConnect4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="70dp"
-                android:layout_height="75dp" />
+            <TextView
+                android:id="@+id/txtInfoPlayerConnect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtInfoGameConnect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/txtGameNotStarted"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/txtInfoPlayerConnect4"
+                app:layout_constraintStart_toStartOf="@+id/txtInfoPlayerConnect4"
+                app:layout_constraintTop_toBottomOf="@+id/txtInfoPlayerConnect4" />
+
+
+            <ImageView
+                android:id="@+id/boardConnect4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="100dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/board"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline1Connect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="12dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2Connect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.185" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3Connect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.345" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4Connect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline5Connect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.66" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline6Connect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.82" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline7Connect4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.98" />
 
             <Button
-                android:id="@+id/button2"
-                android:layout_width="70dp"
-                android:layout_height="75dp"
-                tools:layout_editor_absoluteX="78dp"
-                tools:layout_editor_absoluteY="0dp" />
+                android:id="@+id/btnColumn1"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/boardConnect4"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2Connect4"
+                app:layout_constraintStart_toStartOf="@+id/guideline1Connect4"
+                app:layout_constraintTop_toTopOf="@+id/boardConnect4"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
             <Button
-                android:id="@+id/button3"
-                android:layout_width="70dp"
-                android:layout_height="75dp"
-                tools:layout_editor_absoluteX="158dp"
-                tools:layout_editor_absoluteY="0dp" />
+                android:id="@+id/btnColumn2"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/boardConnect4"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3Connect4"
+                app:layout_constraintStart_toStartOf="@+id/guideline2Connect4"
+                app:layout_constraintTop_toTopOf="@+id/boardConnect4"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
             <Button
-                android:id="@+id/button4"
-                android:layout_width="70dp"
-                android:layout_height="75dp"
-                tools:layout_editor_absoluteX="240dp"
-                tools:layout_editor_absoluteY="0dp" />
+                android:id="@+id/btnColumn3"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/boardConnect4"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4Connect4"
+                app:layout_constraintStart_toStartOf="@+id/guideline3Connect4"
+                app:layout_constraintTop_toTopOf="@+id/boardConnect4"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
             <Button
-                android:id="@+id/button5"
-                android:layout_width="70dp"
-                android:layout_height="75dp"
-                tools:layout_editor_absoluteX="325dp"
-                tools:layout_editor_absoluteY="0dp" />
+                android:id="@+id/btnColumn4"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/boardConnect4"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4Connect4"
+                app:layout_constraintStart_toStartOf="@+id/guideline5Connect4"
+                app:layout_constraintTop_toTopOf="@+id/boardConnect4"
+                tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
+            <Button
+                android:id="@+id/btnColumn5"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/boardConnect4"
+                app:layout_constraintEnd_toStartOf="@+id/guideline5Connect4"
+                app:layout_constraintStart_toStartOf="@+id/guideline6Connect4"
+                app:layout_constraintTop_toTopOf="@+id/boardConnect4"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/btnColumn6"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/boardConnect4"
+                app:layout_constraintEnd_toStartOf="@+id/guideline6Connect4"
+                app:layout_constraintStart_toStartOf="@+id/guideline7Connect4"
+                app:layout_constraintTop_toTopOf="@+id/boardConnect4"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/btnNewGameConnect4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="#CB4335"
+                android:text="@string/btnTxtNovaPartida"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/boardConnect4" />
+
+            <Button
+                android:id="@+id/btnHowToPlayConnect4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="#2E4053"
+                android:text="@string/btnTxtComJugar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnNewGameConnect4" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </ScrollView>
 
 

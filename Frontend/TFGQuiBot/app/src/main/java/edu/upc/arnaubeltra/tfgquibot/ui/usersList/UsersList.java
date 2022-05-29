@@ -1,5 +1,6 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.usersList;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -91,6 +92,7 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.reload).setVisible(true);
+        menu.findItem(R.id.help).setVisible(true);
         super.onPrepareOptionsMenu(menu);
     }
 
@@ -99,7 +101,8 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
         if (item.getItemId() == R.id.reload) {
             Toast.makeText(getActivity(), R.string.txtRefreshedList, Toast.LENGTH_SHORT).show();
             refreshUsersList();
-        }
+        } else if (item.getItemId() == R.id.help)
+            openHelpDialog();
         return super.onOptionsItemSelected(item);
     }
 
@@ -147,7 +150,7 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
         else if (activity.equals(getResources().getString(R.string.menu_interact))) return "interact";
         else if (activity.equals(getResources().getString(R.string.menu_custom_program))) return "custom_program";
         else if (activity.equals(getResources().getString(R.string.menu_tic_tac_toe))) return "tic_tac_toe";
-        else if (activity.equals(getResources().getString(R.string.menu_connect4))) return "connect_4";
+        else if (activity.equals(getResources().getString(R.string.menu_connect4))) return "connect4";
         return "";
     }
 
@@ -181,5 +184,14 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
     
     public static void setIndex(int position) {
         index = position;
+    }
+
+    private void openHelpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.menu_users_list)
+                .setMessage(R.string.txtHelpUsersList)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

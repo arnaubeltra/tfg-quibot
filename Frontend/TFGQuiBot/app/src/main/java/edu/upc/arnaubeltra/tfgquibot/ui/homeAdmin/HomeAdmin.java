@@ -4,9 +4,11 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import edu.upc.arnaubeltra.tfgquibot.AdminNavigation;
 import edu.upc.arnaubeltra.tfgquibot.R;
@@ -30,6 +32,8 @@ public class HomeAdmin extends Fragment {
         v.findViewById(R.id.btnInteractHomeAdmin).setOnClickListener(view -> AdminNavigation.getNavController().navigate(R.id.interactWithRobot));
         v.findViewById(R.id.btnCustomProgramHomeAdmin).setOnClickListener(view -> AdminNavigation.getNavController().navigate(R.id.customProgram));
         v.findViewById(R.id.btnUserListHomeAdmin).setOnClickListener(view -> AdminNavigation.getNavController().navigate(R.id.usersList));
+
+        ((TextView) v.findViewById(R.id.textViewTitleAdmin)).setText(Html.fromHtml(getString(R.string.txtTitleHome) + "<br>Qui-Bot H<sub>2</sub>O"));
 
         return v;
     }
