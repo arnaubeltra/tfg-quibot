@@ -126,7 +126,7 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
         else if (robot == 2)
             Collections.addAll(activities, getResources().getString(R.string.menu_experiments), getResources().getString(R.string.menu_interact), getResources().getString(R.string.menu_custom_program), getResources().getString(R.string.menu_tic_tac_toe), getResources().getString(R.string.menu_connect4));
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, activities);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_layout_2, activities);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
     }

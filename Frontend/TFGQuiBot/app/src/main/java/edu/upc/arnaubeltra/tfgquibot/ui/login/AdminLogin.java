@@ -1,7 +1,6 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
@@ -27,11 +26,10 @@ import edu.upc.arnaubeltra.tfgquibot.R;
 
 public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private EditText emailUser, passwordUser;
+    private EditText username, passwordUser;
     private LoginViewModel loginViewModel;
     private ProgressDialog loginDialog;
     private Spinner spinnerSelectRobot;
-    private String emailPattern = "[a-zA-Z0-9._-]+@+[a-z]+\\.+[a-z]+";
 
     private static int robot = 0;
 
@@ -40,7 +38,7 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_login);
 
-        emailUser = findViewById(R.id.inputTxtEmail);
+        username = findViewById(R.id.inputTxtUsername);
         passwordUser = findViewById(R.id.inputTxtPassword);
 
         findViewById(R.id.btnLoginAdmin).setOnClickListener(view -> login());
@@ -62,14 +60,12 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
 
     private void login() {
         //goToHomeActivityAdmin();
-        String email = "a@a.com";// emailUser.getText().toString();
+        String user = "a@a.com";// emailUser.getText().toString();
         String password = "111111";// passwordUser.getText().toString();
 
-        if (!email.matches(emailPattern)) {
-            emailUser.setError("Entra un correu vàlid");
-        } else if ((password.isEmpty()) || (password.length() < 6)) {
+        if ((password.isEmpty()) || (password.length() < 6)) {
             passwordUser.setError("La longitud de la contrassenya ha de ser major que 6");
-        } else if ((!email.matches("a@a.com")) || (!password.matches("111111"))) {
+        } else if ((!user.matches("admin")) || (!password.matches("Quibot2022"))) {
             Toast.makeText(AdminLogin.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
         } else {
             Login.setAdminLogged(true);

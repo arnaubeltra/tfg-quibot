@@ -43,23 +43,22 @@
                 android:text="@string/txtTitleLoginAdmin"
                 android:textColor="@color/white"
                 android:textSize="25dp"
-                app:layout_constraintBottom_toTopOf="@+id/inputTxtEmail"
+                app:layout_constraintBottom_toTopOf="@+id/inputTxtUsername"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
-                android:id="@+id/inputTxtEmail"
+                android:id="@+id/inputTxtUsername"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="330dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/background_inputs_square"
-                android:drawableLeft="@drawable/icon_email"
+                android:drawableLeft="@drawable/icon_person"
                 android:drawablePadding="10dp"
                 android:ems="10"
-                android:hint="@string/txtEmail"
-                android:inputType="textEmailAddress"
+                android:hint="@string/txtUser"
                 android:paddingLeft="20dp"
                 android:paddingTop="13dp"
                 android:paddingRight="20dp"
@@ -87,9 +86,9 @@
                 android:paddingBottom="13dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/inputTxtEmail"
-                app:layout_constraintStart_toStartOf="@+id/inputTxtEmail"
-                app:layout_constraintTop_toBottomOf="@+id/inputTxtEmail" />
+                app:layout_constraintEnd_toEndOf="@+id/inputTxtUsername"
+                app:layout_constraintStart_toStartOf="@+id/inputTxtUsername"
+                app:layout_constraintTop_toBottomOf="@+id/inputTxtUsername" />
 
             <Spinner
                 android:id="@+id/spinnerSelectRobotAdmin"
