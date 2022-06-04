@@ -21,10 +21,8 @@ public class PermissionsViewModel extends ViewModel {
     public void checkUserPermissions(String user, String activity) {
         if (permissionsLiveData == null)
             permissionsLiveData = new MutableLiveData<>();
-        if (!activity.equals("")) {
-            Log.d("TAG", "checkUserPermissions: ");
+        if (!activity.equals(""))
             robotAPI.checkPermissionsUser(user, activity);
-        }
     }
 
     public LiveData<String> getUserPermissionsResponse() {
@@ -75,5 +73,9 @@ public class PermissionsViewModel extends ViewModel {
 
     public void setUserActualActivityResponse(String response) {
         userActualActivityLiveData.setValue(response);
+    }
+
+    public void resetLiveData() {
+        permissionsLiveData = new MutableLiveData<>();
     }
 }

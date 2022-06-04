@@ -2,6 +2,7 @@ package edu.upc.arnaubeltra.tfgquibot.ui.customProgram;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +63,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     private int init = 0, init2 = 0;
     private int position = 0;
     private String typeAction = "";
+    private int flag = 0, flag2 = 0;
 
     private int robot = 0;
 
@@ -87,7 +90,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
         robot = getRobot();
 
-        v.findViewById(R.id.btnSendCustomProgram).setOnClickListener(view -> sendCustomProgramToRobot());
+        v.findViewById(R.id.btnSendCustomProgram).setOnClickListener(view -> setupSendCustomProgramToRobot());
         v.findViewById(R.id.btnAddActionCustomProgram).setOnClickListener(view -> openDialogNewAction(actionsList.size(),"new_action"));
         txtNoActionsCustomProgram = v.findViewById(R.id.txtNoActionsCustomProgram);
 
@@ -120,17 +123,28 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
-        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
-            try {
-                JSONObject responseObject = new JSONObject(response);
-                if (responseObject.getString("response").equals("robot-connection-failed")) {
-                    robotConnected = false;
-                    dialogWarningRobotNotConnected();
-                } else robotConnected = true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
+        if (init2 == 0) {
+            robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+                try {
+                    JSONObject responseObject = new JSONObject(response);
+                    if (responseObject.getString("response").equals("robot-connection-failed")) {
+                        if (flag == 1) { dialogWarningRobotNotConnected(); flag = 0; }
+                        else flag = 1;
+                    } else {
+                        flag = 1;
+                        if (Login.getAdminLogged()) onSendCustomProgram();
+                        else {
+                            setupPermissionsObserver();
+                            if ((flag2 == 1) && init2 != 0) {
+                                permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "custom_program"); flag2++;
+                            } else if ((flag2 == 2) && init2 != 0)
+                                permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "custom_program");
+                            else flag2++;
+                        }
+                    } init2++;
+                } catch (JSONException e) { e.printStackTrace(); }
+            });
+        }
     }
 
     private void dialogWarningRobotNotConnected() {
@@ -163,7 +177,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
         position = index;
 
-        if (index == 0) builder.setTitle(R.string.txtTitleDialogCustomProgram);
+        if (type.equals("new_action")) builder.setTitle(R.string.txtTitleDialogCustomProgram);
         else builder.setTitle(R.string.txtTitleEditDialogCustomProgram);
 
         setupSpinner(index, type);
@@ -278,15 +292,14 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
     private void editAction(int index, String action, float quantity, int repetitions, int repeatLast) {
         Action actionObj = actionsList.get(index);
+        Action newAction = new Action(action);
         if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
-            actionObj.setName(action);
-            actionObj.setQuantity(quantity);
+            newAction.setQuantity(quantity);
         } else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
-            actionObj.setName(action);
-            actionObj.setRepetitions(repetitions);
-            actionObj.setLastNInstructions(repeatLast);
-        } else actionObj.setName(action);
-        actionsList.set(index, actionObj);
+            newAction.setRepetitions(repetitions);
+            newAction.setLastNInstructions(repeatLast);
+        }
+        actionsList.set(index, newAction);
         customProgramAdapter.updateActionsList(actionsList);
     }
 
@@ -331,9 +344,8 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getInt("robot") != robot) {
-                        Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
-                    } else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) onSendCustomProgram();
+                    if (responseObject.getInt("robot") != robot) Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
+                    else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) onSendCustomProgram();
                     else Toast.makeText(getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -342,13 +354,18 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         } init++;
     }
 
-    private void sendCustomProgramToRobot() {
+    private void setupSendCustomProgramToRobot() {
+        flag = 1;
+        robotConnectionViewModel.checkRobotConnection();
+    }
+
+    /*private void sendCustomProgramToRobot() {
         if (robotConnected) {
             setupPermissionsObserver();
             if (Login.getAdminLogged()) onSendCustomProgram();
             else permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "custom_program");
         }
-    }
+    }*/
 
     private void onSendCustomProgram() {
         if (actionsList.size() != 0) {
@@ -437,8 +454,19 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.menu_custom_program)
                 .setMessage(R.string.txtHelpCustomProgram)
-                .setPositiveButton(R.string.txtAccept, null);
+                .setPositiveButton(R.string.txtAccept, null)
+                .setNeutralButton(R.string.txtBoard, (dialogInterface, i) -> openBoardDialog());
         AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void openBoardDialog() {
+        Dialog dialog = new Dialog(getActivity());
+        dialog.setCancelable(true);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_how_to_play, null);
+        ImageView image = view.findViewById(R.id.imgHowToPlay);
+        image.setImageResource(R.drawable.board_medium);
+        dialog.setContentView(view);
         dialog.show();
     }
 }

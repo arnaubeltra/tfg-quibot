@@ -131,7 +131,7 @@
         <entry key="app/src/main/res/layout/fragment_home_user.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/fragment_home_user_robot1d.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_home_user_robot2d.xml" value="0.24027362120564344" />
-        <entry key="app/src/main/res/layout/fragment_interact_with_robot.xml" value="0.5762170790103751" />
+        <entry key="app/src/main/res/layout/fragment_interact_with_robot.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_interact_with_robot1d.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/fragment_tic_tac_toe.xml" value="0.33" />

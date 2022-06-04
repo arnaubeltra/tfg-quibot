@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 
 # IP and Ports for socket connections
-HOST_ROBOT = '192.168.100.10'
+#HOST_ROBOT = '192.168.100.1'
 PORT_ROBOT = 9999
 
 # Global variables
@@ -22,8 +22,7 @@ ticTacToe = None
 connect4 = None
 
 robot = Robot()
-robot.setActualRobot(2)
-robot.setActualActivity("connect4")
+robot.setActualRobot('1')
 robot.setNumberAuthorizedUsers(0)
 
 # General functionallities
@@ -83,10 +82,11 @@ def adminLogout():
 
 @app.route('/check-robot-connection')
 def checkRobotConnection():
+    global robot
     if (request.method == 'GET'):
         try:
             robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+            robotSocket.connect((robot.getRobotIP(), PORT_ROBOT))
             response = {'response': 'robot-connection-success'}
         except socket.error:
             response = {'response': 'robot-connection-failed'}
@@ -165,8 +165,9 @@ def listUsers():
 # Experiments
 @app.route("/experiment", methods = ['GET'])
 def experiment():
+    global robot
     robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+    robotSocket.connect((robot.getRobotIP(), PORT_ROBOT))
     if (request.method == 'GET'):
         name = request.args.get('name')
         if (name == "series_de_dissolucio"):
@@ -182,9 +183,10 @@ def experiment():
 # Interact with robot
 @app.route("/startInteract", methods = ['GET'])
 def startInteract():
+    global robot
     if (request.method == 'GET'):
         robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+        robotSocket.connect((robot.getRobotIP(), PORT_ROBOT))
         send = "start_interact"
         robotSocket.sendall(send)
         robotSocket.close()
@@ -192,10 +194,10 @@ def startInteract():
 
 @app.route("/sendInstruction", methods = ['GET'])
 def sendInstruction():
+    global robot
     if (request.method == 'GET'):
-        #print ("aaa", robot.getRobotIP())
         robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+        robotSocket.connect((robot.getRobotIP(), PORT_ROBOT))
         send = b"action " + request.args.get('instruction').encode('UTF-8')
         robotSocket.sendall(send)
         robotSocket.close()
@@ -204,12 +206,13 @@ def sendInstruction():
 # Custom program
 @app.route('/custom-program', methods = ['POST'])
 def customProgram():
+    global robot
     if (request.method == 'POST'):
         actions = request.form['actions']
         if (len(actions) != 0):
             print(actions)
             robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+            robotSocket.connect((robot.getRobotIP(), PORT_ROBOT))
             send = b"program " + actions.encode('UTF-8')
             robotSocket.sendall(send)
             robotSocket.close()
@@ -276,6 +279,7 @@ def statusTicTacToe():
 @app.route("/ticTacToePosition", methods = ['GET'])
 def ticTacToePosition():
     global ticTacToe
+    global robot
     if (request.method == 'GET'):
         x = request.args.get('x')
         y = request.args.get('y')
@@ -287,7 +291,7 @@ def ticTacToePosition():
             board[int(ticTacToe.getX())][int(ticTacToe.getY())] = int(ticTacToe.getPlayer())
             ticTacToe.setTicTacToeBoard(board)
             robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
+            robotSocket.connect((robot.getRobotIP(), PORT_ROBOT))
             send = b"tic_tac_toe_put_chip " + " ".join([ticTacToe.getX(), ticTacToe.getY(), ticTacToe.getPlayer()]).encode('UTF-8')
             robotSocket.sendall(send)
             robotSocket.close()
@@ -300,6 +304,7 @@ def ticTacToePosition():
 @app.route("/start-connect4")
 def startConnect4():
     global connect4
+    global robot
     if (request.method == 'GET'):
         if (connect4 is None):
             print ("INIT CONNECT 4")
@@ -311,6 +316,11 @@ def startConnect4():
             return {'response': 'connect4-start-success', 'player': 1}
         elif (connect4.getConnect4Players() == 1):
             connect4.setConnect4Players(2)
+            robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            robotSocket.connect((robot.getRobotIP(), PORT_ROBOT))
+            send = b"connect4_start"
+            robotSocket.sendall(send)
+            robotSocket.close()
             return {'response': 'connect4-start-success', 'player': 2}
         else:
             return {'response': 'game-is-full'}
@@ -352,6 +362,7 @@ def statusConnect4():
 
 @app.route("/connect4Position", methods = ['GET'])
 def connect4Position():
+    global robot
     global connect4
     if (request.method == 'GET'):
         column = int(request.args.get('column')) - 1
@@ -365,11 +376,11 @@ def connect4Position():
             board = connect4.getConnect4Board()
             board[int(connect4.getX())][int(connect4.getY())] = int(connect4.getPlayer())
             connect4.setConnect4Board(board)
-            #robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            #robotSocket.connect((HOST_ROBOT, PORT_ROBOT))
-            #send = b"connect4_put_chip " + " ".join([connect4.getX(), connect4.getY(), connect4.getPlayer()]).encode('UTF-8')
-            #robotSocket.sendall(send)
-            #robotSocket.close()
+            robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            robotSocket.connect((robot.getRobotIP(), PORT_ROBOT))
+            send = b"connect4_put_chip " + " ".join([str(connect4.getX()), str(connect4.getY()), str(connect4.getPlayer())]).encode('UTF-8')
+            robotSocket.sendall(send)
+            robotSocket.close()
             return {'response': 'connect4-position-success', 'x': connect4.getX() + 1, 'y': connect4.getY() + 1}       
         else:
             return {'response': 'connect4-position-full'}
@@ -379,7 +390,6 @@ def connect4Position():
 def after(response):
     print ("")
     print(response.get_data())
-    print ("")
     return response
 
 if __name__ == '__main__':

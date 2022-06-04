@@ -28,16 +28,16 @@
     <string name="txtTitleLoginAdmin">Entrar com a administrador</string>
     <string name="txtEmail">Correu electrònic</string>
     <string name="txtPassword">Contrassenya</string>
-    <string name="txtGoBackLogin">Tornar a inici de sessió</string>
+    <string name="txtGoBackLogin">Tornar a l\'inici de sessió</string>
 
 
     <!-- Login -->
     <string name="txtEnterCorrectEmail">Entra un correu vàlid.</string>
     <string name="txtPasswordLength">La contrassenya ha de contenir 6 caràcters o més.</string>
-    <string name="txtWaitLogin">Espera mentre s\'inicia sessió.</string>
+    <string name="txtWaitLogin">Espera mentre s\'inicia la sessió.</string>
     <string name="txtLoggingIn">Iniciant sessió</string>
-    <string name="txtErrorLoggingIn">Error iniciant sessió.</string>
-    <string name="txtErrorAnotherAdminLogged">Error: un altre administrador ha iniciat sessió.</string>
+    <string name="txtErrorLoggingIn">Error iniciant la sessió.</string>
+    <string name="txtErrorAnotherAdminLogged">Error: un altre administrador ha iniciat la sessió.</string>
 
     <!-- Register -->
     <string name="registering">Registrant</string>
@@ -46,7 +46,7 @@
 
     <!-- Tic tac toe -->
     <string name="btnTxtNovaPartida">Nova partida</string>
-    <string name="btnTxtComJugar">Com jugar?</string>
+    <string name="btnTxtComJugar">Com es juga?</string>
     <string name="txtPlayer1">Jugador 1</string>
     <string name="txtPlayer2">Jugador 2</string>
     <string name="txtGameNotStarted">Inicia una partida</string>
@@ -64,10 +64,10 @@
     <string name="txtPositionFull">La posició està ocupada</string>
 
     <string name="txtGameStarted">El joc ha començat</string>
-    <string name="txtEndGame">Finalitzar partida</string>
+    <string name="txtEndGame">Finalitza la partida</string>
     <string name="txtFirstStartNewGame">Per poder jugar, primer inicia un nou joc.</string>
     <string name="txtYourTurn">El teu torn</string>
-    <string name="txtHisTurn">El seu torn</string>
+    <string name="txtHisTurn">El torn del teu oponent</string>
     <string name="txtYouPlayWithX">Jugues amb: X</string>
     <string name="txtYouPlayWithO">Jugues amb: O</string>
     <string name="txtWaitingForPlayer">Esperant a l\'altre jugador</string>
@@ -84,9 +84,9 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="txtReset">Reset</string>
-    <string name="txtReadColor">Llegeix color</string>
-    <string name="txtRaisePipette">Pujar xeringa</string>
-    <string name="txtLowerPipette">Baixar xeringa</string>
+    <string name="txtReadColor">Llegeix el color</string>
+    <string name="txtRaisePipette">Puja la xeringa</string>
+    <string name="txtLowerPipette">Baixa la xeringa</string>
     <string name="txtNoPermissions">Demana permisos per poder controlar el robot.</string>
 
 
@@ -95,22 +95,22 @@
 
 
     <!-- List users -->
-    <string name="txtGivePermissions">Donar accés</string>
-    <string name="txtQuitPermissions">Treure accés</string>
+    <string name="txtGivePermissions">Dona l\'accés</string>
+    <string name="txtQuitPermissions">Treu l\'accés</string>
     <string name="txtNoUsersLoggedIn">Cap usuari ha accedit a l\'aplicació.</string>
-    <string name="txtRefreshedList">Llista d\'usuaris refrescada</string>
+    <string name="txtRefreshedList">Llista d\'usuaris actualitzada</string>
     <string name="txtSelectActivityToAuthorize">Selecciona l\'activitat</string>
 
-    <string name="txtSendProgram">Enviar programa</string>
-    <string name="txtAddAction">Afegir acció</string>
+    <string name="txtSendProgram">Envia el programa</string>
+    <string name="txtAddAction">Afegeix una acció</string>
     <string name="txtListOfActions">LLISTA D\'ACCIONS</string>
     <string name="txtForward">Endavant</string>
     <string name="txtBackwards">Enrere</string>
     <string name="txtRight">Dreta</string>
     <string name="txtLeft">Esquerra</string>
-    <string name="txtActionPipette">Accionar xeringa</string>
-    <string name="txtSuck">Xuclar líquid</string>
-    <string name="txtUnsuck">Expulsar líquid</string>
+    <string name="txtActionPipette">Acciona la xeringa</string>
+    <string name="txtSuck">Xucla el líquid</string>
+    <string name="txtUnsuck">Expulsa el líquid</string>
     <string name="txtRepeatPreviousActions">Repeteix</string>
 
 
@@ -118,7 +118,7 @@
     <string name="txtTitleDialogCustomProgram">Selecciona l\'acció a realitzar</string>
     <string name="txtTitleEditDialogCustomProgram">Edita l\'acció a realitzar</string>
     <string name="txtButonSave">Desa</string>
-    <string name="txtButonCancel">Cancel·lar</string>
+    <string name="txtButonCancel">Cancel·la</string>
     <string name="txtNoActions">No hi ha cap acció programada.</string>
     <string name="txtProgramSentCorrectly">El programa s\'ha enviat correctament al robot.</string>
     <string name="txtProgramError">S\'ha produit un error a l\'enviar el programa al robot.</string>
@@ -126,28 +126,29 @@
 
 
 
-    <string name="titleSeriesDisolucio">Sèries de disolució</string>
-    <string name="txtExplanationSeriesDisolució">Ompliu la primera cubeta amb el color que més us agradi al 80% de capacitat i les 5 següents amb aigua fins al 60% de capacitat.\n\nAra el que farà el robot serà anar passant la solució d\'una cubeta a una altra. Cada vegada que això passi la solució s\'anirà diluint cada vegada més fins a ser gairebé transparent. Podeu repetir aquest experiment vosaltres mateixos amb "Interactua amb el robot" o amb "Fes el teu propi programa" per intentar aconseguir el mateix resultat.</string>
+    <string name="titleSeriesDisolucio">Sèries de dissolució</string>
+    <string name="txtExplanationSeriesDisolució">Ompliu la primera cubeta amb el color que més us agradi al 80% de capacitat i les 5 següents amb aigua fins al 60% de capacitat.\n\nAra, el robot passarà la solució d\'una cubeta a una altra. Cada vegada que això passi la solució s\'anirà diluint cada vegada més fins a ser gairebé transparent. Podeu repetir aquest experiment vosaltres mateixos amb \"Interactua amb el robot\" o amb \"Programa el robot\" per intentar aconseguir el mateix resultat.</string>
 
     <string name="titleBarrejaColorsPrimaris">Barreja colors primaris</string>
-    <string name="txtExplanationColorsPrimaris">Ompliu la primera cubeta amb color blau i la tercera cubeta amb color groc al 80% de capacitat i la resta de cubetes deixeu-les buides.\n\nAra el que farà el robot serà buscar els dos colors primaris que hem posat per desprès barrejar-los i d\'aquesta manera obtenir un nou color secundari. Quin color serà? Podeu repetir aquest experiment vosaltres mateixos amb "Interactua amb el robot" o amb "Fes el teu propi programa" per intentar aconseguir el mateix resultat amb colors diferents!</string>
+    <string name="txtExplanationColorsPrimaris">Robot 1D:\nOmpliu la primera cubeta amb color blau i la tercera cubeta amb color groc al 80% de capacitat i la resta de cubetes deixeu-les buides.\n\nRobot2D:\nOmpliu la primera cubeta de color blau i la segona de color vermell tal i com es pot veure a \"Com preparar l\'experiment\".\n\nAra, el robot buscarà els dos colors primaris que hem posat per desprès barrejar-los i d\'aquesta manera obtenir un nou color secundari. Quin color serà? Podeu repetir aquest experiment vosaltres mateixos amb \"Interactua amb el robot\" o amb \"Programa el robot\" per intentar aconseguir el mateix resultat amb colors diferents!</string>
 
     <string name="titleCapesDeDensitat">Capes de densitat</string>
-    <string name="txtExplanationCapesDeDensitat">Diluïu 18 g de sal en 50 ml d\'aigua en un got i afegiu-hi el colorant de color blau. Després diluïu 6 g de sal en 50 ml d\'aigua en un got i afegiu-hi el colorant de color vermell.\n\nOmpliu la primera cubeta amb la dissolució de color blau, la segona cubeta amb la dissolució de color vermell i la tercera cubeta amb aigua de color groc al 90% de capacitat i la resta de cubetes deixeu-les buides.\n\nAra el que farà el robot serà dipositar totes les dissolucions en una mateixa cubeta amb molta cura. Com les dissolucions tenen diferent densitat, amb l\'ajuda del colorant, podem veure com les dissolucions no es barregen entre elles.</string>
+    <string name="txtExplanationCapesDeDensitat">Diluïu 18 grs. de sal en 50 ml. d\'aigua en un got i afegiu-hi el colorant de color blau. Després diluïu 6 grs. de sal en 50 ml. d\'aigua en un got i afegiu-hi el colorant de color vermell.\n\nOmpliu la primera cubeta amb la dissolució de color blau, la segona cubeta amb la dissolució de color vermell i la tercera cubeta amb aigua de color groc al 90% de capacitat, i la resta de cubetes deixeu-les buides.\n\nAra, el robot dipositarà totes les dissolucions en una mateixa cubeta amb molta cura. Com que les dissolucions tenen diferent densitat, amb l\'ajuda del colorant, veurem que les dissolucions no es barregen entre elles.</string>
 
-    <string name="txtExecuteExperiment">Executar experiment</string>
+    <string name="txtExecuteExperiment">Executa l\'experiment</string>
     <string name="txtHowToPrepareExperiment">Com preparar l\'experiment</string>
 
     <!--<string name="txtHomeAdmin">Benvingut a l\'aplicació Qui-Bot H2O.\n\nCom a administrador pots:\nConsultar la llista d\'experimentsInteractuar amb el robotVeure la llista d'usuaris no administradors que estan utilitzant l\'aplicació.</string>-->
 
     <string name="txtTitleDialogSelectBoard">Selecciona el tipus de tauler</string>
-    <string name="txtCannotChangePermission">Error canviant permisos per a l\'usuari. L\'activitat seleccionada té el màxim de usuaris permesos.</string>
+    <string name="txtCannotChangePermission">Error canviant permisos per a l\'usuari. L\'activitat seleccionada té el màxim d\'usuaris permesos.</string>
     <string name="txtErrorChangingPermissions">Error canviant permisos per a l\'usuari.</string>
+
 
     <string name="txtRepeatNTimes">Repeteix:</string>
     <string name="txtGetLiquidQuantity">Xuclar:</string>
     <string name="txtTimes">vegades</string>
-    <string name="txtMl">ml</string>
+    <string name="txtMl">ml.</string>
     <string name="txtSuckXMl">Xuclar quantitat</string>
     <string name="txtUnsuckXMl">Expulsar quantitat</string>
     <string name="txtLast">Ultimes:</string>
@@ -156,7 +157,7 @@
     <string name="txtAction">Acció:</string>
 
     <string name="txtNotEnughInstructions">No hi ha suficients instruccions a repetir.</string>
-    <string name="txtValueMustBeGreaterThanZero">El valor d\'instruccions a repetir ha de ser més gran que zero.</string>
+    <string name="txtValueMustBeGreaterThanZero">El valor d\'instruccions per repetir ha de ser més gran que zero.</string>
     <string name="txtValueCannotBeEmpty">El valor d\'instruccions a repetir no pot estar buit.</string>
 
 
@@ -170,7 +171,7 @@
 
     <string name="txtWifiConnectionAlertTitle">Connexió WiFi</string>
     <string name="txtWifiConnectionAlert">El WiFi està parat o desconnectat. Recorda que t\'has de connectar a la xarxa "QuiBotH2O" per poder controlar el robot.</string>
-    <string name="txtSuckUnsuck">Xuclar/Expulsar líquid</string>
+    <string name="txtSuckUnsuck">Xuclar/Expulsar el líquid</string>
 
     <string name="txtLogoutError">Error de connexió amb el servidor. Tancament de sessió només local.</string>
 
@@ -179,22 +180,24 @@
     <string name="txtGrogues">Jugues amb: Grogues</string>
 
     <string name="txtTitleHelpLogin">Inici de sessió</string>
-    <string name="txtHelpLogin">Assegura\'t que el dispositiu mòbil té la connectivitat Wi-fi activada i s\'ha connectat a la xarxa QuiBotH2O.\nContrassenya: 12345678.\n\nUna vegada connectat pots iniciar sessió introduïnt el nom, cognom i seleccionant el robot que es desitja controlar.</string>
+    <string name="txtHelpLogin">Assegura\'t que el dispositiu mòbil té la connectivitat WiFi activada i s\'ha connectat a la xarxa QuiBotH2O.\nContrassenya: 12345678.\n\nUna vegada connectat pots iniciar la sessió introduïnt el nom i cognom, i seleccionant el robot que es desitja controlar.</string>
 
     <string name="txtTitleHelpLoginAdmin">Inici de sessió (Administrador)</string>
-    <string name="txtHelpLoginAdmin">Assegura\'t que el dispositiu mòbil té la connectivitat Wi-fi activada i s\'ha connectat a la xarxa QuiBotH2O.\nContrassenya: 12345678.\n\nUna vegada connectat pots iniciar sessió introduïnt l\'usuari i contrassenya que es pot trobar en el manual de la App Qui-Bot H2O i seleccionant el robot que es desitja controlar.\nMolt important: només pot haver-hi un sol administrador amb la sessió iniciada.</string>
+    <string name="txtHelpLoginAdmin">Assegura\'t que el dispositiu mòbil té la connectivitat WiFi activada i s\'ha connectat a la xarxa QuiBotH2O.\nContrassenya: 12345678.\n\nUna vegada connectat pots iniciar sessió introduïnt l\'usuari i contrassenya que es pot trobar en el manual de l\'App Qui-Bot H2O. Després selecciona el robot que es desitgis controlar.\nMolt important: només pot haver-hi un sol administrador amb la sessió iniciada.</string>
 
 
     <string name="txtTitleHome">Benvingut a l\'aplicació</string>
 
     <string name="txtAdmin">Administrador</string>
 
-    <string name="txtHelpExperiments">Selecciona l\'experiment que vols realitzar.\n\nConsulta com s\'ha de preparar cada un d\'ells per realitzar-los correctament.\n\nPer tal d\'executar els experiments caldrà que s\'hagin assignat els permisos corresponents a l\'usuari. L\'administrador sempre pot executar els experiments.\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
-    <string name="txtHelpInteract">Interacciona amb el robot utilitzant aquesta pantalla com si fos un comandament a distància d\'una televisió.\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
-    <string name="txtHelpCustomProgram">Crea un programa personalitzat per fer realitzar al robot d\'una forma interactiva.\n\nAquesta pantalla permet anar afegint accions de tota mena, algunes amb un nivell de personalització bastant elevat.\n\nEs pot canviar l\'ordre de les accions seleccionant-ne una i arrossegant amunt o avall.\n\nPer modificar accions de la llista cal clicar a l\'icona de llapis. Per el·liminar accions cal clicar a l\'icona de la creu.\n\nUn cop el programa estigui complert, s\'ha de clicar \"Enviar al robot\".\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
-    <string name="txtHelpTicTacToe">Joc interactiu per a dos usuaris. Cal que aquests usuaris hagin estat autoritzats per l\'administrador per tal de poder jugar.\n\nQuan s\'inicia una partida, s\'espera al segon jugador i en la pantalla s\'indica quina és la fitxa de cada jugador.\n\nEn cada moviment, el robot anirà canviant el tauler físic. És important esperar a que el robot acabi per disfrutar de l\'experiència.\n\nUn cop finalitzada la partida, cal que es netegi el tauler físic per tornar a jugar.\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
-    <string name="txtHelpConnect4">Joc interactiu per a dos usuaris. Cal que aquests usuaris hagin estat autoritzats per l\'administrador per tal de poder jugar.\n\nQuan s\'inicia una partida, s\'espera al segon jugador i en la pantalla s\'indica quin és el color de cada jugador.\n\nEn cada moviment, el robot anirà canviant el tauler físic. És important esperar a que el robot acabi per disfrutar de l\'experiència.\n\nUn cop finalitzada la partida, cal que es netegi el tauler físic per tornar a jugar.\n\nSi tens problemes de connexió amb el robot, consulta que el seu programa estigui en execució.</string>
-    <string name="txtHelpUsersList">Controla els usuaris que tenen permís per controlar el robot.\n\nPrimerament, cal refrescar la llista d\'usuaris quan un nou usuari entri a l\'aplicació pitjant l\'icona de recarregar.\nA continuació, cal seleccionar l\'activitat a controlar.\nFinalment cal seleccionar els usuaris autoritzats per a cada activitat, donant-los accés pitjant \"Donar accés\".\n\nEn algunes de les activitats, només es podrà autoritzar un usuari a la vegada, i en el cas dels jocs només se\'n podràn autoritzar dos.\n\nPer treure l\'autorització a un usuari, cal clicar a \"Treure accés\".</string>
+    <string name="txtHelpExperiments">Selecciona l\'experiment que vols realitzar.\n\nConsulta com s\'ha de preparar cada un d\'ells per realitzar-los correctament.\n\nPer tal d\'executar els experiments caldrà que s\'hagin assignat els permisos corresponents a l\'usuari. L\'administrador sempre pot executar els experiments.\n\nSi tens problemes de connexió amb el robot, assegura\'t que el seu programa estigui en execució.</string>
+    <string name="txtHelpInteract">Interacciona amb el robot utilitzant aquesta pantalla com si fos un comandament a distància d\'un televisor.\n\nSi tens problemes de connexió amb el robot, assegura\'t que el seu programa estigui en execució.</string>
+    <string name="txtHelpCustomProgram">Crea un programa personalitzat per què realitzi el robot d\'una forma interactiva.\n\nAquesta pantalla permet anar afegint accions de tota mena, algunes amb un nivell de personalització força elevat.\n\nEs pot canviar l\'ordre de les accions seleccionant-ne una i arrossegant amunt o avall.\n\nPer modificar accions de la llista, cal clicar a la icona de llapis. Per eliminar accions cal clicar a la icona de la creu.\n\nUn cop el programa estigui complet, s\'ha de clicar \"Envia al robot\".\n\nSi tens problemes de connexió amb el robot, assegura\'t que el seu programa estigui en execució.</string>
+    <string name="txtHelpTicTacToe">Joc interactiu per a dos usuaris. Cal que aquests usuaris hagin estat autoritzats per l\'administrador per tal de poder jugar.\n\nQuan s\'inicia una partida, s\'espera el segon jugador i en la pantalla s\'indica quina és la fitxa de cada un d\'ells.\n\nEn cada moviment, el robot anirà canviant el tauler físic. És important esperar a que el robot acabi per disfrutar de l\'experiència.\n\nUn cop finalitzada la partida, cal que es netegi el tauler físic per tornar a jugar.\n\nSi tens problemes de connexió amb el robot, assegura\'t que el seu programa estigui en execució.</string>
+    <string name="txtHelpConnect4">Joc interactiu per a dos usuaris. Cal que aquests usuaris hagin estat autoritzats per l\'administrador per tal de poder jugar.\n\nQuan s\'inicia una partida, s\'espera el segon jugador i en la pantalla s\'indica quin és el color de cada un d\'ells.\n\nEn cada moviment, el robot anirà canviant el tauler físic. És important esperar a que el robot acabi per disfrutar de l\'experiència.\n\nUn cop finalitzada la partida, cal que es netegi el tauler físic per tornar a jugar.\n\nSi tens problemes de connexió amb el robot, assegura\'t que el seu programa estigui en execució.</string>
+    <string name="txtHelpUsersList">Controla els usuaris que tenen permís per controlar el robot.\n\nPrimerament, cal refrescar la llista d\'usuaris quan un nou usuari entri a l\'aplicació pitjant la icona de recarregar.\nA continuació, cal seleccionar l\'activitat a controlar.\nFinalment cal seleccionar els usuaris autoritzats per a cada activitat, donant-los accés pitjant \"Dona l\'accés\".\n\nEn algunes activitats, només es podrà autoritzar un usuari a la vegada i, en el cas dels jocs, només se\'n podràn autoritzar dos.\n\nPer treure l\'autorització a un usuari, cal clicar a \"Treur l\'accés\".</string>
+
 
     <string name="txtUser">Usuari</string>
+    <string name="txtBoard">Tauler</string>
 </resources>

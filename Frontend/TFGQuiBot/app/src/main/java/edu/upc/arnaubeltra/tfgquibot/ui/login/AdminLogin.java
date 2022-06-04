@@ -60,8 +60,8 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
 
     private void login() {
         //goToHomeActivityAdmin();
-        String user = "a@a.com";// emailUser.getText().toString();
-        String password = "111111";// passwordUser.getText().toString();
+        String user = "admin";// emailUser.getText().toString();
+        String password = "Quibot2022";// passwordUser.getText().toString();
 
         if ((password.isEmpty()) || (password.length() < 6)) {
             passwordUser.setError("La longitud de la contrassenya ha de ser major que 6");

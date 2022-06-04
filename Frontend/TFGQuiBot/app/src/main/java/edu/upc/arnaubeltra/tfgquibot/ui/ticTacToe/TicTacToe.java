@@ -47,8 +47,9 @@ public class TicTacToe extends Fragment {
     private RobotConnectionViewModel robotConnectionViewModel;
 
     private int player = 0;
-    private int init = 0;
+    private int init = 0, init2 = 0;
     private Boolean robotConnected = false;
+    private int flag = 0, flag2 = 0;
 
     // Required empty public constructor
     public TicTacToe() { }
@@ -103,19 +104,33 @@ public class TicTacToe extends Fragment {
         return v;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        permissionsViewModel.resetLiveData();
+    }
+
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
-        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
-            try {
-                JSONObject responseObject = new JSONObject(response);
-                if (responseObject.getString("response").equals("robot-connection-failed")) {
-                    robotConnected = false;
-                    dialogWarningRobotNotConnected();
-                } else robotConnected = true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
+        if (init2 == 0) {
+            robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+                try {
+                    JSONObject responseObject = new JSONObject(response);
+                    if (responseObject.getString("response").equals("robot-connection-failed")) {
+                        if (flag == 1) { dialogWarningRobotNotConnected(); flag = 0; }
+                        else flag = 1;
+                    } else {
+                        flag = 1;
+                        setupPermissionsObserver();
+                        if ((flag2 == 1) && init2 != 0) {
+                            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe"); flag2++;
+                        } else if ((flag2 == 2) && init2 != 0)
+                            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe");
+                        else flag2++;
+                    } init2++;
+                } catch (JSONException e) { e.printStackTrace(); }
+            });
+        }
     }
 
     private void dialogWarningRobotNotConnected() {
@@ -217,7 +232,7 @@ public class TicTacToe extends Fragment {
         });
     }
 
-    private void setupPermissionsObserver() {
+    /*private void setupPermissionsObserver() {
         if (init == 0) {
             permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
@@ -231,22 +246,38 @@ public class TicTacToe extends Fragment {
                 }
             });
         } init++;
+    }*/
+
+    private void setupPermissionsObserver() {
+        if (init == 0) {
+            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
+            permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
+                try {
+                    JSONObject responseObject = new JSONObject(auth);
+                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match"))
+                        ticTacToeViewModel.startNewGameTicTacToe(Login.getIpAddress());
+                    else Toast.makeText(getContext(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        } init++;
     }
 
     private void startFinishGame() {
-        if (robotConnected) {
-            if (!GAME_STARTED) {
-                setupPermissionsObserver();
-                permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe");
-            } else {
-                GAME_FINISHED = true;
-                btnNewGame.setText(R.string.btnTxtNovaPartida);
-                txtInfoGame.setText(R.string.txtGameNotStarted);
-                txtInfoPlayer.setText("");
-                finishGame();
-                ticTacToeViewModel.finishGameTicTacToe();
-                Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
-            }
+        if (!GAME_STARTED) {
+            //setupPermissionsObserver();
+            //permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe");
+            flag = 1;
+            robotConnectionViewModel.checkRobotConnection();
+        } else {
+            GAME_FINISHED = true;
+            btnNewGame.setText(R.string.btnTxtNovaPartida);
+            txtInfoGame.setText(R.string.txtGameNotStarted);
+            txtInfoPlayer.setText("");
+            finishGame();
+            ticTacToeViewModel.finishGameTicTacToe();
+            Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
         }
     }
 

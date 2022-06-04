@@ -1,6 +1,7 @@
 package edu.upc.arnaubeltra.tfgquibot.ui.interactWithRobot;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -32,12 +34,10 @@ public class InteractWithRobot extends Fragment {
     private PermissionsViewModel permissionsViewModel;
     private InteractWithRobotViewModel interactWithRobotViewModel;
 
-    private Boolean robotConnected = false;
     private String interaction = "";
     private int init = 0, init2 = 0;
     private int robot = 0;
-
-    private Button btnMulti1, btnMulti2;
+    private int flag = 0, flag2 = 0;
 
     // Required empty public constructor
     public InteractWithRobot() { }
@@ -53,32 +53,45 @@ public class InteractWithRobot extends Fragment {
 
         robot = getRobot();
 
-        v.findViewById(R.id.btnLeft).setOnClickListener(view -> sendActionToRobot("left"));
-        v.findViewById(R.id.btnRight).setOnClickListener(view -> sendActionToRobot("right"));
-        v.findViewById(R.id.btnSuck).setOnClickListener(view -> sendActionToRobot("suck"));
-        v.findViewById(R.id.btnRaisePipette).setOnClickListener(view -> sendActionToRobot("raise_pipette"));
-        v.findViewById(R.id.btnLowerPipette).setOnClickListener(view -> sendActionToRobot("lower_pipette"));
-        v.findViewById(R.id.btnReset).setOnClickListener(view -> sendActionToRobot("reset"));
+        Button btnMulti1, btnMulti2, btnReset1, btnReset2, btnColor;
+
+        v.findViewById(R.id.btnLeft).setOnClickListener(view -> setupInteraction("left"));
+        v.findViewById(R.id.btnRight).setOnClickListener(view -> setupInteraction("right"));
+        v.findViewById(R.id.btnSuck).setOnClickListener(view -> setupInteraction("suck"));
+        v.findViewById(R.id.btnRaisePipette).setOnClickListener(view -> setupInteraction("raise_pipette"));
+        v.findViewById(R.id.btnLowerPipette).setOnClickListener(view -> setupInteraction("lower_pipette"));
 
         if (robot == 1) {
-            v.findViewById(R.id.btnUp).setOnClickListener(view -> sendActionToRobot("raise_pipette"));
-            v.findViewById(R.id.btnDown).setOnClickListener(view -> sendActionToRobot("lower_pipette"));
+            v.findViewById(R.id.btnUp).setOnClickListener(view -> setupInteraction("raise_pipette"));
+            v.findViewById(R.id.btnDown).setOnClickListener(view -> setupInteraction("lower_pipette"));
             btnMulti1 = v.findViewById(R.id.btnMultifunctions1);
-            btnMulti1.setOnClickListener(view -> sendActionToRobot("infrared_control"));
-            btnMulti1.setText(R.string.txtInfraredControl);
-            btnMulti1 = v.findViewById(R.id.btnMultifunctions2);
-            btnMulti1.setOnClickListener(view -> sendActionToRobot("color"));
-            btnMulti1.setText(R.string.txtReadColor);
-
+            btnMulti1.setVisibility(View.GONE);
+            btnMulti2 = v.findViewById(R.id.btnMultifunctions2);
+            btnMulti2.setVisibility(View.GONE);
+            btnColor = v.findViewById(R.id.btnReadColor);
+            btnColor.setOnClickListener(view -> setupInteraction("color"));
+            btnColor.setVisibility(View.VISIBLE);
+            btnReset2 = v.findViewById(R.id.btnReset2);
+            btnReset2.setOnClickListener(view -> setupInteraction("reset"));
+            btnReset2.setVisibility(View.VISIBLE);
+            btnReset1 = v.findViewById(R.id.btnReset);
+            btnReset1.setVisibility(View.GONE);
         } else if (robot == 2) {
-            v.findViewById(R.id.btnUp).setOnClickListener(view -> sendActionToRobot("forward"));
-            v.findViewById(R.id.btnDown).setOnClickListener(view -> sendActionToRobot("backwards"));
+            v.findViewById(R.id.btnUp).setOnClickListener(view -> setupInteraction("forward"));
+            v.findViewById(R.id.btnDown).setOnClickListener(view -> setupInteraction("backwards"));
             btnMulti1 = v.findViewById(R.id.btnMultifunctions1);
-            btnMulti1.setOnClickListener(view -> sendActionToRobot("suck_liquid"));
+            btnMulti1.setOnClickListener(view -> setupInteraction("suck_liquid"));
             btnMulti1.setText(R.string.txtSuck);
             btnMulti1 = v.findViewById(R.id.btnMultifunctions2);
-            btnMulti1.setOnClickListener(view -> sendActionToRobot("unsuck_liquid"));
+            btnMulti1.setOnClickListener(view -> setupInteraction("unsuck_liquid"));
             btnMulti1.setText(R.string.txtUnsuck);
+            btnColor = v.findViewById(R.id.btnReadColor);
+            btnColor.setVisibility(View.GONE);
+            btnReset2 = v.findViewById(R.id.btnReset2);
+            btnReset2.setVisibility(View.GONE);
+            btnReset1 = v.findViewById(R.id.btnReset);
+            btnReset1.setOnClickListener(view -> setupInteraction("reset"));
+            btnReset1.setVisibility(View.VISIBLE);
         }
 
         robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
@@ -87,6 +100,7 @@ public class InteractWithRobot extends Fragment {
 
         setHasOptionsMenu(true);
         checkRobotConnection();
+
         return v;
     }
 
@@ -97,6 +111,12 @@ public class InteractWithRobot extends Fragment {
             return Login.getRobotUser();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        permissionsViewModel.resetLiveData();
+    }
+
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         if (init2 == 0) {
@@ -104,14 +124,23 @@ public class InteractWithRobot extends Fragment {
                 try {
                     JSONObject responseObject = new JSONObject(response);
                     if (responseObject.getString("response").equals("robot-connection-failed")) {
-                        robotConnected = false;
-                        dialogWarningRobotNotConnected();
-                    } else robotConnected = true;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                        if (flag == 1) { dialogWarningRobotNotConnected(); flag = 0; }
+                        else flag = 1;
+                    } else {
+                        flag = 1;
+                        if (Login.getAdminLogged()) executeAction();
+                        else {
+                            setupPermissionsObserver();
+                            if ((flag2 == 1) && init2 != 0) {
+                                permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "interact"); flag2++;
+                            } else if ((flag2 == 2) && init2 != 0)
+                                permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "interact");
+                            else flag2++;
+                        }
+                    } init2++;
+                } catch (JSONException e) { e.printStackTrace(); }
             });
-        } init2++;
+        }
     }
 
     private void dialogWarningRobotNotConnected() {
@@ -129,10 +158,9 @@ public class InteractWithRobot extends Fragment {
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getInt("robot") != robot) {
-                        Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
-                    } else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeAction();
-                    else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                    if (responseObject.getInt("robot") != robot) Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
+                    else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeAction();
+                    else Toast.makeText(getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -140,14 +168,10 @@ public class InteractWithRobot extends Fragment {
         } init++;
     }
 
-    private void sendActionToRobot(String action) {
-        if (robotConnected) {
-            setupPermissionsObserver();
-            interaction = action;
-            if (Login.getAdminLogged()) executeAction();
-            else permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "interact");
-        }
-        else Toast.makeText(getContext(), R.string.txtRobotNotConnected, Toast.LENGTH_SHORT).show();
+    private void setupInteraction(String action) {
+        flag = 1;
+        robotConnectionViewModel.checkRobotConnection();
+        interaction = action;
     }
 
     private void executeAction() {
@@ -208,8 +232,20 @@ public class InteractWithRobot extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.menu_interact)
                 .setMessage(R.string.txtHelpInteract)
-                .setPositiveButton(R.string.txtAccept, null);
+                .setPositiveButton(R.string.txtAccept, null)
+                .setNeutralButton(R.string.txtBoard, (dialogInterface, i) -> openBoardDialog());
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+    private void openBoardDialog() {
+        Dialog dialog = new Dialog(getActivity());
+        dialog.setCancelable(true);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_how_to_play, null);
+        ImageView image = view.findViewById(R.id.imgHowToPlay);
+        image.setImageResource(R.drawable.board_medium);
+        dialog.setContentView(view);
+        dialog.show();
+    }
+
 }

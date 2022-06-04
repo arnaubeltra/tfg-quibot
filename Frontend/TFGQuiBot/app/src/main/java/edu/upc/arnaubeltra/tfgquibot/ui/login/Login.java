@@ -146,13 +146,13 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
     public static boolean adminLogged;
 
     public static boolean getAdminLogged() {
-        Log.d("TAG", "getAdminLogged: " + adminLogged);
+        //Log.d("TAG", "getAdminLogged: " + adminLogged);
         return adminLogged;
     }
 
     public static void setAdminLogged(Boolean status) {
         adminLogged = status;
-        Log.d("TAG", "setAdminLogged: " + adminLogged);
+        //Log.d("TAG", "setAdminLogged: " + adminLogged);
     }
 
     private void setupSpinnerSelectRobot() {

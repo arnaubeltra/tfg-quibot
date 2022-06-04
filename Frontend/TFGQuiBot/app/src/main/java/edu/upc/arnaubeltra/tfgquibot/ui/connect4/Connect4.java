@@ -57,9 +57,10 @@ public class Connect4 extends Fragment {
     private Button btnColumn1, btnColumn2, btnColumn3, btnColumn4, btnColumn5, btnColumn6, btnNewGameConnect4;
 
     private int player = 0;
-    private int init = 0, init1 = 0;
+    private int init = 0, init1 = 0, init2 = 0;
     private int update = 0;
     private Boolean robotConnected = true;
+    private int flag = 0, flag2 = 0;
 
     private ArrayList<Integer> circleObjects = new ArrayList<>();
     private View v;
@@ -107,10 +108,48 @@ public class Connect4 extends Fragment {
         THREAD_RUNNING = true;
         startThreadGame();
 
-        //checkRobotConnection();
+        checkRobotConnection();
         setupRequestResponseObserver();
         setHasOptionsMenu(true);
         return v;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        permissionsViewModel.resetLiveData();
+    }
+
+    private void checkRobotConnection() {
+        robotConnectionViewModel.checkRobotConnection();
+        if (init2 == 0) {
+            robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+                try {
+                    JSONObject responseObject = new JSONObject(response);
+                    if (responseObject.getString("response").equals("robot-connection-failed")) {
+                        if (flag == 1) { dialogWarningRobotNotConnected(); flag = 0; }
+                        else flag = 1;
+                    } else {
+                        flag = 1;
+                        setupPermissionsObserver();
+                        if ((flag2 == 1) && init2 != 0) {
+                            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "connect4"); flag2++;
+                        } else if ((flag2 == 2) && init2 != 0)
+                            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "connect4");
+                        else flag2++;
+                    } init2++;
+                } catch (JSONException e) { e.printStackTrace(); }
+            });
+        }
+    }
+
+    private void dialogWarningRobotNotConnected() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.txtRobotNotConnected)
+                .setMessage(R.string.txtCheckRobotConnection)
+                .setPositiveButton(R.string.txtAccept, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setupRequestResponseObserver() {
@@ -210,7 +249,7 @@ public class Connect4 extends Fragment {
         });
     }
 
-    private void setupPermissionsObserver() {
+    /*private void setupPermissionsObserver() {
         if (init == 0) {
             permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
@@ -227,23 +266,39 @@ public class Connect4 extends Fragment {
                 }
             });
         } init++;
+    }*/
+
+    private void setupPermissionsObserver() {
+        if (init == 0) {
+            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
+            permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
+                try {
+                    JSONObject responseObject = new JSONObject(auth);
+                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match"))
+                        connect4ViewModel.startNewGameConnect4(Login.getIpAddress());
+                    else Toast.makeText(getContext(), R.string.txtPermissionsPlayConnect4, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            });
+        } init++;
     }
 
     private void startFinishGame() {
-        if (robotConnected) {
-            if (!GAME_STARTED) {
-                setupPermissionsObserver();
-                permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "connect4");
-                resetUIGameFinished();
-            } else {
-                GAME_FINISHED = true;
-                btnNewGameConnect4.setText(R.string.btnTxtNovaPartida);
-                txtInfoGame.setText(R.string.txtGameNotStarted);
-                txtInfoPlayer.setText("");
-                finishGame();
-                connect4ViewModel.finishGameConnect4();
-                Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
-            }
+        if (!GAME_STARTED) {
+            //setupPermissionsObserver();
+            //permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "connect4");
+            flag = 1;
+            robotConnectionViewModel.checkRobotConnection();
+            resetUIGameFinished();
+        } else {
+            GAME_FINISHED = true;
+            btnNewGameConnect4.setText(R.string.btnTxtNovaPartida);
+            txtInfoGame.setText(R.string.txtGameNotStarted);
+            txtInfoPlayer.setText("");
+            finishGame();
+            connect4ViewModel.finishGameConnect4();
+            Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsOver, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -425,7 +480,7 @@ public class Connect4 extends Fragment {
         dialog.setCancelable(true);
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_how_to_play, null);
         ImageView image = view.findViewById(R.id.imgHowToPlay);
-        image.setImageResource(R.drawable.quibot_bg_light);
+        image.setImageResource(R.drawable.board_connect_4);
         dialog.setContentView(view);
         dialog.show();
     }
