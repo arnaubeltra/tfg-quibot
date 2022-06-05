@@ -454,8 +454,9 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.menu_custom_program)
                 .setMessage(R.string.txtHelpCustomProgram)
-                .setPositiveButton(R.string.txtAccept, null)
-                .setNeutralButton(R.string.txtBoard, (dialogInterface, i) -> openBoardDialog());
+                .setPositiveButton(R.string.txtAccept, null);
+        if (robot == 2)
+            builder.setNeutralButton(R.string.txtBoard, (dialogInterface, i) -> openBoardDialog());
         AlertDialog dialog = builder.create();
         dialog.show();
     }

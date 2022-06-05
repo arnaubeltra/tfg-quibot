@@ -61,6 +61,7 @@ public class Connect4 extends Fragment {
     private int update = 0;
     private Boolean robotConnected = true;
     private int flag = 0, flag2 = 0;
+    private int flagStarted = 0;
 
     private ArrayList<Integer> circleObjects = new ArrayList<>();
     private View v;
@@ -118,6 +119,13 @@ public class Connect4 extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         permissionsViewModel.resetLiveData();
+        connect4ViewModel.resetLiveData();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        flagStarted = 1;
     }
 
     private void checkRobotConnection() {
@@ -274,8 +282,11 @@ public class Connect4 extends Fragment {
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match"))
-                        connect4ViewModel.startNewGameConnect4(Login.getIpAddress());
+                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) {
+                        if (flagStarted != 1)
+                            connect4ViewModel.startNewGameConnect4(Login.getIpAddress());
+                        flagStarted = 0;
+                    }
                     else Toast.makeText(getContext(), R.string.txtPermissionsPlayConnect4, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();

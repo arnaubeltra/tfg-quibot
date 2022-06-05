@@ -30,7 +30,7 @@ import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewMod
 
 public class RobotAPI extends ViewModel {
 
-    private static final String BASE_URL = "http://192.168.100.2:10000";
+    private static final String BASE_URL = "http://192.168.100.1:10000";
     private static final String TAG = "RobotAPI";
 
     private static RobotAPI instance;

@@ -43,6 +43,8 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
     private static String ipAddress;
     private static int robot = 0;
 
+    private int flag = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,14 +114,17 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
             loginViewModel.getNewUserLoginResponse().observe(this, response -> {
                 try {
                     JSONObject responseObject = new JSONObject(response);
-                    if (responseObject.getString("response").equals("login-user-success")) {
-                        if (String.valueOf(spinnerSelectRobot.getSelectedItem()).equals(getResources().getString(R.string.txtRobot1D)))
-                            robot = 1;
-                        else if (String.valueOf(spinnerSelectRobot.getSelectedItem()).equals(getResources().getString(R.string.txtRobot2D)))
-                            robot = 2;
-                        goToHomeActivityUser();
-                    } else Toast.makeText(Login.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
-                    loginDialog.dismiss();
+                    if (flag == 0) {
+                        if (responseObject.getString("response").equals("login-user-success")) {
+                            if (String.valueOf(spinnerSelectRobot.getSelectedItem()).equals(getResources().getString(R.string.txtRobot1D)))
+                                robot = 1;
+                            else if (String.valueOf(spinnerSelectRobot.getSelectedItem()).equals(getResources().getString(R.string.txtRobot2D)))
+                                robot = 2;
+                            goToHomeActivityUser();
+                        } else
+                            Toast.makeText(Login.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
+                        loginDialog.dismiss();
+                    } flag++;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -130,13 +135,15 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
     private void goToHomeActivityUser() {
         if (robot == 1) {
             Intent intent = new Intent(Login.this, UserNavigationRobot1d.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
+            finish();
         } else if (robot == 2) {
             Intent intent = new Intent(Login.this, UserNavigationRobot2d.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-        }
+            finish();
+        }   //Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK
     }
 
     private void goToAdminLogin() {

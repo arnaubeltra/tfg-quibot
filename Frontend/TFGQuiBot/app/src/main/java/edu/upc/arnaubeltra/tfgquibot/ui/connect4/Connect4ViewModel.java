@@ -40,4 +40,8 @@ public class Connect4ViewModel extends ViewModel {
     public void setConnect4RequestResponse(String response) {
         connect4RequestResponse.setValue(response);
     }
+    public void resetLiveData() {
+        connect4RequestResponse = new MutableLiveData<>();
+    }
+
 }

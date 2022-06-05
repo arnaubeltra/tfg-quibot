@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class UserNavigationRobot1d extends AppCompatActivity {
 
     private Button btnExperiments;
     public static NavController navController;
+
+    private int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,24 +106,45 @@ public class UserNavigationRobot1d extends AppCompatActivity {
         WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(WIFI_SERVICE);
         switch (item.getItemId()) {
             case R.id.logout:
+                flag = 1;
+                navigationViewModel.logoutUser(Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress()));
+                Intent intent = new Intent(UserNavigationRobot1d.this, Login.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
+                startActivity(intent);
+                finish();
+
+                /*Log.d("TAG", "onOptionsItemSelected: ");
                 navigationViewModel.logoutUser(Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress()));
                 navigationViewModel.getLogoutUserResponse().observe(this, response -> {
                     try {
                         JSONObject responseObject = new JSONObject(response);
-                        if (!responseObject.getString("response").equals("logout-user-success"))
+                        Log.d("TAG", "logout: ");
+                        if (responseObject.getString("response").equals("logout-user-success")) {
+
                             finish();
+                        }
+
                         goToLoginActivity();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                });
+                });*/
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void goToLoginActivity() {
         Intent intent = new Intent(UserNavigationRobot1d.this, Login.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (flag == 0) {
+            WifiManager wifiManager = (WifiManager) this.getApplicationContext().getSystemService(WIFI_SERVICE);
+            navigationViewModel.logoutUser(Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress()));
+        }
     }
 }

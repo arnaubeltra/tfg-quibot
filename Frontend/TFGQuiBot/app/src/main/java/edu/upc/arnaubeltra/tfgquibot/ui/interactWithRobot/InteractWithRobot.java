@@ -232,8 +232,9 @@ public class InteractWithRobot extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.menu_interact)
                 .setMessage(R.string.txtHelpInteract)
-                .setPositiveButton(R.string.txtAccept, null)
-                .setNeutralButton(R.string.txtBoard, (dialogInterface, i) -> openBoardDialog());
+                .setPositiveButton(R.string.txtAccept, null);
+        if (robot == 2)
+            builder.setNeutralButton(R.string.txtBoard, (dialogInterface, i) -> openBoardDialog());
         AlertDialog dialog = builder.create();
         dialog.show();
     }

@@ -50,6 +50,7 @@ public class TicTacToe extends Fragment {
     private int init = 0, init2 = 0;
     private Boolean robotConnected = false;
     private int flag = 0, flag2 = 0;
+    private int flagStarted = 0;
 
     // Required empty public constructor
     public TicTacToe() { }
@@ -108,6 +109,13 @@ public class TicTacToe extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         permissionsViewModel.resetLiveData();
+        ticTacToeViewModel.resetLiveData();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        flagStarted = 1;
     }
 
     private void checkRobotConnection() {
@@ -254,8 +262,11 @@ public class TicTacToe extends Fragment {
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match"))
-                        ticTacToeViewModel.startNewGameTicTacToe(Login.getIpAddress());
+                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) {
+                        if (flagStarted != 1)
+                            ticTacToeViewModel.startNewGameTicTacToe(Login.getIpAddress());
+                        flagStarted = 0;
+                    }
                     else Toast.makeText(getContext(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();

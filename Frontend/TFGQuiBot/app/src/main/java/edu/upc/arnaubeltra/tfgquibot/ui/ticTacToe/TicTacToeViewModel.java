@@ -40,4 +40,8 @@ public class TicTacToeViewModel extends ViewModel {
         ticTacTocRequestResponse.setValue(response);
     }
 
+    public void resetLiveData() {
+        ticTacTocRequestResponse = new MutableLiveData<>();
+    }
+
 }
