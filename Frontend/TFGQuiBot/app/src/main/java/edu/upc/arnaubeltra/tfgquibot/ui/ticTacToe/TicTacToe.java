@@ -88,7 +88,7 @@ public class TicTacToe extends Fragment {
         btnTicTacToe9.setOnClickListener(view -> ticTacToeMovement(2, 2));
 
         btnNewGame = v.findViewById(R.id.btnNewGame);
-        btnNewGame.setText(R.string.btnTxtNovaPartida);
+        btnNewGame.setText(R.string.btnTxtNewGame);
         btnNewGame.setOnClickListener(view -> startFinishGame());
         v.findViewById(R.id.btnHowToPlay).setOnClickListener(view -> howToPlayDialog());
 
@@ -201,7 +201,7 @@ public class TicTacToe extends Fragment {
                     GAME_STARTED = false;
                     if (player == 1) txtInfoGame.setText(R.string.txtYouWon);
                     else txtInfoGame.setText(R.string.txtYouLost);
-                    btnNewGame.setText(R.string.btnTxtNovaPartida);
+                    btnNewGame.setText(R.string.btnTxtNewGame);
                     GAME_FINISHED = true;
                     //finishGame();
                 }
@@ -210,7 +210,7 @@ public class TicTacToe extends Fragment {
                     GAME_STARTED = false;
                     if (player == 2) txtInfoGame.setText(R.string.txtYouWon);
                     else txtInfoGame.setText(R.string.txtYouLost);
-                    btnNewGame.setText(R.string.btnTxtNovaPartida);
+                    btnNewGame.setText(R.string.btnTxtNewGame);
                     GAME_FINISHED = true;
                     //finishGame();
                 }
@@ -283,7 +283,7 @@ public class TicTacToe extends Fragment {
             robotConnectionViewModel.checkRobotConnection();
         } else {
             GAME_FINISHED = true;
-            btnNewGame.setText(R.string.btnTxtNovaPartida);
+            btnNewGame.setText(R.string.btnTxtNewGame);
             txtInfoGame.setText(R.string.txtGameNotStarted);
             txtInfoPlayer.setText("");
             finishGame();
@@ -397,7 +397,7 @@ public class TicTacToe extends Fragment {
 
     private void resetUIGameFinished() {
         finishGame();
-        btnNewGame.setText(R.string.btnTxtNovaPartida);
+        btnNewGame.setText(R.string.btnTxtNewGame);
         txtInfoGame.setText(R.string.txtGameNotStarted);
         txtInfoPlayer.setText("");
     }

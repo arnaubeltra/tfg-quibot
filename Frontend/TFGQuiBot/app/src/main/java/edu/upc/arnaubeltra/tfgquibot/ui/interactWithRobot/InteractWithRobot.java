@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot2d;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.AdminLogin;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
@@ -244,7 +242,7 @@ public class InteractWithRobot extends Fragment {
         dialog.setCancelable(true);
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_how_to_play, null);
         ImageView image = view.findViewById(R.id.imgHowToPlay);
-        image.setImageResource(R.drawable.board_medium);
+        image.setImageResource(R.drawable.board_empty_medium);
         dialog.setContentView(view);
         dialog.show();
     }

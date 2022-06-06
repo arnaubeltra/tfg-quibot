@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:textColor="@color/black"
     android:textSize="18sp"
-    android:drawableEnd="@drawable/ic_arrow_down_3"
+    android:drawableEnd="@drawable/icon_arrow_down_3"
     android:paddingLeft="20dp"
     android:paddingTop="13dp"
     android:paddingRight="20dp"

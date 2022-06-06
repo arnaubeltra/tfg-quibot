@@ -6,7 +6,7 @@
     android:textSize="18sp"
     android:drawableStart="@drawable/icon_robot"
     android:drawablePadding="10dp"
-    android:drawableEnd="@drawable/ic_arrow_down"
+    android:drawableEnd="@drawable/icon_arrow_down"
     android:paddingLeft="20dp"
     android:paddingTop="13dp"
     android:paddingRight="20dp"

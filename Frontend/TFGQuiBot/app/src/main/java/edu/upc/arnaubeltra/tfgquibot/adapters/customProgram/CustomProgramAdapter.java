@@ -66,17 +66,17 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
 
     private int getIcon(String action) {
         if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtForward)))
-            return R.drawable.ic_arrow_up_2;
+            return R.drawable.icon_arrow_up_2;
         else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtBackwards)))
-            return R.drawable.ic_arrow_down_2;
+            return R.drawable.icon_arrow_down_2;
         else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtRight)))
-            return R.drawable.ic_arrow_right_2;
+            return R.drawable.icon_arrow_right_2;
         else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtLeft)))
-            return R.drawable.ic_arrow_left_2;
+            return R.drawable.icon_arrow_left_2;
         else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtLowerPipette)))
-            return R.drawable.ic_lower_pipette;
+            return R.drawable.icon_lower_pipette;
         else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtRaisePipette)))
-            return R.drawable.ic_raise_pipette;
+            return R.drawable.icon_raise_pipette;
         else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtSuck)))
             return R.drawable.icon_suck_2;
         else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtUnsuck)))
@@ -88,7 +88,7 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
         else if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtRepeatPreviousActions)))
             return R.drawable.icon_reload;
         else
-            return R.drawable.ic_arrow_up_2;
+            return R.drawable.icon_arrow_up_2;
     }
 
     @Override

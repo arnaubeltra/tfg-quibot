@@ -93,13 +93,68 @@
         <entry key="..\:/Users/Arnau/Desktop/TODAY/TFGQuiBot/app/src/main/res/menu/admin_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TODAY/TFGQuiBot/app/src/main/res/menu/user_navigation.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Arnau/Desktop/TODAY/TFGQuiBot/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.346" />
+        <entry key="app/src/main/res/drawable-v24/icon_arrow_down_3.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable-v24/icon_launcher_foreground.xml" value="0.2815" />
         <entry key="app/src/main/res/drawable/arrow_up_down.xml" value="0.1975" />
         <entry key="app/src/main/res/drawable/background_inputs_square.xml" value="0.229" />
         <entry key="app/src/main/res/drawable/box.xml" value="0.315" />
         <entry key="app/src/main/res/drawable/box_2.xml" value="0.174" />
         <entry key="app/src/main/res/drawable/button.xml" value="0.1905" />
+        <entry key="app/src/main/res/drawable/container_custom_program.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/custom_program_icon.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/custom_program_icon_big.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/experiments_icon.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/ic_add_action.xml" value="0.2815" />
         <entry key="app/src/main/res/drawable/ic_reload.xml" value="0.324" />
+        <entry key="app/src/main/res/drawable/icon_add_action.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_arrow_down.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_arrow_down_2.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_arrow_left.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_arrow_left_2.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_arrow_right.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_arrow_right_2.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_arrow_up.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_arrow_up_2.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_big_custom_program.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_big_experiments.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_connect4.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_connect4_big.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_custom_program.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_delete.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_edit.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_email.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_exit.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_experiments.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_experiments_big.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_help.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_home.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_interact.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/icon_interact_big.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/icon_launcher_background.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_lower_pipette.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_menu_camera.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_menu_gallery.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_menu_slideshow.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_person.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_person_big.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_raise_pipette.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_read_color.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_reload.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_reorder.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_robot.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_security.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_send_program.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_suck.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_suck_2.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/icon_tic_tac_toe.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/icon_tic_tac_toe_big.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/icon_user.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/line.xml" value="0.2815" />
+        <entry key="app/src/main/res/drawable/line_separation_users_list.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/nav_bar_header.xml" value="0.277" />
+        <entry key="app/src/main/res/drawable/quibot_logo_background.xml" value="0.2815" />
         <entry key="app/src/main/res/drawable/red_circle.xml" value="0.22" />
+        <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.2815" />
         <entry key="app/src/main/res/layout/activity_admin_login.xml" value="0.3101851851851852" />
         <entry key="app/src/main/res/layout/activity_admin_navigation.xml" value="0.21354166666666666" />
         <entry key="app/src/main/res/layout/activity_admin_navigation_robot1d.xml" value="0.37604166666666666" />

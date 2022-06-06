@@ -55,7 +55,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="194dp"
                             android:layout_marginTop="20dp"
-                            app:srcCompat="@drawable/exp_series_dissolucio" />
+                            app:srcCompat="@drawable/experiment_series_dissolucio" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -129,7 +129,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="194dp"
                             android:layout_marginTop="20dp"
-                            app:srcCompat="@drawable/exp_barreja_colors" />
+                            app:srcCompat="@drawable/experiment_barreja_colors" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -205,7 +205,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="194dp"
                             android:layout_marginTop="20dp"
-                            app:srcCompat="@drawable/exp_capes_de_densitat" />
+                            app:srcCompat="@drawable/experiment_capes_de_densitat" />
 
                         <LinearLayout
                             android:layout_width="match_parent"

@@ -220,7 +220,7 @@ public class Connect4 extends Fragment {
                     GAME_STARTED = false;
                     if (player == 1) txtInfoGame.setText(R.string.txtYouWon);
                     else txtInfoGame.setText(R.string.txtYouLost);
-                    btnNewGameConnect4.setText(R.string.btnTxtNovaPartida);
+                    btnNewGameConnect4.setText(R.string.btnTxtNewGame);
                     GAME_FINISHED = true;
                 }
 
@@ -228,7 +228,7 @@ public class Connect4 extends Fragment {
                     GAME_STARTED = false;
                     if (player == 2) txtInfoGame.setText(R.string.txtYouWon);
                     else txtInfoGame.setText(R.string.txtYouLost);
-                    btnNewGameConnect4.setText(R.string.btnTxtNovaPartida);
+                    btnNewGameConnect4.setText(R.string.btnTxtNewGame);
                     GAME_FINISHED = true;
                 }
 
@@ -304,7 +304,7 @@ public class Connect4 extends Fragment {
             resetUIGameFinished();
         } else {
             GAME_FINISHED = true;
-            btnNewGameConnect4.setText(R.string.btnTxtNovaPartida);
+            btnNewGameConnect4.setText(R.string.btnTxtNewGame);
             txtInfoGame.setText(R.string.txtGameNotStarted);
             txtInfoPlayer.setText("");
             finishGame();
@@ -363,8 +363,8 @@ public class Connect4 extends Fragment {
         imageCircle.setId(View.generateViewId());
         circleObjects.add(imageCircle.getId());
 
-        if (player == 1) imageCircle.setImageResource(R.drawable.icon_red_circle);
-        else if (player == 2) imageCircle.setImageResource(R.drawable.icon_yellow_circle);
+        if (player == 1) imageCircle.setImageResource(R.drawable.connect_4_red);
+        else if (player == 2) imageCircle.setImageResource(R.drawable.connect_4_yellow);
 
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
@@ -463,7 +463,7 @@ public class Connect4 extends Fragment {
 
     private void resetUIGameFinished() {
         finishGame();
-        btnNewGameConnect4.setText(R.string.btnTxtNovaPartida);
+        btnNewGameConnect4.setText(R.string.btnTxtNewGame);
         txtInfoGame.setText(R.string.txtGameNotStarted);
         txtInfoPlayer.setText("");
         try {

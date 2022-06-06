@@ -466,7 +466,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         dialog.setCancelable(true);
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_how_to_play, null);
         ImageView image = view.findViewById(R.id.imgHowToPlay);
-        image.setImageResource(R.drawable.board_medium);
+        image.setImageResource(R.drawable.board_empty_medium);
         dialog.setContentView(view);
         dialog.show();
     }

@@ -22,7 +22,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot2d;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.AdminLogin;
 import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
@@ -196,17 +195,17 @@ public class Experiments extends Fragment {
 
         if (experimentName.equals(getResources().getString(R.string.titleSeriesDisolucio))) {
             if (robot == 1)
-                image.setImageResource(R.drawable.exp_series_dissolucio);
+                image.setImageResource(R.drawable.experiment_series_dissolucio);
             else if (robot == 2)
                 image.setImageResource(R.drawable.board_series_dissolucio);
         } else if (experimentName.equals(getResources().getString(R.string.titleBarrejaColorsPrimaris))) {
             if (robot == 1)
-                image.setImageResource(R.drawable.exp_barreja_colors);
+                image.setImageResource(R.drawable.experiment_barreja_colors);
             else if (robot == 2)
                 image.setImageResource(R.drawable.board_barreja_colors_primaris);
         } else if (experimentName.equals(getResources().getString(R.string.titleCapesDeDensitat))) {
             if (robot == 1)
-                image.setImageResource(R.drawable.exp_capes_de_densitat);
+                image.setImageResource(R.drawable.experiment_capes_de_densitat);
             else if (robot == 2)
                 image.setImageResource(R.drawable.board_capes_de_densitat);
         }

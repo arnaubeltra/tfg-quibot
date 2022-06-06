@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/tic_tac_toe_map" />
+        app:srcCompat="@drawable/board_tic_tac_toe" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
