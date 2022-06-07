@@ -26,33 +26,44 @@ import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
+// Class that defines the fragment of the InteractWithRobot activity
 public class InteractWithRobot extends Fragment {
 
     private RobotConnectionViewModel robotConnectionViewModel;
     private PermissionsViewModel permissionsViewModel;
     private InteractWithRobotViewModel interactWithRobotViewModel;
 
+    // Variable to define interaction that the robot has to perform
     private String interaction = "";
-    private int init = 0, init2 = 0;
-    private int robot = 0;
-    private int flag = 0, flag2 = 0;
 
-    // Required empty public constructor
+    // Definition of variables that handle some states (some of them caused because receiving doubled responses, so to control the flow)
+    private int init = 0, init2 = 0, robot = 0, flag = 0, flag2 = 0;
+
+
+    // Fragments require an empty constructor.
     public InteractWithRobot() { }
 
+    // Method to create the fragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    // Method that creates the view of the fragment, defining all the elements of the layout and calling important methods to handle status.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_interact_with_robot, container, false);
 
+        // Creation of the ViewModel objects.
+        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
+        permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
+        interactWithRobotViewModel = new ViewModelProvider(Login.getContext()).get(InteractWithRobotViewModel.class);
+
+        // As this fragment is used for Robot 1D and Robot 2D, we have to know which robot we are using to adapt the layout.
         robot = getRobot();
 
+        // Definition of the layout according to the robot that we are using.
         Button btnMulti1, btnMulti2, btnReset1, btnReset2, btnColor;
-
         v.findViewById(R.id.btnLeft).setOnClickListener(view -> setupInteraction("left"));
         v.findViewById(R.id.btnRight).setOnClickListener(view -> setupInteraction("right"));
         v.findViewById(R.id.btnSuck).setOnClickListener(view -> setupInteraction("suck"));
@@ -75,8 +86,8 @@ public class InteractWithRobot extends Fragment {
             btnReset1 = v.findViewById(R.id.btnReset);
             btnReset1.setVisibility(View.GONE);
         } else if (robot == 2) {
-            v.findViewById(R.id.btnUp).setOnClickListener(view -> setupInteraction("forward"));
-            v.findViewById(R.id.btnDown).setOnClickListener(view -> setupInteraction("backwards"));
+            v.findViewById(R.id.btnUp).setOnClickListener(view -> setupInteraction("up"));
+            v.findViewById(R.id.btnDown).setOnClickListener(view -> setupInteraction("down"));
             btnMulti1 = v.findViewById(R.id.btnMultifunctions1);
             btnMulti1.setOnClickListener(view -> setupInteraction("suck_liquid"));
             btnMulti1.setText(R.string.txtSuck);
@@ -92,16 +103,12 @@ public class InteractWithRobot extends Fragment {
             btnReset1.setVisibility(View.VISIBLE);
         }
 
-        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
-        permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
-        interactWithRobotViewModel = new ViewModelProvider(Login.getContext()).get(InteractWithRobotViewModel.class);
-
         setHasOptionsMenu(true);
         checkRobotConnection();
-
         return v;
     }
 
+    // Method that gets the actual robot, selected when logging in.
     private int getRobot() {
         if (Login.getAdminLogged())
             return AdminLogin.getRobotAdmin();
@@ -109,12 +116,14 @@ public class InteractWithRobot extends Fragment {
             return Login.getRobotUser();
     }
 
+    // When the view is destroyed, resets the live data.
     @Override
     public void onDestroy() {
         super.onDestroy();
         permissionsViewModel.resetLiveData();
     }
 
+    // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         if (init2 == 0) {
@@ -141,6 +150,7 @@ public class InteractWithRobot extends Fragment {
         }
     }
 
+    // Method that shows a dialog if the robot is not connected.
     private void dialogWarningRobotNotConnected() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.txtRobotNotConnected)
@@ -150,6 +160,7 @@ public class InteractWithRobot extends Fragment {
         dialog.show();
     }
 
+    // Setups the observer that will receive all the responses of the requests done when checking user permissions.
     private void setupPermissionsObserver() {
         if (init == 0) {
             permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
@@ -159,66 +170,31 @@ public class InteractWithRobot extends Fragment {
                     if (responseObject.getInt("robot") != robot) Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
                     else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeAction();
                     else Toast.makeText(getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                } catch (JSONException e) { e.printStackTrace(); }
             });
         } init++;
     }
 
+    // Method that is called when an interaction has to be sent to robot, to check if robot is connected.
     private void setupInteraction(String action) {
         flag = 1;
         robotConnectionViewModel.checkRobotConnection();
         interaction = action;
     }
 
+    // Sends action to be executed to the robot.
     private void executeAction() {
-        switch (interaction) {
-            case "forward":
-                interactWithRobotViewModel.sendInteraction("up");
-                break;
-            case "backwards":
-                interactWithRobotViewModel.sendInteraction("down");
-                break;
-            case "left":
-                interactWithRobotViewModel.sendInteraction("left");
-                break;
-            case "right":
-                interactWithRobotViewModel.sendInteraction("right");
-                break;
-            case "raise_pipette":
-                interactWithRobotViewModel.sendInteraction("raise_pipette");
-                break;
-            case "lower_pipette":
-                interactWithRobotViewModel.sendInteraction("lower_pipette");
-                break;
-            case "suck":
-                interactWithRobotViewModel.sendInteraction("suck");
-                break;
-            case "suck_liquid":
-                interactWithRobotViewModel.sendInteraction("suck_liquid");
-                break;
-            case "unsuck_liquid":
-                interactWithRobotViewModel.sendInteraction("unsuck_liquid");
-                break;
-            case "reset":
-                interactWithRobotViewModel.sendInteraction("reset");
-                break;
-            case "infrared_control":
-                interactWithRobotViewModel.sendInteraction("infrared_control");
-                break;
-            case "color":
-                interactWithRobotViewModel.sendInteraction("color");
-                break;
-        }
+        interactWithRobotViewModel.sendInteraction(interaction);
     }
 
+    // Changes the help menu item visibility to true.
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.help).setVisible(true);
         super.onPrepareOptionsMenu(menu);
     }
 
+    // When the help menu item is clicked, opens help dialog.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.help)
@@ -226,6 +202,7 @@ public class InteractWithRobot extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    // Opens a dialog that explains how to use the Interact with robot activity.
     private void openHelpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.menu_interact)
@@ -237,6 +214,7 @@ public class InteractWithRobot extends Fragment {
         dialog.show();
     }
 
+    // Opens a dialog with a picture of the board.
     private void openBoardDialog() {
         Dialog dialog = new Dialog(getActivity());
         dialog.setCancelable(true);

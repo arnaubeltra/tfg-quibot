@@ -1,6 +1,5 @@
 package edu.upc.arnaubeltra.tfgquibot.adapters.customProgram;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +16,34 @@ import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.models.Action;
 import edu.upc.arnaubeltra.tfgquibot.ui.customProgram.CustomProgram;
 
+
+// Adapter used in the Recycler View of the CustomProgram class.
 public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdapter.CustomProgramViewHolder> implements ItemMoveCallback.ItemTouchHelperContract {
 
+    // Interface used to handle element in list clicked.
     public interface ICustomProgramRCVItemClicked {
         void onUserClicked(int index);
     }
 
+    // Listener of the element clicked.
     private ICustomProgramRCVItemClicked listener;
-
+    // ArrayList where are stored the elements displayed in the RecyclerView.
     private ArrayList<Action> actions = new ArrayList<>();
-
+    // Instance of the CustomProgram class
     private CustomProgram customProgram = CustomProgram.getInstance();
 
+    // Constructor
     public CustomProgramAdapter(ICustomProgramRCVItemClicked listener) {
         this.listener = listener;
     }
 
+    // Method called when Recycler View needs to be updated as new data has ben updated or data has been removed.
     public void updateActionsList(ArrayList<Action> actions) {
         this.actions = actions;
         notifyDataSetChanged();
     }
 
+    // Inflate the layout of each element of the Recycler View. This layout represent each individual list element.
     @NonNull
     @Override
     public CustomProgramAdapter.CustomProgramViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,6 +51,7 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
         return new CustomProgramViewHolder(itemView, listener);
     }
 
+    // Configure each new element in the Recycler View, adding all the content needed.
     @Override
     public void onBindViewHolder(@NonNull CustomProgramAdapter.CustomProgramViewHolder holder, int position) {
         holder.iconAction.setImageResource(getIcon(actions.get(position).getName()));
@@ -55,15 +62,14 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
             holder.txtAction.setText(actions.get(position).getName() + "\n" + actions.get(position).getQuantity() + "ml");
         } else if (actions.get(position).getRepetitions() != 0) {
             holder.txtAction.setMaxLines(2);
-            holder.txtAction.setText(actions.get(position).getName() + " " + actions.get(position).getRepetitions() + " " + CustomProgram.getInstance().getResources().getString(R.string.txtTimes) + "\n" +
-                    CustomProgram.getInstance().getResources().getString(R.string.txtLast2) + " " + actions.get(position).getLastNInstructions() + " " + CustomProgram.getInstance().getResources().getString(R.string.txtActions));
-
-        }else {
+            holder.txtAction.setText(actions.get(position).getName() + " " + actions.get(position).getRepetitions() + " " + CustomProgram.getInstance().getResources().getString(R.string.txtTimes) + "\n" + CustomProgram.getInstance().getResources().getString(R.string.txtLast2) + " " + actions.get(position).getLastNInstructions() + " " + CustomProgram.getInstance().getResources().getString(R.string.txtActions));
+        } else {
             holder.txtAction.setMaxLines(1);
             holder.txtAction.setText(actions.get(position).getName() + "\n");
         }
     }
 
+    // Method that returns an icon according to an action. Switch-case statement not possible to use as does not accept resources as return values.
     private int getIcon(String action) {
         if (action.equals(CustomProgram.getInstance().getResources().getString(R.string.txtForward)))
             return R.drawable.icon_arrow_up_2;
@@ -91,35 +97,26 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
             return R.drawable.icon_arrow_up_2;
     }
 
+    // Method that returns the number of items of the list.
     @Override
     public int getItemCount() {
         return actions.size();
     }
 
+    // Method that handles when a row is moved up or down in the Recycler View (re-organizing). It basically updates the ArrayList with all the elements of the list.
     @Override
     public void onRowMoved(int fromPosition, int toPosition) {
         if (fromPosition < toPosition) {
-            for (int i = fromPosition; i < toPosition; i++) {
+            for (int i = fromPosition; i < toPosition; i++)
                 Collections.swap(actions, i, i + 1);
-            }
         } else {
-            for (int i = fromPosition; i > toPosition; i--) {
+            for (int i = fromPosition; i > toPosition; i--)
                 Collections.swap(actions, i, i - 1);
-            }
         }
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    @Override
-    public void onRowSelected(CustomProgramViewHolder myViewHolder) {
-
-    }
-
-    @Override
-    public void onRowClear(CustomProgramViewHolder myViewHolder) {
-
-    }
-
+    // ViewHolder class, that defines the structure of each element of the Recycler View.
     public class CustomProgramViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView iconAction, iconEdit, iconDelete;
@@ -127,6 +124,7 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
 
         View rowView;
 
+        // Definition of the elements of the view and call to methods if they have to perform any action.
         public CustomProgramViewHolder(@NonNull View itemView, ICustomProgramRCVItemClicked itemClickedListener) {
             super(itemView);
 
@@ -142,17 +140,19 @@ public class CustomProgramAdapter extends RecyclerView.Adapter<CustomProgramAdap
             iconDelete.setOnClickListener(view -> onDeleteAction(getAdapterPosition()));
         }
 
+        // Handler when clicking one of the Recycler View list elements.
         @Override
         public void onClick(View view) {
             listener.onUserClicked(getAdapterPosition());
-            Log.d("TAG", "onClick: " + getAdapterPosition());
         }
     }
 
+    // When edit icon is pressed, call to openDialogNewAction method of the CustomProgram class.
     private void onEditAction(int index) {
         CustomProgram.getInstance().openDialogNewAction(index, "edit_action");
     }
 
+    // Handler of what has to be done, when an element is deleted from the Recycler View.
     private void onDeleteAction(int index) {
         actions.remove(index);
         updateActionsList(actions);

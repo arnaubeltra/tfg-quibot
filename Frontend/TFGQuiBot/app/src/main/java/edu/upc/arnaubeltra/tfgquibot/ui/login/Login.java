@@ -33,6 +33,7 @@ import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot1d;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot2d;
 
+// Class that defines the Login activity
 public class Login extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static Login instance;
@@ -41,10 +42,13 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
     private ProgressDialog loginDialog;
     private Spinner spinnerSelectRobot;
     private static String ipAddress;
+    public static boolean adminLogged;
+
     private static int robot = 0;
 
     private int flag = 0;
 
+    // Method to create the activity. Defines layout and calls methods when needed.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,22 +83,27 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
             dialogWifiConnection();
     }
 
+    // Gets the instance of the Login class.
     public static Context getInstance() {
         return instance.getApplicationContext();
     }
 
+    // Gets the context of the Login class.
     public static Login getContext() {
         return instance;
     }
 
+    // Gets the IP address of the user.
     public static String getIpAddress() {
         return ipAddress;
     }
 
+    // Gets the robot that the user has selected to login.
     public static int getRobotUser() {
         return robot;
     }
 
+    // Performs a login for the normal user. Checks the fields and then performs a log in.
     private void login() {
         //goToHomeActivityUser();
         String name = "a"; //nameUser.getText().toString();
@@ -132,6 +141,7 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
         }
     }
 
+    // Intent to the home user. Changes depending on the robot selected.
     private void goToHomeActivityUser() {
         if (robot == 1) {
             Intent intent = new Intent(Login.this, UserNavigationRobot1d.class);
@@ -146,22 +156,22 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
         }   //Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK
     }
 
+    // Intent to the admin login.
     private void goToAdminLogin() {
         startActivity(new Intent(Login.this, AdminLogin.class));
     }
 
-    public static boolean adminLogged;
-
+    // Returns whether admin is logged.
     public static boolean getAdminLogged() {
-        //Log.d("TAG", "getAdminLogged: " + adminLogged);
         return adminLogged;
     }
 
+    // Sets if the admin is logged.
     public static void setAdminLogged(Boolean status) {
         adminLogged = status;
-        //Log.d("TAG", "setAdminLogged: " + adminLogged);
     }
 
+    // Method to show a spinner that allows to select the robot.
     private void setupSpinnerSelectRobot() {
         spinnerSelectRobot.setOnItemSelectedListener(this);
 
@@ -174,20 +184,19 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-    }
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) { }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> adapterView) { }
 
-    }
-
+    // Checks wifi connection to know if the user is connected to the QuiBot network.
     private boolean checkWifiConnection() {
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
     }
 
+    // Shows a dialog if wifi is not connected.
     private void dialogWifiConnection() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.txtWifiConnectionAlertTitle)
@@ -197,6 +206,7 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
         dialog.show();
     }
 
+    // Opens a help dialog with information on how to log in.
     private void openHelpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.txtTitleHelpLogin)

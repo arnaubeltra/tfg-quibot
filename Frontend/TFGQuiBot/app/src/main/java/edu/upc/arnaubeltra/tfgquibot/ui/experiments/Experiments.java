@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,47 +27,51 @@ import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
 
+// Class that defines the fragment of the Experiments activity
 public class Experiments extends Fragment {
 
     private RobotConnectionViewModel robotConnectionViewModel;
     private PermissionsViewModel permissionsViewModel;
     private ExperimentsViewModel experimentsViewModel;
 
-    private Boolean robotConnected = false;
+    // Variable to set the selected experiment.
     private String experimentName = "";
-    private int init = 0, init2 = 0;
-    private int robot = 0;
 
-    private int flag = 0, flag2 = 0;
+    // Definition of variables that handle some states (some of them caused because receiving doubled responses, so to control the flow)
+    private int init = 0, init2 = 0, robot = 0, flag = 0, flag2 = 0;
 
-    // Required empty public constructor
+
+    // Fragments require an empty constructor.
     public Experiments() { }
 
+    // Method that creates the fragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    // Method that creates the view of the fragment, defining all the elements of the layout and calling important methods to handle status.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_experiments, container, false);
 
-        robot = getRobot();
-
-        v.findViewById(R.id.btnExecExperimentSeriesDisolucio).setOnClickListener(view -> setupExperiment(getResources().getString(R.string.titleSeriesDisolucio)));
-        v.findViewById(R.id.btnExecExperimentBarrejaColors).setOnClickListener(view -> setupExperiment(getResources().getString(R.string.titleBarrejaColorsPrimaris)));
-        v.findViewById(R.id.btnExecExperimentCapesDensitat).setOnClickListener(view -> setupExperiment(getResources().getString(R.string.titleCapesDeDensitat)));
-
-        v.findViewById(R.id.btnBoardtSeriesDisolucio).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleSeriesDisolucio)));
-        v.findViewById(R.id.btnBoardBarrejaColors).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleBarrejaColorsPrimaris)));
-        v.findViewById(R.id.btnBoardCapesDensitat).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleCapesDeDensitat)));
-
+        // Creation of the ViewModel objects.
         robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
         experimentsViewModel = new ViewModelProvider(Login.getContext()).get(ExperimentsViewModel.class);
 
-        checkRobotConnection();
+        // As this fragment is used for Robot 1D and Robot 2D, we have to know which robot we are using to adapt the layout.
+        robot = getRobot();
 
+        // Definition of the elements of the activity and call to methods to perform actions.
+        v.findViewById(R.id.btnExecExperimentSeriesDisolucio).setOnClickListener(view -> setupExperiment(getResources().getString(R.string.titleSeriesDisolucio)));
+        v.findViewById(R.id.btnExecExperimentBarrejaColors).setOnClickListener(view -> setupExperiment(getResources().getString(R.string.titleBarrejaColorsPrimaris)));
+        v.findViewById(R.id.btnExecExperimentCapesDensitat).setOnClickListener(view -> setupExperiment(getResources().getString(R.string.titleCapesDeDensitat)));
+        v.findViewById(R.id.btnBoardtSeriesDisolucio).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleSeriesDisolucio)));
+        v.findViewById(R.id.btnBoardBarrejaColors).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleBarrejaColorsPrimaris)));
+        v.findViewById(R.id.btnBoardCapesDensitat).setOnClickListener(view -> dialogHowToPrepareExperiment(getResources().getString(R.string.titleCapesDeDensitat)));
+
+        checkRobotConnection();
         setHasOptionsMenu(true);
         return v;
     }
@@ -78,6 +81,7 @@ public class Experiments extends Fragment {
         super.onAttach(context);
     }
 
+    // Method that gets the actual robot, selected when logging in.
     private int getRobot() {
         if (Login.getAdminLogged())
             return AdminLogin.getRobotAdmin();
@@ -85,12 +89,14 @@ public class Experiments extends Fragment {
             return Login.getRobotUser();
     }
 
+    // When the view is destroyed, resets the live data.
     @Override
     public void onDestroy() {
         super.onDestroy();
         permissionsViewModel.resetLiveData();
     }
 
+    // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         if (init2 == 0) {
@@ -117,6 +123,7 @@ public class Experiments extends Fragment {
         }
     }
 
+    // Method that shows a dialog if the robot is not connected.
     private void dialogWarningRobotNotConnected() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.txtRobotNotConnected)
@@ -126,23 +133,7 @@ public class Experiments extends Fragment {
         dialog.show();
     }
 
-    /*private void setupPermissionsObserver() {
-        if (init == 0) {
-            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
-            permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
-                try {
-                    JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getInt("robot") != robot) {
-                        Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
-                    } else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeExperiment();
-                    else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            });
-        } init++;
-    }*/
-
+    // Setups the observer that will receive all the responses of the requests done when checking user permissions.
     private void setupPermissionsObserver() {
         if (init == 0) {
             permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
@@ -152,28 +143,19 @@ public class Experiments extends Fragment {
                     if (responseObject.getInt("robot") != robot) Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
                     else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeExperiment();
                     else Toast.makeText(getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                } catch (JSONException e) { e.printStackTrace(); }
             });
         } init++;
     }
 
+    // Method that checks if robot is connected when a new experiment has to be performed.
     private void setupExperiment(String experiment) {
         flag = 1;
         robotConnectionViewModel.checkRobotConnection();
         experimentName = experiment;
     }
 
-    private void sendExecutionExperiment(String experiment) {
-        /*if (robotConnected) {
-            setupPermissionsObserver();
-            experimentName = experiment;
-            if (Login.getAdminLogged()) executeExperiment();
-            else permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "experiments");
-        }*/
-    }
-
+    // Executes an experiment when the method is called, using the experimentName variable to know which one to execute.
     private void executeExperiment() {
         if (experimentName.equals(getResources().getString(R.string.titleSeriesDisolucio)))
             experimentsViewModel.startExperiment("series_de_dissolucio");
@@ -183,16 +165,13 @@ public class Experiments extends Fragment {
             experimentsViewModel.startExperiment("capes_de_densitat");
     }
 
-    private void dialogHowToPrepareExperiment(String experimentName) {          /*Todo: change images*/
+    // Dialog that shows the image of each experiment. Changes according to each robot.
+    private void dialogHowToPrepareExperiment(String experimentName) {
         Dialog dialog = new Dialog(getActivity());
         dialog.setCancelable(true);
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_experiments, null);
 
         ImageView image = view.findViewById(R.id.imgBoardExperiment);
-
-
-        Log.d("TAG", "dialogHowToPrepareExperiment: " + experimentName +  " " + robot);
-
         if (experimentName.equals(getResources().getString(R.string.titleSeriesDisolucio))) {
             if (robot == 1)
                 image.setImageResource(R.drawable.experiment_series_dissolucio);
@@ -214,12 +193,14 @@ public class Experiments extends Fragment {
         dialog.show();
     }
 
+    // Changes the help menu item visibility to true.
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.help).setVisible(true);
         super.onPrepareOptionsMenu(menu);
     }
 
+    // When the help menu item is clicked, opens help dialog.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.help)
@@ -227,6 +208,7 @@ public class Experiments extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    // Opens a dialog that explains how to use the Experiments activity.
     private void openHelpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.menu_experiments)

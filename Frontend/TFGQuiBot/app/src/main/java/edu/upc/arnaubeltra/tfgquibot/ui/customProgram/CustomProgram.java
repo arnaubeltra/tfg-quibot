@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,57 +42,75 @@ import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
+
+// Class that defines the fragment of the CustomProgram activity
 public class CustomProgram extends Fragment implements CustomProgramAdapter.ICustomProgramRCVItemClicked, AdapterView.OnItemSelectedListener  {
 
     private static CustomProgram instance;
-
-    private RecyclerView rcvCustomProgram;
-    private CustomProgramAdapter customProgramAdapter;
-    private ArrayList<Action> actionsList = new ArrayList<>();
-
-    private TextView txtNoActionsCustomProgram, textViewStartSentence, textViewFinishSentence, textStartSentence2, textViewFinishSentence2;
-    private Spinner spinner, spinnerSelectQuantity;
-    private EditText inputInstructionsRepetition;
 
     private RobotConnectionViewModel robotConnectionViewModel;
     private PermissionsViewModel permissionsViewModel;
     private CustomProgramViewModel customProgramViewModel;
 
-    private Boolean robotConnected = false;
-    private int init = 0, init2 = 0;
-    private int position = 0;
+    // Definition of variables for the Recycler View and the adapter
+    private RecyclerView rcvCustomProgram;
+    private CustomProgramAdapter customProgramAdapter;
+
+    // ArrayList to store all the actions that the user has set as the program to be executed.
+    private ArrayList<Action> actionsList = new ArrayList<>();
+
+    // Definition of the variables used by the elements of the layout.
+    private TextView txtNoActionsCustomProgram, textViewStartSentence, textViewFinishSentence, textStartSentence2, textViewFinishSentence2;
+    private Spinner spinner, spinnerSelectQuantity;
+    private EditText inputInstructionsRepetition;
+
+    // Definition of variables that handle some states (some of them caused because receiving doubled responses, so to control the flow)
+    private int init = 0, init2 = 0, position = 0, flag = 0, flag2 = 0, robot = 0;
+
+    // Variable to specify the type of action that is going to be created/modified(new action or edit action)
     private String typeAction = "";
-    private int flag = 0, flag2 = 0;
 
-    private int robot = 0;
 
-    // Required empty public constructor
+    // Fragments require an empty constructor.
     public CustomProgram() { }
 
+    // Method to provide instance of the CustomProgram class (used in other classes).
     public static CustomProgram getInstance() {
         return instance;
     }
-    
+
+    // Method to provide context of the CustomProgram class (used in other classes).
     public Context getCustomProgramContext() {
         return getContext();
     }
 
+    // Method that creates the fragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    // Method that creates the view of the fragment, defining all the elements of the layout and calling important methods to handle status.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         instance = this;
+
         View v = inflater.inflate(R.layout.fragment_custom_program, container, false);
 
+        // Creation of the ViewModel objects.
+        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
+        permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
+        customProgramViewModel = new ViewModelProvider(Login.getContext()).get(CustomProgramViewModel.class);
+
+        // As this fragment is used for Robot 1D and Robot 2D, we have to know which robot we are using to adapt the layout.
         robot = getRobot();
 
+        // Definition of the elements of the activity, set some initial values, and call to methods to perform actions when needed.
         v.findViewById(R.id.btnSendCustomProgram).setOnClickListener(view -> setupSendCustomProgramToRobot());
         v.findViewById(R.id.btnAddActionCustomProgram).setOnClickListener(view -> openDialogNewAction(actionsList.size(),"new_action"));
         txtNoActionsCustomProgram = v.findViewById(R.id.txtNoActionsCustomProgram);
 
+        // Configuration of the Recycler View, setting the adapter, item touch callback...
         rcvCustomProgram = v.findViewById(R.id.rcvCustomProgram);
         customProgramAdapter = new CustomProgramAdapter(this);
 
@@ -104,15 +121,12 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         rcvCustomProgram.setLayoutManager(new LinearLayoutManager(getActivity()));
         rcvCustomProgram.setAdapter(customProgramAdapter);
 
-        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
-        permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
-        customProgramViewModel = new ViewModelProvider(Login.getContext()).get(CustomProgramViewModel.class);
-
-        setHasOptionsMenu(true);
         checkRobotConnection();
+        setHasOptionsMenu(true);
         return v;
     }
 
+    // Method that gets the actual robot, selected when logging in.
     private int getRobot() {
         if (Login.getAdminLogged())
             return AdminLogin.getRobotAdmin();
@@ -120,7 +134,14 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
             return Login.getRobotUser();
     }
 
+    // When the view is destroyed, resets the live data.
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        permissionsViewModel.resetLiveData();
+    }
 
+    // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         if (init2 == 0) {
@@ -147,6 +168,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         }
     }
 
+    // Method that shows a dialog if the robot is not connected.
     private void dialogWarningRobotNotConnected() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.txtRobotNotConnected)
@@ -156,12 +178,15 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         dialog.show();
     }
 
+    // Opens a dialog allowing the user to select which action has to be created and added to the list of actions.
     public void openDialogNewAction(int index, String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        // Inflates custom layout created to select a new action.
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_custom_program, null);
 
+        // Associates the different elements of the dialog to the variables, and sets some texts.
         spinner = view.findViewById(R.id.spinnerSelectPropertiesAndActions);
         textViewStartSentence = view.findViewById(R.id.textViewStartSentence);
         spinnerSelectQuantity = view.findViewById(R.id.spinnerSelectQuantity);
@@ -177,12 +202,14 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
         position = index;
 
+        // Title changes according to the type of action (new / edit).
         if (type.equals("new_action")) builder.setTitle(R.string.txtTitleDialogCustomProgram);
         else builder.setTitle(R.string.txtTitleEditDialogCustomProgram);
 
         setupSpinner(index, type);
         typeAction = type;
 
+        // Actions of the buttons of the dialog.
         builder.setPositiveButton(R.string.txtButonSave, (dialogInterface, i) -> onAccept(type, index));
         builder.setNegativeButton(R.string.txtButonCancel, (dialogInterface, i) -> { });
 
@@ -190,6 +217,8 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         alertDialog.show();
     }
 
+    // Applies the action when accept button is pressed. If new action, calls newActionAdded method. If edit action, calls editAction method.
+    // Some of the actions make the dialog to ask for more fields, that's why there are some conditions inside the condition of type of action.
     private void onAccept(String type, int index) {
         String action = String.valueOf(spinner.getSelectedItem());
         if (type.equals("new_action")) {
@@ -210,6 +239,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         }
     }
 
+    // Method to check the inputs of the dialog. If there is any error, shows the dialog and returns false.
     private boolean checkInputs(int index) {
         if (inputInstructionsRepetition.getText().toString().equals("")) {
             Toast.makeText(getContext(), R.string.txtValueCannotBeEmpty, Toast.LENGTH_SHORT).show();
@@ -223,12 +253,11 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         } return true;
     }
 
+    // Setups the element spinner, that shows the different actions that can be executed. Spinner is different according to the type of robot.
     private void setupSpinner(int index, String type) {
-        //List picker (spinner) configuration
         spinner.setOnItemSelectedListener(this);
 
         List<String> actions = new ArrayList<>();
-        Log.d("TAG", "setupSpinner: " + robot);
         if (robot == 2)
             Collections.addAll(actions, getResources().getString(R.string.txtForward), getResources().getString(R.string.txtBackwards), getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtSuck), getResources().getString(R.string.txtUnsuck), getResources().getString(R.string.txtSuckXMl), getResources().getString(R.string.txtUnsuckXMl),getResources().getString(R.string.txtRepeatPreviousActions));
         else if (robot == 1)
@@ -242,9 +271,11 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
             spinner.setSelection(dataAdapter.getPosition(actionsList.get(index).getName()));
     }
 
+    // Setups the element spinner quantity, to show the different amounts of liquid, the robot can suck.
     private void setupSpinnerQuantity(String action) {
         spinnerSelectQuantity.setOnItemSelectedListener(this);
 
+        // Sets to visible texts and spinner (that otherwise are set to GONE).
         textViewStartSentence.setVisibility(View.VISIBLE);
         textViewFinishSentence.setVisibility(View.VISIBLE);
         spinnerSelectQuantity.setVisibility(View.VISIBLE);
@@ -265,6 +296,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         quantityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSelectQuantity.setAdapter(quantityAdapter);
 
+        // If type edit, sets the previous stored values.
         if (typeAction.equals("edit_action")) {
             if (actionsList.get(position).getName().equals(getResources().getString(R.string.txtSuckXMl)) || actionsList.get(position).getName().equals(getResources().getString(R.string.txtUnsuckXMl)))
                 spinnerSelectQuantity.setSelection(quantityAdapter.getPosition(Float.toString(actionsList.get(position).getQuantity())));
@@ -275,6 +307,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         }
     }
 
+    // Method that handles when a new action is added. Creates an object of type Action and stores it to the list to show it through the Recycler View.
     private void newActionAdded(String action, float quantity, int repetitions, int repeatLast) {
         Action actionObj = new Action(action);
         if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
@@ -290,8 +323,8 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         checkListIsEmpty();
     }
 
+    // Method that handles when an action is edited. Edits an object and refreshes the list.
     private void editAction(int index, String action, float quantity, int repetitions, int repeatLast) {
-        Action actionObj = actionsList.get(index);
         Action newAction = new Action(action);
         if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
             newAction.setQuantity(quantity);
@@ -303,41 +336,44 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         customProgramAdapter.updateActionsList(actionsList);
     }
 
+    // If list of actions is empty, shows a text.
     public void checkListIsEmpty() {
         if (customProgramAdapter.getItemCount() == 0) CustomProgram.getInstance().txtNoActionsCustomProgram.setVisibility(View.VISIBLE);
         else CustomProgram.getInstance().txtNoActionsCustomProgram.setVisibility(View.INVISIBLE);
     }
 
+    // Method to set which elements are VISIBLE or GONE, when selecting any of the options at the element spinner (spinner of actions).
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
         String action = adapterView.getItemAtPosition(position).toString();
-        switch (adapterView.getId()) {
-            case R.id.spinnerSelectPropertiesAndActions:
-                if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
-                    setupSpinnerQuantity(action);
-                    textStartSentence2.setVisibility(View.GONE);
-                    inputInstructionsRepetition.setVisibility(View.GONE);
-                    textViewFinishSentence2.setVisibility(View.GONE);
-                } else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
-                    setupSpinnerQuantity(action);
-                    textStartSentence2.setVisibility(View.VISIBLE);
-                    inputInstructionsRepetition.setVisibility(View.VISIBLE);
-                    textViewFinishSentence2.setVisibility(View.VISIBLE);
-                } else {
-                    textViewStartSentence.setVisibility(View.GONE);
-                    textViewFinishSentence.setVisibility(View.GONE);
-                    spinnerSelectQuantity.setVisibility(View.GONE);
-                    textStartSentence2.setVisibility(View.GONE);
-                    inputInstructionsRepetition.setVisibility(View.GONE);
-                    textViewFinishSentence2.setVisibility(View.GONE);
-                }
+        if (adapterView.getId() == R.id.spinnerSelectPropertiesAndActions) {
+            if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl))) {
+                setupSpinnerQuantity(action);
+                textStartSentence2.setVisibility(View.GONE);
+                inputInstructionsRepetition.setVisibility(View.GONE);
+                textViewFinishSentence2.setVisibility(View.GONE);
+            } else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+                setupSpinnerQuantity(action);
+                textStartSentence2.setVisibility(View.VISIBLE);
+                inputInstructionsRepetition.setVisibility(View.VISIBLE);
+                textViewFinishSentence2.setVisibility(View.VISIBLE);
+            } else {
+                textViewStartSentence.setVisibility(View.GONE);
+                textViewFinishSentence.setVisibility(View.GONE);
+                spinnerSelectQuantity.setVisibility(View.GONE);
+                textStartSentence2.setVisibility(View.GONE);
+                inputInstructionsRepetition.setVisibility(View.GONE);
+                textViewFinishSentence2.setVisibility(View.GONE);
+            }
         }
     }
 
+    // Method that has to be overriden but is not used.
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) { }
 
+    // Setups the observer that will receive all the responses of the requests done when checking user permissions.
     private void setupPermissionsObserver() {
         if (init == 0) {
             permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
@@ -354,19 +390,13 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         } init++;
     }
 
+    // Method that is called when a program wants to be sent to robot, and checks the robot connection.
     private void setupSendCustomProgramToRobot() {
         flag = 1;
         robotConnectionViewModel.checkRobotConnection();
     }
 
-    /*private void sendCustomProgramToRobot() {
-        if (robotConnected) {
-            setupPermissionsObserver();
-            if (Login.getAdminLogged()) onSendCustomProgram();
-            else permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "custom_program");
-        }
-    }*/
-
+    // Sends program to the robot.
     private void onSendCustomProgram() {
         if (actionsList.size() != 0) {
             setupCustomProgramResponseListener();
@@ -376,6 +406,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         } else Toast.makeText(getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
     }
 
+    // Observer to know if the program has been sent correctly to the robot.
     private void setupCustomProgramResponseListener() {
         if (init2 == 0) {
             customProgramViewModel.onSendListActions("");
@@ -393,9 +424,11 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         } init2++;
     }
 
+    // Gets the list of actions and parses it to a certain format, in order to be sent to the robot.
     private String parseActions() {
         StringBuilder parsedActionsList = new StringBuilder();
         for (int i = 0; i < actionsList.size(); i++) {
+            //Checks if action is type "repeat", to add the number of times specified the repeated actions.
             if (actionsList.get(i).getName().equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
                 int repetitions = actionsList.get(i).getRepetitions();
                 int nInstructions = actionsList.get(i).getLastNInstructions();
@@ -419,6 +452,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         return parsedActionsList.toString();
     }
 
+    // Method to translate string resources used to identify actions, to the actions that the robot can understand.
     private String translator(String instruction, int i) {
         if (instruction.equals(getResources().getString(R.string.txtForward))) return "up";
         else if (instruction.equals(getResources().getString(R.string.txtBackwards))) return "down";
@@ -433,16 +467,19 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         return "";
     }
 
+    // Method that has to be overriden but not used.
     @Override
     public void onUserClicked(int index) {
     }
 
+    // Changes the help menu item visibility to true.
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.help).setVisible(true);
         super.onPrepareOptionsMenu(menu);
     }
 
+    // When the help menu item is clicked, opens help dialog.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.help)
@@ -450,6 +487,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         return super.onOptionsItemSelected(item);
     }
 
+    // Opens a dialog that explains how to use the Custom program activity.
     private void openHelpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.menu_custom_program)
@@ -461,6 +499,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         dialog.show();
     }
 
+    // Opens a dialog with a picture of the board.
     private void openBoardDialog() {
         Dialog dialog = new Dialog(getActivity());
         dialog.setCancelable(true);

@@ -17,25 +17,34 @@ import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersList;
 
+
+// Adapter used in the Recycler View of the UsersList class.
 public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.UsersListViewHolder> {
 
+    // Interface used to handle element in list clicked.
     public interface ILoggedUserListRCVItemClicked {
         void onUserClicked(int index);
     }
 
+    // Listener of the element clicked.
     private ILoggedUserListRCVItemClicked listener;
+    // ArrayList where are stored the elements displayed in the RecyclerView.
     public ArrayList<User> loggedUsersList = new ArrayList<>();
+    // Instance of the PermissionsViewModel class
     private PermissionsViewModel permissionsViewModel;
 
+    // Constructor
     public UsersListAdapter(ILoggedUserListRCVItemClicked listener) {
         this.listener = listener;
     }
 
+    // Method called when Recycler View needs to be updated as new data has ben updated or data has been removed.
     public void updateLoggedUsersList(ArrayList<User> loggedUsersData) {
         loggedUsersList = loggedUsersData;
         notifyDataSetChanged();
     }
 
+    // Inflate the layout of each element of the Recycler View. This layout represent each individual list element.
     @NonNull
     @Override
     public UsersListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -43,10 +52,10 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
         return new UsersListViewHolder(v, listener);
     }
 
+    // Configure each new element in the Recycler View, adding all the content needed.
     @Override
     public void onBindViewHolder(@NonNull UsersListViewHolder holder, int position) {
         holder.txtUserNameSurname.setText(loggedUsersList.get(position).getName() + " " + loggedUsersList.get(position).getSurname());
-
         if (loggedUsersList.get(position).getAuthorized().equals("false")) {
             holder.btnGiveQuitAccess.setText(R.string.txtGivePermissions);
         } else {
@@ -54,12 +63,13 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
         }
     }
 
+    // Method that returns the number of items of the list.
     @Override
     public int getItemCount() {
         return loggedUsersList.size();
     }
 
-
+    // ViewHolder class, that defines the structure of each element of the Recycler View.
     public class UsersListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView txtUserNameSurname;
@@ -67,6 +77,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
 
         ILoggedUserListRCVItemClicked listener;
 
+        // Definition of the elements of the view and call to methods if they have to perform any action.
         public UsersListViewHolder(@NonNull View itemView, ILoggedUserListRCVItemClicked itemClickedListener) {
             super(itemView);
 
@@ -80,12 +91,14 @@ public class UsersListAdapter extends RecyclerView.Adapter<UsersListAdapter.User
             itemView.setOnClickListener(this);
         }
 
+        // Handler when clicking one of the Recycler View list elements.
         @Override
         public void onClick(View view) {
             listener.onUserClicked(getAdapterPosition());
         }
     }
 
+    // Method used to change permissions of a user. Changes button text when clicked.
     private void changePermissions(int index) {
         if (loggedUsersList.get(index).getAuthorized().equals("true"))
             permissionsViewModel.changeUserPermissions(loggedUsersList.get(index).getUid(), "false");

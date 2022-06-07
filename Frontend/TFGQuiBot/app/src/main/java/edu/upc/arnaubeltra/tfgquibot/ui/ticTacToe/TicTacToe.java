@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,43 +30,45 @@ import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewMod
 
 public class TicTacToe extends Fragment {
 
+    // Definition of status variables
     private static boolean GAME_STARTED = false;
     private static boolean PLAYERS_READY = false;
     private static boolean YOUR_TURN = false;
-    private static boolean IS_AUTHORIZED = false;
-    private static boolean ROBOT_READY = false;
     private static boolean THREAD_RUNNING = false;
     private static boolean GAME_FINISHED = false;
-
-    private TextView txtInfoPlayer, txtInfoGame;
-    private Button btnTicTacToe1, btnTicTacToe2, btnTicTacToe3, btnTicTacToe4, btnTicTacToe5, btnTicTacToe6, btnTicTacToe7, btnTicTacToe8, btnTicTacToe9, btnNewGame;
 
     private TicTacToeViewModel ticTacToeViewModel;
     private PermissionsViewModel permissionsViewModel;
     private RobotConnectionViewModel robotConnectionViewModel;
 
-    private int player = 0;
-    private int init = 0, init2 = 0;
-    private Boolean robotConnected = false;
-    private int flag = 0, flag2 = 0;
-    private int flagStarted = 0;
+    // Definition of the variables used by the elements of the layout.
+    private TextView txtInfoPlayer, txtInfoGame;
+    private Button btnTicTacToe1, btnTicTacToe2, btnTicTacToe3, btnTicTacToe4, btnTicTacToe5, btnTicTacToe6, btnTicTacToe7, btnTicTacToe8, btnTicTacToe9, btnNewGame;
 
-    // Required empty public constructor
+    // Definition of variables that handle some states (some of them caused because receiving doubled responses, so to control the flow)
+    private int player = 0, init = 0, init2 = 0, flag = 0, flag2 = 0, flagStarted = 0;
+
+
+    // Fragments require an empty constructor.
     public TicTacToe() { }
 
+    // Method that creates the fragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    // Method that creates the view of the fragment, defining all the elements of the layout and calling important methods to handle status.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_tic_tac_toe, container, false);
 
+        // Creation of the ViewModel objects.
         robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
         permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
         ticTacToeViewModel = new ViewModelProvider(Login.getContext()).get(TicTacToeViewModel.class);
 
+        // Definition of the elements of the activity, set some initial values, and call to methods to perform actions when needed.
         btnTicTacToe1 = v.findViewById(R.id.btnTicTacToe1);
         btnTicTacToe1.setOnClickListener(view -> ticTacToeMovement(0, 0));
         btnTicTacToe2 = v.findViewById(R.id.btnTicTacToe2);
@@ -95,16 +96,26 @@ public class TicTacToe extends Fragment {
         txtInfoGame = v.findViewById(R.id.txtInfoGame);
         txtInfoPlayer = v.findViewById(R.id.txtInfoPlayer);
 
+        // Start thread that checks periodically the status of the game.
         THREAD_RUNNING = true;
         startThreadGame();
 
+        // Calls method to check if the robot is connected.
         checkRobotConnection();
+
         setupRequestResponseObserver();
-        //onGetUserPermissions();
         setHasOptionsMenu(true);
         return v;
     }
 
+    // When fragment starts, set flagStarted to 1, used by another method.
+    @Override
+    public void onStart() {
+        super.onStart();
+        flagStarted = 1;
+    }
+
+    // When fragment is destroyed, resets the liveData variables.
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -112,12 +123,7 @@ public class TicTacToe extends Fragment {
         ticTacToeViewModel.resetLiveData();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        flagStarted = 1;
-    }
-
+    // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         if (init2 == 0) {
@@ -141,6 +147,7 @@ public class TicTacToe extends Fragment {
         }
     }
 
+    // Method that shows a dialog if the robot is not connected.
     private void dialogWarningRobotNotConnected() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.txtRobotNotConnected)
@@ -150,12 +157,14 @@ public class TicTacToe extends Fragment {
         dialog.show();
     }
 
+    // Setups the observer that will receive all the responses of the requests done when playing, by using the TicTacToeViewModel.
     private void setupRequestResponseObserver() {
         ticTacToeViewModel.ticTacToeRequestResponse();
         ticTacToeViewModel.getTicTacToeRequestResponse().observe(getViewLifecycleOwner(), response -> {
             try {
                 JSONObject responseObject = new JSONObject(response);
 
+                // Handle when game starts.
                 if (responseObject.getString("response").equals("tic-tac-toe-start-success")) {
                     GAME_STARTED = true;
                     player = responseObject.getInt("player");
@@ -166,14 +175,17 @@ public class TicTacToe extends Fragment {
                     Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameStarted, Toast.LENGTH_SHORT).show();
                 }
 
+                // Handle when game is full.
                 else if (responseObject.getString("response").equals("game-is-full"))
                     Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsFull, Toast.LENGTH_SHORT).show();
 
+                // Handle when player 1 has started a new game, but another player needs to click start new game.
                 else if (responseObject.getString("response").equals("waiting-for-player") && GAME_STARTED) {
                     txtInfoGame.setText(getResources().getString(R.string.txtWaitingForPlayer));
                     PLAYERS_READY = false;
                 }
 
+                // Handle when game starts because there are two players in the game.
                 else if (responseObject.getString("response").equals("tic-tac-toe-init") && GAME_STARTED) {
                     PLAYERS_READY = true;
                     GAME_FINISHED = false;
@@ -186,6 +198,7 @@ public class TicTacToe extends Fragment {
                     }
                 }
 
+                // Handle when there has been a status request, to update the game status in each player screen.
                 else if (responseObject.getString("response").equals("no-winner") && GAME_STARTED)  {
                     if (responseObject.getInt("player") != player) {
                         onNewMovement(responseObject.getInt("x"), responseObject.getInt("y"), responseObject.getInt("player"));
@@ -197,6 +210,7 @@ public class TicTacToe extends Fragment {
                     }
                 }
 
+                // Handle when there is a winner in the current game.
                 else if (responseObject.getString("response").equals("winner-1")) {
                     GAME_STARTED = false;
                     if (player == 1) txtInfoGame.setText(R.string.txtYouWon);
@@ -206,6 +220,7 @@ public class TicTacToe extends Fragment {
                     //finishGame();
                 }
 
+                // Handle when there is a winner in the current game.
                 else if (responseObject.getString("response").equals("winner-2")) {
                     GAME_STARTED = false;
                     if (player == 2) txtInfoGame.setText(R.string.txtYouWon);
@@ -215,47 +230,34 @@ public class TicTacToe extends Fragment {
                     //finishGame();
                 }
 
+                // Handle when game is over, due to external events.
                 else if (responseObject.getString("response").equals("game-is-over") && GAME_STARTED) {
                     resetUIGameFinished();
                     Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtGameIsOver, Toast.LENGTH_LONG).show();
                 }
 
+                // Handle when board is full, so no movements are left.
                 else if (responseObject.getString("response").equals("board-is-full") && GAME_STARTED) {
                     resetUIGameFinished();
                     ticTacToeViewModel.finishGameTicTacToe();
                     Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtBoardIsFull, Toast.LENGTH_LONG).show();
                 }
 
+                // Handle when the movement that a player has done, is successful.
                 else if (responseObject.getString("response").equals("tic-tac-toe-position-success")) {
                     onNewMovement(responseObject.getInt("x"), responseObject.getInt("y"), player);
                     Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtWaitRobot, Toast.LENGTH_LONG).show();
                 }
 
+                // Handle when the position selected is full.
                 else if (responseObject.getString("response").equals("tic-tac-toe-position-full"))
                     Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtPositionFull, Toast.LENGTH_LONG).show();
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            } catch (JSONException e) { e.printStackTrace(); }
         });
     }
 
-    /*private void setupPermissionsObserver() {
-        if (init == 0) {
-            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
-            permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
-                try {
-                    JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match"))
-                        ticTacToeViewModel.startNewGameTicTacToe(Login.getIpAddress());
-                    else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            });
-        } init++;
-    }*/
-
+    // Setups the observer that will receive all the responses of the requests done when checking user permissions.
     private void setupPermissionsObserver() {
         if (init == 0) {
             permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "");
@@ -275,10 +277,9 @@ public class TicTacToe extends Fragment {
         } init++;
     }
 
+    // Method to handle when button to start or finish game is pressed.
     private void startFinishGame() {
         if (!GAME_STARTED) {
-            //setupPermissionsObserver();
-            //permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe");
             flag = 1;
             robotConnectionViewModel.checkRobotConnection();
         } else {
@@ -292,16 +293,14 @@ public class TicTacToe extends Fragment {
         }
     }
 
+    // Thread that checks periodically the status of the game. If game is finished, clears the board.
     private void startThreadGame() {
         new Thread(()-> {
             int i = 0;
             while (THREAD_RUNNING) {
                 while (!GAME_STARTED) {
-                    Log.d("TAG", "GAME NOT STARTED: " + GAME_FINISHED + " " + i);
                     if (!THREAD_RUNNING) break;
-                    //permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe");
                     if (GAME_FINISHED && i == 5) {
-                        Log.d("TAG", "GAME FINISHED TRUE");
                         finishGame();
                         ticTacToeViewModel.finishGameTicTacToe();
                         GAME_FINISHED = false;
@@ -328,6 +327,7 @@ public class TicTacToe extends Fragment {
         }).start();
     }
 
+    // Sends a new movement, when player has selected a position.
     private void ticTacToeMovement(int x, int y) {
         if (GAME_STARTED) {
             if (PLAYERS_READY) {
@@ -337,6 +337,7 @@ public class TicTacToe extends Fragment {
         } else Toast.makeText(UserNavigationRobot2d.getContext(), R.string.txtFirstStartNewGame, Toast.LENGTH_SHORT).show();
     }
 
+    // Method to put a new piece to the board, according to the x and y position and the player sign.
     private void onNewMovement(int x, int y, int player) {
         String sign;
         if (player == 1) sign = "X" ;
@@ -381,8 +382,8 @@ public class TicTacToe extends Fragment {
         }
     }
 
+    // Finishes game, clearing the board.
     private void finishGame() {
-        //ticTacToeViewModel.finishGameTicTacToe();
         GAME_STARTED = false;
         btnTicTacToe1.setText("");
         btnTicTacToe2.setText("");
@@ -395,6 +396,7 @@ public class TicTacToe extends Fragment {
         btnTicTacToe9.setText("");
     }
 
+    // Resets the UI when a game is finished.
     private void resetUIGameFinished() {
         finishGame();
         btnNewGame.setText(R.string.btnTxtNewGame);
@@ -402,6 +404,7 @@ public class TicTacToe extends Fragment {
         txtInfoPlayer.setText("");
     }
 
+    // When fragment is destroyed, it stops the thread and the game.
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -410,6 +413,7 @@ public class TicTacToe extends Fragment {
         ticTacToeViewModel.finishGameTicTacToe();
     }
 
+    // Opens a dialog that shows an image of the board.
     private void howToPlayDialog() {
         Dialog dialog = new Dialog(getActivity());
         dialog.setCancelable(true);
@@ -418,12 +422,14 @@ public class TicTacToe extends Fragment {
         dialog.show();
     }
 
+    // Changes the help menu item visibility to true.
     @Override
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         menu.findItem(R.id.help).setVisible(true);
         super.onPrepareOptionsMenu(menu);
     }
 
+    // When the help menu item is clicked, opens help dialog.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.help)
@@ -431,6 +437,7 @@ public class TicTacToe extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    // Opens a dialog that explains how to play TicTacToe
     private void openHelpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.menu_tic_tac_toe)

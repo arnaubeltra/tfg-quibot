@@ -1,5 +1,6 @@
 package edu.upc.arnaubeltra.tfgquibot.models;
 
+// Model class to define an Action object
 public class Action {
 
     private String name;

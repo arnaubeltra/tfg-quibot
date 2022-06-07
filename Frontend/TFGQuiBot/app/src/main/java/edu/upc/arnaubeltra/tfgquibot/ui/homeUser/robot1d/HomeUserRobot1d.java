@@ -8,25 +8,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import edu.upc.arnaubeltra.tfgquibot.R;
 import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot1d;
-import edu.upc.arnaubeltra.tfgquibot.UserNavigationRobot2d;
-import edu.upc.arnaubeltra.tfgquibot.ui.login.Login;
-import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.NavigationViewModel;
 
 
+// Class that defines the Robot 1D home screen.
 public class HomeUserRobot1d extends Fragment {
 
-    public HomeUserRobot1d() {
-    }
+    // Fragments require an empty constructor.
+    public HomeUserRobot1d() { }
 
+    // Method that creates the fragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    // Method that creates the view of the fragment. Handles navigation when menu buttons are clicked.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_user_robot1d, container, false);
@@ -39,12 +38,4 @@ public class HomeUserRobot1d extends Fragment {
 
         return v;
     }
-
-    // problema login logout
-    /*@Override
-    public void onPause() {
-        super.onPause();
-        NavigationViewModel navigationViewModel = new ViewModelProvider(Login.getContext()).get(NavigationViewModel.class);
-        navigationViewModel.logoutUser(Login.getIpAddress());
-    }*/
 }

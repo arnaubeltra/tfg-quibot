@@ -24,6 +24,8 @@ import java.util.List;
 import edu.upc.arnaubeltra.tfgquibot.AdminNavigation;
 import edu.upc.arnaubeltra.tfgquibot.R;
 
+
+// Class that defines the Admin Login activity
 public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private EditText username, passwordUser;
@@ -33,6 +35,7 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
 
     private static int robot = 0;
 
+    // Method to create the activity. Defines layout and calls methods when needed.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +57,13 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
         setupSpinnerSelectRobot();
     }
 
+    // Return the robot that the admin has selected.
     public static int getRobotAdmin() {
         return robot;
     }
 
+    // Performs a login for the admin user. Checks the fields and then performs a log in.
     private void login() {
-        //goToHomeActivityAdmin();
         String user = "admin";// emailUser.getText().toString();
         String password = "Quibot2022";// passwordUser.getText().toString();
 
@@ -98,16 +102,19 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
         }
     }
 
+    // Intent to go to Admin Navigation activity.
     private void goToHomeActivityAdmin() {
         Intent intent = new Intent(AdminLogin.this, AdminNavigation.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
+    // Method to go back to the Login activity.
     private void goBack() {
         finish();
     }
 
+    // Method to show a spinner that allows to select the robot.
     private void setupSpinnerSelectRobot() {
         spinnerSelectRobot.setOnItemSelectedListener(this);
 
@@ -120,14 +127,12 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-    }
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) { }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> adapterView) { }
 
-    }
-
+    // Opens a help dialog with information on how to log in.
     private void openHelpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.txtTitleHelpLoginAdmin)

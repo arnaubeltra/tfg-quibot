@@ -13,17 +13,20 @@ import android.widget.TextView;
 import edu.upc.arnaubeltra.tfgquibot.AdminNavigation;
 import edu.upc.arnaubeltra.tfgquibot.R;
 
+
+// Class that defines the admin home screen.
 public class HomeAdmin extends Fragment {
 
-    public HomeAdmin() {
-    }
+    // Fragments require an empty constructor.
+    public HomeAdmin() { }
 
+    // Method that creates the fragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
+    // Method that creates the view of the fragment. Handles navigation when menu buttons are clicked.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_admin, container, false);

@@ -28,44 +28,33 @@ import edu.upc.arnaubeltra.tfgquibot.ui.usersList.UsersListViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.PermissionsViewModel;
 import edu.upc.arnaubeltra.tfgquibot.ui.shared.viewModels.RobotConnectionViewModel;
 
+
+// Class used to interact directly with the Backend Robot API.
 public class RobotAPI extends ViewModel {
 
+    // Definition of constants.
     private static final String BASE_URL = "http://192.168.100.1:10000";
     private static final String TAG = "RobotAPI";
 
+    // Instance of the class (used by many ViewModels).
     private static RobotAPI instance;
 
+    // Definition of the request queues for a GET request and a POST request.
     private RequestQueue getRequestQueue;
     private RequestQueue postRequestQueue;
 
     private LoginViewModel loginViewModel;
-    private NavigationViewModel navigationViewModel;
-    private PermissionsViewModel permissionsViewModel;
-    private UsersListViewModel usersListViewModel;
-    private TicTacToeViewModel ticTacToeViewModel;
-    private RobotConnectionViewModel robotConnectionViewModel;
-    private CustomProgramViewModel customProgramViewModel;
-    private Connect4ViewModel connect4ViewModel;
 
-    private ArrayList<User> loggedUsersList;
-
+    // Public instance of the RobotAPI class (singleton pattern).
     public static RobotAPI getInstance() {
         if (instance == null) instance = new RobotAPI();
         return instance;
     }
 
-    public void startInteract(String boardSize) {
-        String url = BASE_URL;
-        url += "/startInteract?board-size=" + boardSize;
-        getRequest(url, "");
-    }
 
-    public void interactWithRobot(String interaction) {
-        String url = BASE_URL;
-        url += "/sendInstruction?instruction=" + interaction;
-        getRequest(url, "interactWithRobot");
-    }
-
+    // The following methods configure the URL, and then call the getRequest or postRequest method, to perform each request.
+    // General functionalities.
+    // Method that handles when a user performs a login. Uses POST request, to send user information.
     public void userLogin(String ipAddress, String name, String surname, String isAuthorized) {
         String url = BASE_URL + "/user/login";
 
@@ -78,72 +67,62 @@ public class RobotAPI extends ViewModel {
         postRequest(url, params, "userLogin");
     }
 
+    // Method that handles when an admin performs a login.
     public void adminLogin() {
         String url = BASE_URL + "/admin/login";
         getRequest(url, "adminLogin");
     }
 
+    // Method that handles when a user performs a logout.
     public void userLogout(String userIP) {
         String url = BASE_URL + "/user/logout?user=" + userIP;
         getRequest(url, "userLogout");
     }
 
+    // Method that handles when an admin performs a logout.
     public void adminLogout() {
         String url = BASE_URL + "/admin/logout";
         getRequest(url, "adminLogout");
     }
 
+    // Method used to check permissions of a certain user in a certain activity.
     public void checkPermissionsUser(String userIP, String activity) {
         String url = BASE_URL + "/user/check-permissions?user=" + userIP + "&activity=" + activity;
         getRequest(url, "checkPermissionsUser");
     }
 
-    public void changePermissionsUser(String userIP, String auth) {
-        String url = BASE_URL + "/user/change-permissions?user=" + userIP + "&isAuthorized=" + auth;
-        getRequest(url, "changePermissionsUser");
-    }
-
-    public void getLoggedInUsersList() {
-        String url = BASE_URL + "/list-users";
-        getRequest(url, "getLoggedInUsersList");
-    }
-
-    public void startTicTacToe(String userIP) {
-        String url = BASE_URL + "/start-ticTacToe"; //?user=" + userIP;
-        getRequest(url, "ticTacToe");
-    }
-
-    public void ticTacToePosition(int player, int x, int y) {
-        String url = BASE_URL + "/ticTacToePosition?x=" + x + "&y=" + y + "&player=" + player;
-        getRequest(url, "ticTacToe");
-    }
-
-    public void checkStatusTicTacToe() {
-        String url = BASE_URL + "/status-ticTacToe";
-        getRequest(url, "ticTacToe");
-    }
-
-    public void finishGameTicTacToe() {
-        String url = BASE_URL + "/finish-ticTacToe";
-        getRequest(url, "");
-    }
-
+    // Method to check whether robot is connected or not.
     public void checkRobotConnection() {
         String url = BASE_URL + "/check-robot-connection";
         getRequest(url, "checkRobotConnection");
     }
 
-    public void setBoardSize(String size) {
-        String url = BASE_URL + "/board-size?type=" + size;
+    // Experiments.
+    // Method that starts any experiment of the experiments list.
+    public void startExperiment(String experiment) {
+        String url = BASE_URL + "/experiment?name=" + experiment;
         getRequest(url, "");
     }
 
+    // Interact with robot.
+    // Method that sends to the robot, the start of InteractWithRobot.
+    public void startInteract() {
+        String url = BASE_URL;
+        url += "/startInteract";
+        getRequest(url, "");
+    }
+
+    // Method that sends to robot the movements that has to perform when using InteractWithRobot activity.
+    public void interactWithRobot(String interaction) {
+        String url = BASE_URL;
+        url += "/sendInstruction?instruction=" + interaction;
+        getRequest(url, "interactWithRobot");
+    }
+
+    // Custom program
+    // Method to send the list of actions that the user has created, and that wants the robot to perform.
     public void sendListActions(String actions) {
         String url = BASE_URL + "/custom-program";
-
-        /*GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
-        String actionsJSON = gson.toJson(actions);*/
 
         Map<String, String> params = new HashMap<>();
         params.put("actions", actions);
@@ -151,47 +130,84 @@ public class RobotAPI extends ViewModel {
         postRequest(url, params, "sendListActions");
     }
 
-    public void startExperiment(String experiment) {
-        String url = BASE_URL + "/experiment?name=" + experiment;
+    // Tic tac toe.
+    // Method that starts a game TicTacToe
+    public void startTicTacToe(String userIP) {
+        String url = BASE_URL + "/start-ticTacToe"; //?user=" + userIP;
+        getRequest(url, "ticTacToe");
+    }
+
+    // Method that sends the new position of any player.
+    public void ticTacToePosition(int player, int x, int y) {
+        String url = BASE_URL + "/ticTacToePosition?x=" + x + "&y=" + y + "&player=" + player;
+        getRequest(url, "ticTacToe");
+    }
+
+    // Method that checks the status of the ticTacToe game.
+    public void checkStatusTicTacToe() {
+        String url = BASE_URL + "/status-ticTacToe";
+        getRequest(url, "ticTacToe");
+    }
+
+    // Method to finish a TicTacToe game.
+    public void finishGameTicTacToe() {
+        String url = BASE_URL + "/finish-ticTacToe";
         getRequest(url, "");
     }
 
-    public void sendRobotActualActivity(String activity) {
-        String url = BASE_URL + "/admin/actual-activity?activity=" + activity;
-        getRequest(url, "sendRobotActualActivity");
-    }
-
-    public void sendUserActualActivity(String user, String activity) {
-        String url = BASE_URL + "/user/actual-activity?user=" + user + "&activity=" + activity;
-        getRequest(url, "sendUserActualActivity");
-    }
-
-    public void selectRobot(int robot) {
-        String url = BASE_URL + "/admin/set-robot?robot=" + robot;
-        getRequest(url, "");
-    }
-
+    // Connect 4.
+    // Method that starts a game of Connect 4
     public void startConnect4(String userIP) {
         String url = BASE_URL + "/start-connect4";
         getRequest(url, "connect4");
     }
 
+    // Method that sends the new position of any player.
     public void connect4Position(int player, int y) {
         String url = BASE_URL + "/connect4Position?column=" + y + "&player=" + player;
         getRequest(url, "connect4");
     }
 
+    // Method that checks the status of the Connect 4 game.
     public void checkStatusConnect4() {
         String url = BASE_URL + "/status-connect4";
         getRequest(url, "connect4");
     }
 
+    // Method to finish a Connect 4 game.
     public void finishGameConnect4() {
         String url = BASE_URL + "/finish-connect4";
         getRequest(url, "");
     }
 
+    // Users list.
+    // Method used to change permissions of a certain user.
+    public void changePermissionsUser(String userIP, String auth) {
+        String url = BASE_URL + "/user/change-permissions?user=" + userIP + "&isAuthorized=" + auth;
+        getRequest(url, "changePermissionsUser");
+    }
 
+    // Method that returns the list of users that are logged in.
+    public void getLoggedInUsersList() {
+        String url = BASE_URL + "/list-users";
+        getRequest(url, "getLoggedInUsersList");
+    }
+
+    // Method to send which activity is being performed by the robot.
+    public void sendRobotActualActivity(String activity) {
+        String url = BASE_URL + "/admin/actual-activity?activity=" + activity;
+        getRequest(url, "sendRobotActualActivity");
+    }
+
+    // Method to select which robot is being used on that moment.
+    public void selectRobot(int robot) {
+        String url = BASE_URL + "/admin/set-robot?robot=" + robot;
+        getRequest(url, "");
+    }
+
+
+    // The following methods perform a GET request and a POST request. They have response handler functions, to handle each response, and to know where has to be send.
+    // Performs a simple GET request according to the URL, and sends the received response to the parseGetResponse function
     private void getRequest(String url, String callFun) {
         if (getRequestQueue == null)
             getRequestQueue = Volley.newRequestQueue(Login.getInstance());
@@ -208,14 +224,15 @@ public class RobotAPI extends ViewModel {
         getRequestQueue.add(stringRequest);
     }
 
+    // Parses the GET request response, by sending each of them to the ViewModel that made the request.
     private void parseGetResponse(String response, String callFun) {
         loginViewModel = new ViewModelProvider(Login.getContext()).get(LoginViewModel.class);
-        navigationViewModel = new ViewModelProvider(Login.getContext()).get(NavigationViewModel.class);
-        permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
-        usersListViewModel = new ViewModelProvider(Login.getContext()).get(UsersListViewModel.class);
-        ticTacToeViewModel = new ViewModelProvider(Login.getContext()).get(TicTacToeViewModel.class);
-        connect4ViewModel = new ViewModelProvider(Login.getContext()).get(Connect4ViewModel.class);
-        robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
+        NavigationViewModel navigationViewModel = new ViewModelProvider(Login.getContext()).get(NavigationViewModel.class);
+        PermissionsViewModel permissionsViewModel = new ViewModelProvider(Login.getContext()).get(PermissionsViewModel.class);
+        UsersListViewModel usersListViewModel = new ViewModelProvider(Login.getContext()).get(UsersListViewModel.class);
+        TicTacToeViewModel ticTacToeViewModel = new ViewModelProvider(Login.getContext()).get(TicTacToeViewModel.class);
+        Connect4ViewModel connect4ViewModel = new ViewModelProvider(Login.getContext()).get(Connect4ViewModel.class);
+        RobotConnectionViewModel robotConnectionViewModel = new ViewModelProvider(Login.getContext()).get(RobotConnectionViewModel.class);
 
         switch (callFun) {
             case "adminLogin":
@@ -237,7 +254,7 @@ public class RobotAPI extends ViewModel {
                 permissionsViewModel.setUserPermissionsChangeResponse(response);
                 break;
             case "getLoggedInUsersList":
-                loggedUsersList = new ArrayList<>();
+                ArrayList<User> loggedUsersList = new ArrayList<>();
                 Gson gson = new GsonBuilder().create();
                 ListUsersAPI listUsersAPI = gson.fromJson(response, ListUsersAPI.class);
                 if (listUsersAPI != null) {
@@ -257,15 +274,10 @@ public class RobotAPI extends ViewModel {
             case "connect4":
                 connect4ViewModel.setConnect4RequestResponse(response);
                 break;
-            case "sendRobotActualActivity":
-                permissionsViewModel.setRobotActualActivityResponse(response);
-                break;
-            case "sendUserActualActivity":
-                permissionsViewModel.setUserActualActivityResponse(response);
-                break;
         }
     }
 
+    // Performs a simple POST request according to the URL, and sends the received response to the parsePostResponse function
     private void postRequest(String url, Map postParams, String callFun) {
         if (postRequestQueue == null)
             postRequestQueue = Volley.newRequestQueue(Login.getInstance());
@@ -282,9 +294,10 @@ public class RobotAPI extends ViewModel {
         postRequestQueue.add(postRequest);
     }
 
+    // Parses the POST request response, by sending each of them to the ViewModel that made the request.
     private void parsePostResponse(String response, String callFun) {
         loginViewModel = new ViewModelProvider(Login.getContext()).get(LoginViewModel.class);
-        customProgramViewModel = new ViewModelProvider(Login.getContext()).get(CustomProgramViewModel.class);
+        CustomProgramViewModel customProgramViewModel = new ViewModelProvider(Login.getContext()).get(CustomProgramViewModel.class);
         switch (callFun) {
             case "userLogin":
                 loginViewModel.setNewUserLoginResponse(response);
