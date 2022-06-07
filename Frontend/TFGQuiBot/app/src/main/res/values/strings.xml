@@ -73,6 +73,7 @@
     <string name="txtValueMustBeGreaterThanZero">El valor d\'instruccions per repetir ha de ser més gran que zero.</string>
     <string name="txtValueCannotBeEmpty">El valor d\'instruccions a repetir no pot estar buit.</string>
     <string name="txtErrorLoop">L\'acció \"repeteix\" no pot estar en aquesta posició de la llista d\'accions.</string>
+    <string name="txtImpossibleLoop">L\'acció \"Repeteix\" no pot repetir una altra acció \"Repeteix\"</string>
 
     <!-- Tic tac toe -->
     <string name="txtYouPlayWithX">Jugues amb: X</string>

@@ -31,6 +31,8 @@ public class AdminNavigation extends AppCompatActivity {
     private NavigationViewModel navigationViewModel;
     public static NavController navController;
 
+    int unexpectedExit = 0;
+
     // Creates and configures views and menus.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,5 +102,20 @@ public class AdminNavigation extends AppCompatActivity {
         Intent intent = new Intent(AdminNavigation.this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
+    }
+
+    // Check if back pressed to avoid logging out if multiple activities are loaded
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        unexpectedExit = 1;
+    }
+
+    // If admin forces in an unexpected way, logs out.
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (unexpectedExit == 1)
+            navigationViewModel.logoutAdmin();
     }
 }

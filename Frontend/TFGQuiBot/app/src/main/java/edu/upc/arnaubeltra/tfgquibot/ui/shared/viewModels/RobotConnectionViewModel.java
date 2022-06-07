@@ -32,4 +32,9 @@ public class RobotConnectionViewModel extends ViewModel {
     public void setCheckRobotConnectionResponse(String response) {
         robotConnectionResponseLiveData.setValue(response);
     }
+
+    // Method to reset the liveData.
+    public void resetLiveData() {
+        robotConnectionResponseLiveData = new MutableLiveData<>();
+    }
 }

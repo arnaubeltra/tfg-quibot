@@ -105,6 +105,9 @@ public class InteractWithRobot extends Fragment {
 
         setHasOptionsMenu(true);
         checkRobotConnection();
+
+        // Call to start interact in order set board
+        interactWithRobotViewModel.startInteract();
         return v;
     }
 
@@ -184,7 +187,8 @@ public class InteractWithRobot extends Fragment {
 
     // Sends action to be executed to the robot.
     private void executeAction() {
-        interactWithRobotViewModel.sendInteraction(interaction);
+        if (!interaction.equals(""))
+            interactWithRobotViewModel.sendInteraction(interaction);
     }
 
     // Changes the help menu item visibility to true.

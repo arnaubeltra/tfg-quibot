@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -139,6 +140,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     public void onDestroy() {
         super.onDestroy();
         permissionsViewModel.resetLiveData();
+        robotConnectionViewModel.resetLiveData();
     }
 
     // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
@@ -148,12 +150,14 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
             robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
                 try {
                     JSONObject responseObject = new JSONObject(response);
+                    Log.d("TAG", "checkRobotConnection: " + responseObject);
                     if (responseObject.getString("response").equals("robot-connection-failed")) {
                         if (flag == 1) { dialogWarningRobotNotConnected(); flag = 0; }
                         else flag = 1;
                     } else {
                         flag = 1;
-                        if (Login.getAdminLogged()) onSendCustomProgram();
+                        if (Login.getAdminLogged() && (flag2 > 0))
+                            onSendCustomProgram();
                         else {
                             setupPermissionsObserver();
                             if ((flag2 == 1) && init2 != 0) {
@@ -401,7 +405,9 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         if (actionsList.size() != 0) {
             setupCustomProgramResponseListener();
             String programmedActions = parseActions();
-            if (!programmedActions.equals("parseError"))
+            if (programmedActions.equals("impossibleLoop"))
+                Toast.makeText(getContext(), R.string.txtErrorLoop, Toast.LENGTH_SHORT).show();
+            else if (!programmedActions.equals("parseError"))
                 customProgramViewModel.onSendListActions(programmedActions);
         } else Toast.makeText(getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
     }
@@ -436,6 +442,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
                     for (int rep = 0; rep < repetitions; rep ++) {
                         try {
                             for (int nIns = i-nInstructions; nIns < i; nIns++) {
+                                if (actionsList.get(nIns).getName().equals(getResources().getString(R.string.txtRepeatPreviousActions))) return "impossibleLoop";
                                 parsedActionsList.append(translator(actionsList.get(nIns).getName(), nIns));
                                 parsedActionsList.append(",");
                             }
