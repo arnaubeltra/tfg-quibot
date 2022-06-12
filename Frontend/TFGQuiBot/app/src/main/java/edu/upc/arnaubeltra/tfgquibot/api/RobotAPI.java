@@ -194,9 +194,9 @@ public class RobotAPI extends ViewModel {
     }
 
     // Method to send which activity is being performed by the robot.
-    public void sendRobotActualActivity(String activity) {
-        String url = BASE_URL + "/admin/actual-activity?activity=" + activity;
-        getRequest(url, "sendRobotActualActivity");
+    public void sendRobotCurrentActivity(String activity) {
+        String url = BASE_URL + "/admin/current-activity?activity=" + activity;
+        getRequest(url, "");
     }
 
     // Method to select which robot is being used on that moment.

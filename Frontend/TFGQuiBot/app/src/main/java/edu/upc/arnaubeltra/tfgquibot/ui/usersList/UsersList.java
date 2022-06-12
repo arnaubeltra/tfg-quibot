@@ -152,7 +152,7 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
     // Method to get the selected activity of the spinner. Sets all the auth users to false, to have the overall control.
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-        usersListViewModel.changeActualActivity(parseItemSelected(adapterView.getItemAtPosition(position).toString()));
+        usersListViewModel.changeCurrentActivity(parseItemSelected(adapterView.getItemAtPosition(position).toString()));
 
         for (int i = 0; i < loggedUsersListAdapter.loggedUsersList.size(); i++)
             loggedUsersListAdapter.loggedUsersList.get(i).setAuthorized("false");
@@ -162,7 +162,7 @@ public class UsersList extends Fragment implements UsersListAdapter.ILoggedUserL
     // Method that specifies which activity must be shown when none of them is selected.
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        usersListViewModel.changeActualActivity(parseItemSelected(getResources().getString(R.string.menu_experiments)));
+        usersListViewModel.changeCurrentActivity(parseItemSelected(getResources().getString(R.string.menu_experiments)));
     }
 
     // Acts as a translator between the string resources and a string that is understandable by the backend.

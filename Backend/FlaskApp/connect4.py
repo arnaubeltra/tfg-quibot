@@ -1,3 +1,11 @@
+"""
+Class used to handle status of a Connect 4 game:
+    - Number of players
+    - Current board status
+    - Game status
+    - Last player that made a movement
+    - Coordinates of the last movement
+"""
 class Connect4(object):
     def __init__(self):
         self.connect4Players = 0
@@ -43,6 +51,15 @@ class Connect4(object):
     def setY(self, Y):
         self.Y = Y
 
+
+    """
+    Looks the Connect 4 board and checks if there are four pieces of the same player in a row. 
+    Four pieces in a row can be vertical, horizontal or diagonal.
+    
+    Returns the number of the player has four pieces in a row.
+
+    Return type: int
+    """
     def checkBoard(self):
         board = self.getConnect4Board()
         #Horizontal
@@ -78,6 +95,13 @@ class Connect4(object):
                     return 2
         return 0
 
+
+    """
+    Checks if there are no movements left because the board is full.
+    Returns true/false depending on the board status.
+
+    Return type: boolean
+    """
     def checkBoardFull(self):
         counter = 0
         for i in range(5):
@@ -86,6 +110,15 @@ class Connect4(object):
                     counter += 1
         return (not counter > 0)
 
+
+    """
+    Checks the row position of the piece that has to be introduced to the board, as Connect 4 game
+    works by placing pieces one over the other. Given a column calculates where the piece has to be put.
+    Returns a row number.
+
+    Input type: int
+    Return type: int
+    """
     def checkRowPosition(self, column):
         for row in range(5, 0, -1):
             if (self.connect4Board[row-1][column] == 0):

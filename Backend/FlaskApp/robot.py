@@ -1,26 +1,41 @@
+"""
+Class used to handle robot status:
+    - Current IP to reach the robot
+    - Current robot used
+    - Current activity that the robot is performing
+    - Number of authorized users in a given activity
+"""
 class Robot(object):
     def __init__(self):
-        self.actualRobot = 0
-        self.actualActivity = ""
+        self.currentRobot = 0
+        self.currentActivity = ""
         self.numberAuthorizedUsers = 0
 
+    """
+    Returns the robot IP depending on the current used robot.
+    Robots have an assigned IP, that never changes.
+        - ROBOT 1D (1) --> 192.168.100.5
+        - ROBOT 2D (2) --> 192.168.100.6
+
+    Return type: string
+    """
     def getRobotIP(self):
-        if (self.actualRobot == '1'):
-            return '192.168.100.1'
-        elif (self.actualRobot == '2'):
-            return '192.168.100.1'
+        if (self.currentRobot == '1'):
+            return '192.168.100.5'
+        elif (self.currentRobot == '2'):
+            return '192.168.100.6'
 
-    def getActualRobot(self):
-        return self.actualRobot
+    def getCurrentRobot(self):
+        return self.currentRobot
 
-    def setActualRobot(self, newRobot):
-        self.actualRobot = newRobot
+    def setCurrentRobot(self, newRobot):
+        self.currentRobot = newRobot
 
-    def getActualActivity(self):
-        return self.actualActivity
+    def getCurrentActivity(self):
+        return self.currentActivity
 
-    def setActualActivity(self, newActivity):
-        self.actualActivity = newActivity
+    def setCurrentActivity(self, newActivity):
+        self.currentActivity = newActivity
 
     def getNumberAuthorizedUsers(self):
         return self.numberAuthorizedUsers

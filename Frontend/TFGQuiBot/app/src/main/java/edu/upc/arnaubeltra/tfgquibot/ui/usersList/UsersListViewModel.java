@@ -37,7 +37,7 @@ public class UsersListViewModel extends ViewModel {
     }
 
     // Method to change the actual activity that the robot is performing.
-    public void changeActualActivity(String activity) {
-        robotAPI.sendRobotActualActivity(activity);
+    public void changeCurrentActivity(String activity) {
+        robotAPI.sendRobotCurrentActivity(activity);
     }
 }
