@@ -46,7 +46,7 @@ public class TicTacToe extends Fragment {
     private Button btnTicTacToe1, btnTicTacToe2, btnTicTacToe3, btnTicTacToe4, btnTicTacToe5, btnTicTacToe6, btnTicTacToe7, btnTicTacToe8, btnTicTacToe9, btnNewGame;
 
     // Definition of variables that handle some states (some of them caused because receiving doubled responses, so to control the flow)
-    private int player = 0, init = 0, init2 = 0, flag = 0, flag2 = 0, flagStarted = 0;
+    private int player = 0, init = 0, init2 = 0, flag = 0, flag2 = 0, flagClicked = 0;
 
 
     // Fragments require an empty constructor.
@@ -108,23 +108,31 @@ public class TicTacToe extends Fragment {
         return v;
     }
 
-    // When fragment starts, set flagStarted to 1, used by another method.
-    @Override
-    public void onStart() {
-        super.onStart();
-        flagStarted = 1;
-    }
-
     // When fragment is destroyed, resets the liveData variables.
     @Override
     public void onDestroy() {
         super.onDestroy();
         permissionsViewModel.resetLiveData();
         ticTacToeViewModel.resetLiveData();
+        robotConnectionViewModel.resetLiveData();
+    }
+
+    private void checkRobotConnection() {
+        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("response").equals("robot-connection-failed")) dialogWarningRobotNotConnected();
+                else {
+                    setupPermissionsObserver();
+                    permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "tic_tac_toe");
+                }
+            } catch (JSONException e) { e.printStackTrace(); }
+        });
     }
 
     // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
-    private void checkRobotConnection() {
+    /*private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         if (init2 == 0) {
             robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
@@ -145,7 +153,7 @@ public class TicTacToe extends Fragment {
                 } catch (JSONException e) { e.printStackTrace(); }
             });
         }
-    }
+    }*/
 
     // Method that shows a dialog if the robot is not connected.
     private void dialogWarningRobotNotConnected() {
@@ -265,20 +273,20 @@ public class TicTacToe extends Fragment {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
                     if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) {
-                        if (flagStarted != 1)
-                            ticTacToeViewModel.startNewGameTicTacToe(Login.getIpAddress());
-                        flagStarted = 0;
+                        if (flagClicked == 1)
+                        ticTacToeViewModel.startNewGameTicTacToe(Login.getIpAddress());
                     }
-                    else Toast.makeText(getContext(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    else {
+                        if (init != 0) Toast.makeText(getContext(), R.string.txtPermissionsPlayTicTacToe, Toast.LENGTH_SHORT).show();
+                    } init++;
+                } catch (JSONException e) { e.printStackTrace(); }
             });
-        } init++;
+        }
     }
 
     // Method to handle when button to start or finish game is pressed.
     private void startFinishGame() {
+        flagClicked = 1;
         if (!GAME_STARTED) {
             flag = 1;
             robotConnectionViewModel.checkRobotConnection();
@@ -305,11 +313,10 @@ public class TicTacToe extends Fragment {
                         ticTacToeViewModel.finishGameTicTacToe();
                         GAME_FINISHED = false;
                     }
+                    // Counter to 5 seconds
                     if (i == 5) i = 0;
                     else i++;
-
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
+                    try { TimeUnit.SECONDS.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -317,8 +324,7 @@ public class TicTacToe extends Fragment {
                 while (GAME_STARTED) {
                     if (!THREAD_RUNNING) break;
                     ticTacToeViewModel.ticTacToeCheckStatus();
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
+                    try { TimeUnit.SECONDS.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

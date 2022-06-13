@@ -60,7 +60,7 @@ public class Connect4 extends Fragment {
     private Button btnColumn1, btnColumn2, btnColumn3, btnColumn4, btnColumn5, btnColumn6, btnNewGameConnect4;
 
     // Definition of variables that handle some states (some of them caused because receiving doubled responses, so to control the flow)
-    private int player = 0, init = 0, init1 = 0, init2 = 0, update = 0, flag = 0, flag2 = 0, flagStarted = 0;
+    private int player = 0, init = 0, init1 = 0, init2 = 0, update = 0, flag = 0, flag2 = 0, flagClicked = 0;
 
     // ArrayList to store the ID's of the pieces generated to play the game. Used when having to clear the board.
     private ArrayList<Integer> circleObjects = new ArrayList<>();
@@ -123,23 +123,31 @@ public class Connect4 extends Fragment {
         return v;
     }
 
-    // When fragment starts, set flagStarted to 1, used by another method.
-    @Override
-    public void onStart() {
-        super.onStart();
-        flagStarted = 1;
-    }
-
     // When fragment is destroyed, resets the liveData variables.
     @Override
     public void onDestroy() {
         super.onDestroy();
         permissionsViewModel.resetLiveData();
         connect4ViewModel.resetLiveData();
+        robotConnectionViewModel.resetLiveData();
+    }
+
+    private void checkRobotConnection() {
+        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("response").equals("robot-connection-failed")) dialogWarningRobotNotConnected();
+                else {
+                    setupPermissionsObserver();
+                    permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "connect4");
+                }
+            } catch (JSONException e) { e.printStackTrace(); }
+        });
     }
 
     // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
-    private void checkRobotConnection() {
+    /*private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         if (init2 == 0) {
             robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
@@ -160,7 +168,7 @@ public class Connect4 extends Fragment {
                 } catch (JSONException e) { e.printStackTrace(); }
             });
         }
-    }
+    }*/
 
     // Method that shows a dialog if the robot is not connected.
     private void dialogWarningRobotNotConnected() {
@@ -283,17 +291,19 @@ public class Connect4 extends Fragment {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
                     if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) {
-                        if (flagStarted != 1)
+                        if (flagClicked == 1)
                             connect4ViewModel.startNewGameConnect4(Login.getIpAddress());
-                        flagStarted = 0;
-                    } else Toast.makeText(getContext(), R.string.txtPermissionsPlayConnect4, Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (init != 0) Toast.makeText(getContext(), R.string.txtPermissionsPlayConnect4, Toast.LENGTH_SHORT).show();
+                    } init++;
                 } catch (JSONException e) { e.printStackTrace(); }
             });
-        } init++;
+        }
     }
 
     // Method to handle when button to start or finish game is pressed.
     private void startFinishGame() {
+        flagClicked = 1;
         if (!GAME_STARTED) {
             flag = 1;
             robotConnectionViewModel.checkRobotConnection();
@@ -317,21 +327,20 @@ public class Connect4 extends Fragment {
                 while (!GAME_STARTED) {
                     if (!THREAD_RUNNING) break;
                     if (GAME_FINISHED && i == 5) {
-                        GAME_STARTED = false;
+                        //GAME_STARTED = false;
                         connect4ViewModel.finishGameConnect4();
                         GAME_FINISHED = false;
                     }
+                    // Counter to 5 seconds
                     if (i == 5) i = 0;
                     else i++;
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
+                    try { TimeUnit.SECONDS.sleep(1);
                     } catch (InterruptedException e) { e.printStackTrace(); }
                 }
                 while (GAME_STARTED) {
                     if (!THREAD_RUNNING) break;
                     connect4ViewModel.connect4CheckStatus();
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
+                    try { TimeUnit.SECONDS.sleep(1);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

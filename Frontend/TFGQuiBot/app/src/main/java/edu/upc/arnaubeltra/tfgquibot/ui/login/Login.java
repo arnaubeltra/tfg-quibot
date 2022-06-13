@@ -14,7 +14,6 @@ import android.net.NetworkRequest;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.format.Formatter;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -78,7 +77,6 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
 
         setupSpinnerSelectRobot();
 
-        Log.d("TAG", "onCreate: " + checkWifiConnection());
         if (!checkWifiConnection())
             dialogWifiConnection();
     }

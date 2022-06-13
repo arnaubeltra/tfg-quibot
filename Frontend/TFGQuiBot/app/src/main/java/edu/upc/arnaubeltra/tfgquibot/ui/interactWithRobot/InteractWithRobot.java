@@ -124,10 +124,28 @@ public class InteractWithRobot extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         permissionsViewModel.resetLiveData();
+        robotConnectionViewModel.resetLiveData();
+    }
+
+    private void checkRobotConnection() {
+        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                if (responseObject.getString("response").equals("robot-connection-failed")) dialogWarningRobotNotConnected();
+                else {
+                    if (Login.getAdminLogged() && (flag2 > 0)) executeAction();
+                    else {
+                        setupPermissionsObserver();
+                        permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "interact");
+                    }
+                }
+            } catch (JSONException e) { e.printStackTrace(); }
+        });
     }
 
     // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
-    private void checkRobotConnection() {
+    /*private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         if (init2 == 0) {
             robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
@@ -151,7 +169,7 @@ public class InteractWithRobot extends Fragment {
                 } catch (JSONException e) { e.printStackTrace(); }
             });
         }
-    }
+    }*/
 
     // Method that shows a dialog if the robot is not connected.
     private void dialogWarningRobotNotConnected() {
@@ -170,12 +188,16 @@ public class InteractWithRobot extends Fragment {
             permissionsViewModel.getUserPermissionsResponse().observe(getViewLifecycleOwner(), auth -> {
                 try {
                     JSONObject responseObject = new JSONObject(auth);
-                    if (responseObject.getInt("robot") != robot) Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
-                    else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match")) executeAction();
-                    else Toast.makeText(getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                    if (responseObject.getInt("robot") != robot)
+                        Toast.makeText(getContext(), R.string.txtDifferentRobot, Toast.LENGTH_LONG).show();
+                    else if (responseObject.getString("response").equals("true") && responseObject.getString("activity").equals("match"))
+                        executeAction();
+                    else {
+                        if (init != 0) Toast.makeText(getContext(), R.string.txtNoPermissions, Toast.LENGTH_SHORT).show();
+                    } init++;
                 } catch (JSONException e) { e.printStackTrace(); }
             });
-        } init++;
+        }
     }
 
     // Method that is called when an interaction has to be sent to robot, to check if robot is connected.
