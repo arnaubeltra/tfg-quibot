@@ -33,6 +33,7 @@ Color_sensor_liquid = ColorSensor(Port.S4)
 Frame = Frame_Matrix([[None, None], [None, None]])
 Frame_interact = Frame_Matrix_All_Medium()
 liquid_quantity = 0
+connect4Flag = False
 
 
 # Basic movement functions
@@ -40,14 +41,14 @@ def reset_x():
     while  not Touch_sensor_x.pressed():
         Motor_x.run(250)
     Motor_x.reset_angle(0)
-    ev3.speaker.beep()
+    #ev3.speaker.beep()
     return
 
 def reset_y():
     while not Touch_sensor_y.pressed():
         Motor_y.run(-250)
     Motor_y.reset_angle(0)
-    ev3.speaker.beep()
+    #ev3.speaker.beep()
     return
 
 def reset_x_y():
@@ -64,7 +65,7 @@ def raise_pipette():
         Motor_pipette.run(-300)
     Motor_pipette.stop()
     Motor_pipette.reset_angle(0)
-    ev3.speaker.beep()
+    #ev3.speaker.beep()
     return
 
 def lower_pipette():
@@ -72,7 +73,7 @@ def lower_pipette():
         Motor_pipette.run(300)
     Motor_pipette.stop()
     Motor_pipette.reset_angle(0)
-    ev3.speaker.beep()
+    #ev3.speaker.beep()
     return
 
 def lower_plunger():
@@ -127,7 +128,7 @@ def get_liquid_interact():
 def deposit_liquid_interact():
     lower_plunger()
     liquid_quantity = 0
-    returnind
+    return
 
 def get_liquid():
     lower_pipette()
@@ -145,6 +146,13 @@ def reset_robot():
     global Frame
     Frame.update_position(0, 0)
     raise_pipette()
+    reset_x_y()
+    time.sleep(1)
+
+def reset_robot_2():
+    global Frame
+    Frame.update_position(0, 0)
+    raise_pipette()
     reset_plunger()
     reset_x_y()
     time.sleep(1)
@@ -157,7 +165,12 @@ def set_frame_config(matrix):
 
 def set_plate_frame(x,y):
     global Frame
-    reset_robot()
+    global connect4Flag
+    if (connect4Flag == True):
+        reset_robot()
+    else:
+        reset_robot_2()
+
     if (x):
         Motor_x.run_target(400, Frame.get_xy_frame_constants()[0]*-1)
     if (y):
@@ -221,13 +234,13 @@ def series_de_disolucio():
         raise_pipette()
     set_plate_frame(1,1)
 
-def barrejaColors(color1, color2):
+def barrejaColors():
     set_frame_config(Frame_Matrix([[Medium_Matrix(), Medium_Matrix()], [Medium_Matrix(), Medium_Matrix()]]))
     set_plate_frame(0,0)
     reset_plunger()
 
-    pos1, pos2 = findColors(color1, color2)
-
+    pos1, pos2 = findColors()
+    
     for i in range(2):
         set_bucket_plate(0,pos1+1)
         lower_pipette()
@@ -237,6 +250,7 @@ def barrejaColors(color1, color2):
         lower_pipette()
         lower_plunger()
         raise_pipette()
+    for i in range(2):
         set_bucket_plate(0,pos2+1)
         lower_pipette()
         raise_plunger()
@@ -245,28 +259,50 @@ def barrejaColors(color1, color2):
         lower_pipette()
         lower_plunger()
         raise_pipette()
-    set_plate_frame(1,1)
+    lower_pipette()
+    for i in range(3):
+        raise_plunger()
+        lower_plunger()
+    raise_pipette()
+    set_bucket_plate(2,3)
+    
 
-def findColors(color1, color2):
+def findColors():
     pos1 = 0
     pos2 = 0
     for i in range(3):
+        print(i)
         set_bucket_plate(0,i)
         color = read_liquid_color()
-        if (color == color1):
+        if (color == Color.RED):
             pos1 = i
-        if (color == color2):
+        if (color == Color.BLUE):
             pos2 = i
+        time.sleep(0.2)
     return pos1, pos2
 
 def capes_de_densitat():
-    pass
+    set_frame_config(Frame_Matrix([[Medium_Matrix(), Medium_Matrix()], [Medium_Matrix(), Medium_Matrix()]]))
+    set_plate_frame(0,0)
+    reset_plunger()
+
+    pos = [2, 3, 1]
+    for i in range(3):
+        set_bucket_plate(0,pos[i])
+        lower_pipette()
+        raise_plunger()
+        raise_pipette()
+        set_bucket_plate(2,0)
+        lower_pipette()
+        lower_plunger()
+        raise_pipette()
+    set_bucket_plate(2,3)
 
 def start_experiment(instruction):
     if instruction=='series_de_dissolucio':
         series_de_disolucio()
     elif instruction=='barreja_colors':
-        barrejaColors(Color.YELLOW,Color.BLUE)
+        barrejaColors()
     elif instruction=='capes_de_densitat':
         capes_de_densitat()
 
@@ -310,11 +346,12 @@ def move_interact(direction):
         Frame_interact.update_position(current_x+1, current_y)
     Motor_y.reset_angle(0)
     Motor_x.reset_angle(0)
-    ev3.speaker.beep()
+    #ev3.speaker.beep()
 
 # Custom program
 def custom_program(instruction):
     global liquid_quantity
+    print(instruction)
     if instruction in ["up", "down", "left", "right"]:
         move_interact(instruction)
     elif (instruction == "raise_pipette"):
@@ -327,6 +364,11 @@ def custom_program(instruction):
     elif (instruction == "unsuck"):
         if (liquid_quantity > 0):
             deposit_liquid_interact()
+    elif (instruction == "reset"):
+        print("hola")
+        reset_robot()
+        Frame_interact.update_position(0,0)
+        set_plate_frame(0, 0)
     else:
         ins = instruction.split("_")
         if (ins[0] == "suck"):
@@ -340,7 +382,6 @@ def custom_program(instruction):
 
 # Tic tac toe
 def play_tic_tac_toe(x, y, player_chip):
-    print(x,y)
     set_plate_frame(0,0)
     if (player_chip == '1'):
         set_bucket_plate(0,3)
@@ -355,7 +396,9 @@ def play_tic_tac_toe(x, y, player_chip):
 
 # Connect 4
 def play_connect4(x, y, player_chip, connect4_liquid_count):
-    print(x,y)
+    global connect4Flag
+    connect4Flag = True
+    print(x+1, y)
     set_plate_frame(0,1)
     if (player_chip == '1'):
         if (connect4_liquid_count[0] < 11):
@@ -378,11 +421,11 @@ def play_connect4(x, y, player_chip, connect4_liquid_count):
     get_liquid()
     if (y < 4):
         set_plate_frame(0,0)
-        set_bucket_plate(y,abs(x-5))
+        set_bucket_plate(y,abs(x+1-5))
         deposit_liquid()
     else:
         set_plate_frame(1,0)
-        set_bucket_plate(y-4,abs(x-5))
+        set_bucket_plate(y-4,abs(x+1-5))
         deposit_liquid()
     return connect4_liquid_count
 
@@ -390,7 +433,7 @@ def play_connect4(x, y, player_chip, connect4_liquid_count):
 if __name__ == "__main__":
     ind = 0
     ev3.speaker.set_speech_options(language='ca',voice='f1')
-    HOST = "192.168.100.16" #ip
+    HOST = "192.168.100.6" #ip
     PORT = 9999
     s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((HOST, PORT))
@@ -403,9 +446,10 @@ if __name__ == "__main__":
             if not data:
                 break
             #print(data)
+            connect4Flag = False
             raw_instruccio=data.decode("utf-8")
             instruccio=raw_instruccio.split()
-            ev3.speaker.beep()
+            #ev3.speaker.beep()
             if instruccio[0]=='experiment':
                 start_experiment(instruccio[1])
                 conn.send(b"finished")
@@ -429,6 +473,7 @@ if __name__ == "__main__":
                 play_tic_tac_toe(int(instruccio[1]), int(instruccio[2]), instruccio[3])
                 conn.send(b"finished")
             elif (instruccio[0] == "start_interact"):
+                print("dad")
                 #start_interact(instruccio[1])
                 set_frame_config(Frame_Matrix([[Medium_Matrix(), Medium_Matrix()], [Medium_Matrix(), Medium_Matrix()]]))
                 start_interact("")
@@ -444,20 +489,25 @@ if __name__ == "__main__":
                 elif (instruccio[1] == "lower_pipette"):
                     lower_pipette()
                 elif (instruccio[1] == "suck"):
-                    if (have_liquid):
-                        deposit_liquid_interact()
+                    if (liquid_quantity > 0):
+                        lower_plunger()
                     else:
-                        get_liquid_interact()
+                        raise_plunger()
+                elif (instruccio[1] == "suck_liquid"):
+                    raise_plunger()
+                elif (instruccio[1] == "unsuck_liquid"):
+                    lower_plunger()
                 elif (instruccio[1] == "reset"):
                     reset_robot()
                     Frame_interact.update_position(0,0)
                     set_plate_frame(0, 0)
                 conn.send(b"finished")
             elif instruccio[0]=='program':
+                start_interact("")
                 ins=instruccio[1].split(',')
                 print (ins)
                 for i in range(len(ins)): 
                     custom_program(ins[i])
                     time.sleep(0.5)
     time.sleep(1)
-    ev3.speaker.beep()
+    #ev3.speaker.beep()

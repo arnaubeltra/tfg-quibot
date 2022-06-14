@@ -104,7 +104,7 @@ public class Experiments extends Fragment {
                 JSONObject responseObject = new JSONObject(response);
                 if (responseObject.getString("response").equals("robot-connection-failed")) dialogWarningRobotNotConnected();
                 else {
-                    if (Login.getAdminLogged() && (flag2 > 0)) executeExperiment();
+                    if (Login.getAdminLogged()) executeExperiment();
                     else {
                         setupPermissionsObserver();
                         permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "experiments");

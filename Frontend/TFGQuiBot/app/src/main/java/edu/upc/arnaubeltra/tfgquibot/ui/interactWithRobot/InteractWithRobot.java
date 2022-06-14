@@ -66,13 +66,13 @@ public class InteractWithRobot extends Fragment {
         Button btnMulti1, btnMulti2, btnReset1, btnReset2, btnColor;
         v.findViewById(R.id.btnLeft).setOnClickListener(view -> setupInteraction("left"));
         v.findViewById(R.id.btnRight).setOnClickListener(view -> setupInteraction("right"));
-        v.findViewById(R.id.btnSuck).setOnClickListener(view -> setupInteraction("suck"));
         v.findViewById(R.id.btnRaisePipette).setOnClickListener(view -> setupInteraction("raise_pipette"));
         v.findViewById(R.id.btnLowerPipette).setOnClickListener(view -> setupInteraction("lower_pipette"));
 
         if (robot == 1) {
             v.findViewById(R.id.btnUp).setOnClickListener(view -> setupInteraction("raise_pipette"));
             v.findViewById(R.id.btnDown).setOnClickListener(view -> setupInteraction("lower_pipette"));
+            v.findViewById(R.id.btnSuck).setOnClickListener(view -> setupInteraction("suck_unsuck"));
             btnMulti1 = v.findViewById(R.id.btnMultifunctions1);
             btnMulti1.setVisibility(View.GONE);
             btnMulti2 = v.findViewById(R.id.btnMultifunctions2);
@@ -88,6 +88,7 @@ public class InteractWithRobot extends Fragment {
         } else if (robot == 2) {
             v.findViewById(R.id.btnUp).setOnClickListener(view -> setupInteraction("up"));
             v.findViewById(R.id.btnDown).setOnClickListener(view -> setupInteraction("down"));
+            v.findViewById(R.id.btnSuck).setOnClickListener(view -> setupInteraction("suck"));
             btnMulti1 = v.findViewById(R.id.btnMultifunctions1);
             btnMulti1.setOnClickListener(view -> setupInteraction("suck_liquid"));
             btnMulti1.setText(R.string.txtSuck);
@@ -134,7 +135,7 @@ public class InteractWithRobot extends Fragment {
                 JSONObject responseObject = new JSONObject(response);
                 if (responseObject.getString("response").equals("robot-connection-failed")) dialogWarningRobotNotConnected();
                 else {
-                    if (Login.getAdminLogged() && (flag2 > 0)) executeAction();
+                    if (Login.getAdminLogged()) executeAction();
                     else {
                         setupPermissionsObserver();
                         permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "interact");

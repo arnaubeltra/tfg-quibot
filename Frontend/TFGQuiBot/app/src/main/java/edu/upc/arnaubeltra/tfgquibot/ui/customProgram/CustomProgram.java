@@ -149,7 +149,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
                 JSONObject responseObject = new JSONObject(response);
                 if (responseObject.getString("response").equals("robot-connection-failed")) dialogWarningRobotNotConnected();
                 else {
-                    if (Login.getAdminLogged() && (flag2 > 0)) onSendCustomProgram();
+                    if (Login.getAdminLogged()) onSendCustomProgram();
                     else {
                         setupPermissionsObserver();
                         permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "custom_program");
@@ -281,7 +281,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         if (robot == 2)
             Collections.addAll(actions, getResources().getString(R.string.txtForward), getResources().getString(R.string.txtBackwards), getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtSuck), getResources().getString(R.string.txtUnsuck), getResources().getString(R.string.txtSuckXMl), getResources().getString(R.string.txtUnsuckXMl),getResources().getString(R.string.txtRepeatPreviousActions));
         else if (robot == 1)
-            Collections.addAll(actions, getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtSuckUnsuck), getResources().getString(R.string.txtRepeatPreviousActions));
+            Collections.addAll(actions, getResources().getString(R.string.txtRight), getResources().getString(R.string.txtLeft), getResources().getString(R.string.txtLowerPipette), getResources().getString(R.string.txtRaisePipette), getResources().getString(R.string.txtSuck), getResources().getString(R.string.txtUnsuck),  getResources().getString(R.string.txtSuckXMl), getResources().getString(R.string.txtUnsuckXMl),getResources().getString(R.string.txtRepeatPreviousActions));
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, actions);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -485,7 +485,8 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         else if (instruction.equals(getResources().getString(R.string.txtLeft))) return "left";
         else if (instruction.equals(getResources().getString(R.string.txtLowerPipette))) return "lower_pipette";
         else if (instruction.equals(getResources().getString(R.string.txtRaisePipette))) return "raise_pipette";
-        else if (instruction.equals(getResources().getString(R.string.txtSuck)) || instruction.equals(getResources().getString(R.string.txtSuckUnsuck))) return "suck";
+        else if (instruction.equals(getResources().getString(R.string.txtSuck))) return "suck";
+        else if (instruction.equals(getResources().getString(R.string.txtSuckUnsuck))) return "suck_unsuck";
         else if (instruction.equals(getResources().getString(R.string.txtUnsuck))) return "unsuck";
         else if (instruction.equals(getResources().getString(R.string.txtSuckXMl))) return "suck_" + actionsList.get(i).getQuantity();
         else if (instruction.equals(getResources().getString(R.string.txtUnsuckXMl))) return "unsuck_" + actionsList.get(i).getQuantity();
