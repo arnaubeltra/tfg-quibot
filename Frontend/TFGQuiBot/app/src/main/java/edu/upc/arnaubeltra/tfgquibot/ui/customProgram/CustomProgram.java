@@ -142,6 +142,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
         robotConnectionViewModel.resetLiveData();
     }
 
+    // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
@@ -158,35 +159,6 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
             } catch (JSONException e) { e.printStackTrace(); }
         });
     }
-
-    // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
-    /*private void checkRobotConnection() {
-        robotConnectionViewModel.checkRobotConnection();
-        if (init2 == 0) {
-            robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
-                try {
-                    JSONObject responseObject = new JSONObject(response);
-                    Log.d("TAG", "checkRobotConnection: " + responseObject);
-                    if (responseObject.getString("response").equals("robot-connection-failed")) {
-                        if (flag == 1) { dialogWarningRobotNotConnected(); flag = 0; }
-                        else flag = 1;
-                    } else {
-                        flag = 1;
-                        if (Login.getAdminLogged() && (flag2 > 0))
-                            onSendCustomProgram();
-                        else {
-                            setupPermissionsObserver();
-                            if ((flag2 == 1) && init2 != 0) {
-                                permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "custom_program"); flag2++;
-                            } else if ((flag2 == 2) && init2 != 0)
-                                permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "custom_program");
-                            else flag2++;
-                        }
-                    } init2++;
-                } catch (JSONException e) { e.printStackTrace(); }
-            });
-        }
-    }*/
 
     // Method that shows a dialog if the robot is not connected.
     private void dialogWarningRobotNotConnected() {
@@ -235,42 +207,6 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-    }
-
-    // Applies the action when accept button is pressed. If new action, calls newActionAdded method. If edit action, calls editAction method.
-    // Some of the actions make the dialog to ask for more fields, that's why there are some conditions inside the condition of type of action.
-    private void onAccept(String type, int index) {
-        String action = String.valueOf(spinner.getSelectedItem());
-        if (type.equals("new_action")) {
-            if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl)))
-                newActionAdded(action, Float.parseFloat(String.valueOf(spinnerSelectQuantity.getSelectedItem())), 0, 0);
-            else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
-                if (checkInputs(index))
-                    newActionAdded(action, 0, Integer.parseInt(String.valueOf(spinnerSelectQuantity.getSelectedItem())), Integer.parseInt(inputInstructionsRepetition.getText().toString()));
-            } else newActionAdded(action, 0, 0, 0);
-        }
-        else if (type.equals("edit_action")) {
-            if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl)))
-                editAction(index, action, Float.parseFloat(String.valueOf(spinnerSelectQuantity.getSelectedItem())), 0, 0);
-            else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
-                if (checkInputs(index))
-                    editAction(index, action, 0, Integer.parseInt(String.valueOf(spinnerSelectQuantity.getSelectedItem())), Integer.parseInt(inputInstructionsRepetition.getText().toString()));
-            } else editAction(index, action, 0, 0, 0);
-        }
-    }
-
-    // Method to check the inputs of the dialog. If there is any error, shows the dialog and returns false.
-    private boolean checkInputs(int index) {
-        if (inputInstructionsRepetition.getText().toString().equals("")) {
-            Toast.makeText(getContext(), R.string.txtValueCannotBeEmpty, Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (Integer.parseInt(inputInstructionsRepetition.getText().toString()) > index) {
-            Toast.makeText(getContext(), R.string.txtNotEnughInstructions, Toast.LENGTH_LONG).show();
-            return false;
-        } else if (Integer.parseInt(inputInstructionsRepetition.getText().toString()) <= 0) {
-            Toast.makeText(getContext(), R.string.txtValueMustBeGreaterThanZero, Toast.LENGTH_SHORT).show();
-            return false;
-        } return true;
     }
 
     // Setups the element spinner, that shows the different actions that can be executed. Spinner is different according to the type of robot.
@@ -325,6 +261,43 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
                 inputInstructionsRepetition.setText(String.valueOf(actionsList.get(position).getLastNInstructions()));
             }
         }
+    }
+
+
+    // Applies the action when accept button is pressed. If new action, calls newActionAdded method. If edit action, calls editAction method.
+    // Some of the actions make the dialog to ask for more fields, that's why there are some conditions inside the condition of type of action.
+    private void onAccept(String type, int index) {
+        String action = String.valueOf(spinner.getSelectedItem());
+        if (type.equals("new_action")) {
+            if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl)))
+                newActionAdded(action, Float.parseFloat(String.valueOf(spinnerSelectQuantity.getSelectedItem())), 0, 0);
+            else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+                if (checkInputs(index))
+                    newActionAdded(action, 0, Integer.parseInt(String.valueOf(spinnerSelectQuantity.getSelectedItem())), Integer.parseInt(inputInstructionsRepetition.getText().toString()));
+            } else newActionAdded(action, 0, 0, 0);
+        }
+        else if (type.equals("edit_action")) {
+            if (action.equals(getResources().getString(R.string.txtSuckXMl)) || action.equals(getResources().getString(R.string.txtUnsuckXMl)))
+                editAction(index, action, Float.parseFloat(String.valueOf(spinnerSelectQuantity.getSelectedItem())), 0, 0);
+            else if (action.equals(getResources().getString(R.string.txtRepeatPreviousActions))) {
+                if (checkInputs(index))
+                    editAction(index, action, 0, Integer.parseInt(String.valueOf(spinnerSelectQuantity.getSelectedItem())), Integer.parseInt(inputInstructionsRepetition.getText().toString()));
+            } else editAction(index, action, 0, 0, 0);
+        }
+    }
+
+    // Method to check the inputs of the dialog. If there is any error, shows the dialog and returns false.
+    private boolean checkInputs(int index) {
+        if (inputInstructionsRepetition.getText().toString().equals("")) {
+            Toast.makeText(getContext(), R.string.txtValueCannotBeEmpty, Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (Integer.parseInt(inputInstructionsRepetition.getText().toString()) > index) {
+            Toast.makeText(getContext(), R.string.txtNotEnughInstructions, Toast.LENGTH_LONG).show();
+            return false;
+        } else if (Integer.parseInt(inputInstructionsRepetition.getText().toString()) <= 0) {
+            Toast.makeText(getContext(), R.string.txtValueMustBeGreaterThanZero, Toast.LENGTH_SHORT).show();
+            return false;
+        } return true;
     }
 
     // Method that handles when a new action is added. Creates an object of type Action and stores it to the list to show it through the Recycler View.

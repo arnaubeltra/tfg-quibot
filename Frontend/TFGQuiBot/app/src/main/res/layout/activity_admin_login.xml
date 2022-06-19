@@ -25,16 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/imgHelpLoginAdmin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="32dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_help" />
-
             <TextView
                 android:id="@+id/textViewTitleAdminLogin"
                 android:layout_width="wrap_content"
@@ -42,7 +32,7 @@
                 android:layout_marginBottom="24dp"
                 android:text="@string/txtTitleLoginAdmin"
                 android:textColor="@color/white"
-                android:textSize="25dp"
+                android:textSize="25sp"
                 app:layout_constraintBottom_toTopOf="@+id/inputTxtUsername"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -122,12 +112,23 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/txtGoBackLogin"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/btnLoginAdmin"
                 app:layout_constraintStart_toStartOf="@+id/btnLoginAdmin"
                 app:layout_constraintTop_toBottomOf="@+id/btnLoginAdmin" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/imgHelpLoginAdmin"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:contentDescription="@string/txtHelpText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_help" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

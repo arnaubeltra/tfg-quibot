@@ -104,8 +104,8 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
     // Performs a login for the normal user. Checks the fields and then performs a log in.
     private void login() {
         //goToHomeActivityUser();
-        String name = "a"; //nameUser.getText().toString();
-        String surname = "b"; //surnameUser.getText().toString();
+        String name = nameUser.getText().toString();
+        String surname = surnameUser.getText().toString();
 
         if (name.isEmpty())
             nameUser.setError("El camp de nom no pot estar buit");

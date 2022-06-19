@@ -19,22 +19,11 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-45dp">
+        tools:layout_editor_absoluteY="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-
-            <ImageView
-                android:id="@+id/imgHelpLogin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="32dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_help" />
 
             <EditText
                 android:id="@+id/inputNameUser"
@@ -84,8 +73,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="1dp"
-                android:minHeight="48dp"
                 android:background="@drawable/background_inputs_square"
+                android:minHeight="48dp"
                 app:layout_constraintEnd_toEndOf="@+id/inputSurnameUser"
                 app:layout_constraintStart_toStartOf="@+id/inputSurnameUser"
                 app:layout_constraintTop_toBottomOf="@+id/inputSurnameUser" />
@@ -111,7 +100,7 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/txtTitleLoginAdmin"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/btnLogin"
                 app:layout_constraintStart_toStartOf="@+id/btnLogin"
                 app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
@@ -119,5 +108,15 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
+    <ImageView
+        android:id="@+id/imgHelpLogin"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:contentDescription="@string/txtHelpText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_help" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

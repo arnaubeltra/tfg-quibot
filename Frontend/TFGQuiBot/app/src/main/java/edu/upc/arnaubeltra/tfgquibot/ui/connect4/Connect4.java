@@ -132,6 +132,7 @@ public class Connect4 extends Fragment {
         robotConnectionViewModel.resetLiveData();
     }
 
+    // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
         robotConnectionViewModel.checkRobotConnection();
         robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
@@ -145,30 +146,6 @@ public class Connect4 extends Fragment {
             } catch (JSONException e) { e.printStackTrace(); }
         });
     }
-
-    // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
-    /*private void checkRobotConnection() {
-        robotConnectionViewModel.checkRobotConnection();
-        if (init2 == 0) {
-            robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
-                try {
-                    JSONObject responseObject = new JSONObject(response);
-                    if (responseObject.getString("response").equals("robot-connection-failed")) {
-                        if (flag == 1) { dialogWarningRobotNotConnected(); flag = 0; }
-                        else flag = 1;
-                    } else {
-                        flag = 1;
-                        setupPermissionsObserver();
-                        if ((flag2 == 1) && init2 != 0) {
-                            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "connect4"); flag2++;
-                        } else if ((flag2 == 2) && init2 != 0)
-                            permissionsViewModel.checkUserPermissions(Login.getIpAddress(), "connect4");
-                        else flag2++;
-                    } init2++;
-                } catch (JSONException e) { e.printStackTrace(); }
-            });
-        }
-    }*/
 
     // Method that shows a dialog if the robot is not connected.
     private void dialogWarningRobotNotConnected() {

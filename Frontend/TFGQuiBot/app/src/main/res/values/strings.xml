@@ -130,6 +130,7 @@
     <string name="txtDifferentRobot">Error. Actualment s\'està usant un altre robot. Tanca la sessió i selecciona el robot correctament.</string>
     <string name="txtUser">Usuari</string>
     <string name="txtBoard">Tauler</string>
+    <string name="txtHelpText">Ajuda</string>
 
     <!-- Dialogs -->
     <string name="txtWifiConnectionAlertTitle">Connexió WiFi</string>

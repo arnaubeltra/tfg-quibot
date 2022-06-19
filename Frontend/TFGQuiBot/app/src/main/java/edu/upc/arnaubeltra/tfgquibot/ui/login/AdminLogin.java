@@ -64,8 +64,8 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
 
     // Performs a login for the admin user. Checks the fields and then performs a log in.
     private void login() {
-        String user = "admin";// emailUser.getText().toString();
-        String password = "Quibot2022";// passwordUser.getText().toString();
+        String user = username.getText().toString();
+        String password = passwordUser.getText().toString();
 
         if ((password.isEmpty()) || (password.length() < 6)) {
             passwordUser.setError("La longitud de la contrassenya ha de ser major que 6");
