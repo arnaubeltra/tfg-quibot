@@ -28,7 +28,7 @@
     <string name="titleSeriesDisolucio">Sèries de dissolució</string>
     <string name="txtExplanationSeriesDisolució">Ompliu la primera cubeta amb el color que més us agradi al 80% de capacitat i les 5 següents amb aigua fins al 60% de capacitat.\n\nAra, el robot passarà la solució d\'una cubeta a una altra. Cada vegada que això passi la solució s\'anirà diluint cada vegada més fins a ser gairebé transparent. Podeu repetir aquest experiment vosaltres mateixos amb \"Interactua amb el robot\" o amb \"Programa el robot\" per intentar aconseguir el mateix resultat.</string>
     <string name="titleBarrejaColorsPrimaris">Barreja colors primaris</string>
-    <string name="txtExplanationColorsPrimaris">Robot 1D:\nOmpliu la primera cubeta amb color blau i la tercera cubeta amb color groc al 80% de capacitat i la resta de cubetes deixeu-les buides.\n\nRobot2D:\nOmpliu la primera cubeta de color blau i la segona de color vermell tal i com es pot veure a \"Com preparar l\'experiment\".\n\nAra, el robot buscarà els dos colors primaris que hem posat per desprès barrejar-los i d\'aquesta manera obtenir un nou color secundari. Quin color serà? Podeu repetir aquest experiment vosaltres mateixos amb \"Interactua amb el robot\" o amb \"Programa el robot\" per intentar aconseguir el mateix resultat amb colors diferents!</string>
+    <string name="txtExplanationColorsPrimaris">Lab-Qui-Bot H2O:\nOmpliu la primera cubeta amb color blau i la tercera cubeta amb color groc al 80% de capacitat i la resta de cubetes deixeu-les buides.\n\nLab2-Qui-Bot H2O:\nOmpliu la primera cubeta de color blau i la segona de color vermell tal i com es pot veure a \"Com preparar l\'experiment\".\n\nAra, el robot buscarà els dos colors primaris que hem posat per desprès barrejar-los i d\'aquesta manera obtenir un nou color secundari. Quin color serà? Podeu repetir aquest experiment vosaltres mateixos amb \"Interactua amb el robot\" o amb \"Programa el robot\" per intentar aconseguir el mateix resultat amb colors diferents!</string>
     <string name="titleCapesDeDensitat">Capes de densitat</string>
     <string name="txtExplanationCapesDeDensitat">Diluïu 18 grs. de sal en 50 ml. d\'aigua en un got i afegiu-hi el colorant de color blau. Després diluïu 6 grs. de sal en 50 ml. d\'aigua en un got i afegiu-hi el colorant de color vermell.\n\nOmpliu la primera cubeta amb la dissolució de color blau, la segona cubeta amb la dissolució de color vermell i la tercera cubeta amb aigua de color groc al 90% de capacitat, i la resta de cubetes deixeu-les buides.\n\nAra, el robot dipositarà totes les dissolucions en una mateixa cubeta amb molta cura. Com que les dissolucions tenen diferent densitat, amb l\'ajuda del colorant, veurem que les dissolucions no es barregen entre elles.</string>
 
@@ -125,8 +125,8 @@
     <string name="txtCannotChangePermission">Error canviant permisos per a l\'usuari. L\'activitat seleccionada té el màxim d\'usuaris permesos.</string>
     <string name="txtErrorChangingPermissions">Error canviant permisos per a l\'usuari.</string>
     <string name="txtAccept">D\'acord</string>
-    <string name="txtRobot1D">Robot 1D</string>
-    <string name="txtRobot2D">Robot 2D</string>
+    <string name="txtRobot1D">Lab-Qui-Bot H2O</string>
+    <string name="txtRobot2D">Lab2-Qui-Bot H2O</string>
     <string name="txtDifferentRobot">Error. Actualment s\'està usant un altre robot. Tanca la sessió i selecciona el robot correctament.</string>
     <string name="txtUser">Usuari</string>
     <string name="txtBoard">Tauler</string>

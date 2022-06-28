@@ -103,7 +103,6 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
 
     // Performs a login for the normal user. Checks the fields and then performs a log in.
     private void login() {
-        //goToHomeActivityUser();
         String name = nameUser.getText().toString();
         String surname = surnameUser.getText().toString();
 
@@ -151,7 +150,7 @@ public class Login extends AppCompatActivity implements AdapterView.OnItemSelect
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
-        }   //Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK
+        }
     }
 
     // Intent to the admin login.
