@@ -15,9 +15,10 @@ import os
 import socket
 
 
-# Brick elements
+# Creation of the EV3 object
 ev3 = EV3Brick()
 
+# Declaration of ports used for actuators and sensors
 Motor_x = Motor(Port.D)
 Motor_y = Motor(Port.A)
 Motor_pipette = Motor(Port.C)
@@ -37,20 +38,29 @@ connect4Flag = False
 
 
 # Basic movement functions
+"""
+Performs a reset of the x axis. Moves robot until the rouch sensor is pressed.
+"""
 def reset_x():
     while  not Touch_sensor_x.pressed():
         Motor_x.run(250)
     Motor_x.reset_angle(0)
-    #ev3.speaker.beep()
+    ev3.speaker.beep()
     return
 
+"""
+Performs a reset of the y axis. Moves robot until the rouch sensor is pressed.
+"""
 def reset_y():
     while not Touch_sensor_y.pressed():
         Motor_y.run(-250)
     Motor_y.reset_angle(0)
-    #ev3.speaker.beep()
+    ev3.speaker.beep()
     return
 
+"""
+Performs a reset of the x and y axes. Calls the two previous functions.
+"""
 def reset_x_y():
     x = threading.Thread(target=reset_x)
     x.start()
@@ -60,32 +70,32 @@ def reset_x_y():
         continue
     return
 
+"""
+Raises the pippete from the lowest position to the highest.
+"""
 def raise_pipette():
     while Color_sensor_pipette.color() != Color.YELLOW:
         Motor_pipette.run(-300)
     Motor_pipette.stop()
     Motor_pipette.reset_angle(0)
-    #ev3.speaker.beep()
+    ev3.speaker.beep()
     return
 
+"""
+Lowers the pippete from the highest position to the lowest.
+"""
 def lower_pipette():
     while Color_sensor_pipette.color() != Color.RED:
         Motor_pipette.run(300)
     Motor_pipette.stop()
     Motor_pipette.reset_angle(0)
-    #ev3.speaker.beep()
+    ev3.speaker.beep()
     return
 
-def lower_plunger():
-    global liquid_quantity
-    if (liquid_quantity == 1):
-        Motor_plunger.run_target(250, 610)
-    else:
-        Motor_plunger.run_target(250, (610 - (610*(1 - liquid_quantity))))
-    liquid_quantity = 0
-    Motor_plunger.reset_angle(0)
-    return
-
+"""
+Raises the plunger to get liquid. 
+Checks if the pipette is empty or mid empty to move the motor proportionaly.
+"""
 def raise_plunger():
     global liquid_quantity
     if (liquid_quantity == 0):
@@ -96,52 +106,93 @@ def raise_plunger():
     Motor_plunger.reset_angle(0)
     return
 
+"""
+Lowers the plunger to expulse liquid. 
+Checks if the pipette is full or mid full to move the motor proportionaly.
+"""
+def lower_plunger():
+    global liquid_quantity
+    if (liquid_quantity == 1):
+        Motor_plunger.run_target(250, 610)
+    else:
+        Motor_plunger.run_target(250, (610 - (610*(1 - liquid_quantity))))
+    liquid_quantity = 0
+    Motor_plunger.reset_angle(0)
+    return
+
+"""
+Gets a certain liquid quantity.
+
+Input: quantity --> float
+"""
 def plunger_get_quantity(quantity):
     Motor_plunger.run_target(250, -(61*quantity))
     Motor_plunger.reset_angle(0)
     return
 
+"""
+Expulses a certain liquid quantity.
+
+Input: quantity --> float
+"""
 def plunger_expulse_quantity(quantity):   
     Motor_plunger.run_target(250, (61*quantity))
     Motor_plunger.reset_angle(0)
     return
 
+"""
+Performs a reset of the plunger, moving it to the lowest position to expulse the liquid.
+"""
 def reset_plunger():
     Motor_plunger.run_until_stalled(250, then=Stop.HOLD, duty_limit=20)
     Motor_plunger.reset_angle(0)
     return
 
+"""
+Reads the color of the liquid, using the color sensor.
+"""
 def read_liquid_color():    
     return Color_sensor_liquid.color()
 
-def loop_read_liquid_color():   #delete
-    while (1):
-        print (Color_sensor_liquid.color())
-
 
 # Complex functions (using basic functions)
+"""
+Function used to interact with robot. Gets liquid and sets liquid quantity to 1.
+"""
 def get_liquid_interact():
     raise_plunger()
     liquid_quantity = 1
     return
 
+"""
+Function used to interact with robot. Expulses liquid and sets liquid quantity to 0.
+"""
 def deposit_liquid_interact():
     lower_plunger()
     liquid_quantity = 0
     return
 
+"""
+Function used to interact with robot. Performs the action of getting liquid, step by step.
+"""
 def get_liquid():
     lower_pipette()
     raise_plunger()
     raise_pipette()
     return
 
+"""
+Function used to interact with robot. Performs the action of expulsing liquid, step by step.
+"""
 def deposit_liquid():
     lower_pipette()
     lower_plunger()
     raise_pipette()
     return
 
+"""
+Resets the robot, raising pippete, and moving to the origin.
+"""
 def reset_robot():
     global Frame
     Frame.update_position(0, 0)
@@ -149,20 +200,38 @@ def reset_robot():
     reset_x_y()
     time.sleep(1)
 
+"""
+Resets the robot, raising pippete, resetting pulnger and moving to the origin.
+"""
 def reset_robot_2():
     global Frame
+    global liquid_quantity
     Frame.update_position(0, 0)
     raise_pipette()
     reset_plunger()
+    liquid_quantity = 0
     reset_x_y()
     time.sleep(1)
 
 
 # Board functions
+"""
+Sets the current board being used.
+
+Input: matrix --> Matrix class
+"""
 def set_frame_config(matrix):
     global Frame
     Frame = matrix
 
+"""
+Moves the robot to a given plate.
+There are 4 plates in the board.
+
+Inputs:
+    - x --> int
+    - y --> int
+"""
 def set_plate_frame(x,y):
     global Frame
     global connect4Flag
@@ -186,6 +255,13 @@ def set_plate_frame(x,y):
     Motor_y.reset_angle(0)
     return
 
+"""
+Moves the robot to a given bucket of the specified plate (in the previous fun)
+
+Inputs:
+    - x --> int
+    - y --> int
+"""
 def set_bucket_plate(x, y):
     global Frame
     plate = Frame.current_matrix()
@@ -216,6 +292,11 @@ def set_bucket_plate(x, y):
 
 # Functionalities
 # Experiments
+"""
+Series de dissolució experiment. All the functions needed are called
+as if it was a list of actions.
+Adapted for the 2D robot.
+"""
 def series_de_disolucio():
     set_frame_config(Frame_Matrix([[Large_Matrix(), Large_Matrix()], [Medium_Matrix(), Medium_Matrix()]]))
     set_plate_frame(0,0)
@@ -234,6 +315,11 @@ def series_de_disolucio():
         raise_pipette()
     set_plate_frame(1,1)
 
+"""
+Barreja colors primaris experiment. All the functions needed are called
+as if it was a list of actions.
+Adapted for the 2D robot.
+"""
 def barrejaColors():
     set_frame_config(Frame_Matrix([[Medium_Matrix(), Medium_Matrix()], [Medium_Matrix(), Medium_Matrix()]]))
     set_plate_frame(0,0)
@@ -266,12 +352,13 @@ def barrejaColors():
     raise_pipette()
     set_bucket_plate(2,3)
     
-
+"""
+Finds the position of the red and blue liquids.
+"""
 def findColors():
     pos1 = 0
     pos2 = 0
     for i in range(3):
-        print(i)
         set_bucket_plate(0,i)
         color = read_liquid_color()
         if (color == Color.RED):
@@ -281,6 +368,11 @@ def findColors():
         time.sleep(0.2)
     return pos1, pos2
 
+"""
+Capes de densitat experiment. All the functions needed are called
+as if it was a list of actions.
+Adapted for the 2D robot.
+"""
 def capes_de_densitat():
     set_frame_config(Frame_Matrix([[Medium_Matrix(), Medium_Matrix()], [Medium_Matrix(), Medium_Matrix()]]))
     set_plate_frame(0,0)
@@ -298,6 +390,11 @@ def capes_de_densitat():
         raise_pipette()
     set_bucket_plate(2,3)
 
+"""
+Used to call the function used to start any experiment.
+
+Input: instruction --> string
+"""
 def start_experiment(instruction):
     if instruction=='series_de_dissolucio':
         series_de_disolucio()
@@ -307,6 +404,11 @@ def start_experiment(instruction):
         capes_de_densitat()
 
 #Interact with robot
+"""
+Starts the Interact with robot activity, seting the board being used. Used at Interacft with robot activity.
+
+Input: matrix_size --> Matrix
+"""
 def start_interact(matrix_size):
     global Frame_interact
     set_frame_config(Frame_Matrix([[Medium_Matrix(), Medium_Matrix()], [Medium_Matrix(), Medium_Matrix()]]))
@@ -314,13 +416,18 @@ def start_interact(matrix_size):
     Frame_interact.update_position(0,0)
     set_plate_frame(0, 0)
 
+"""
+Moves robot to the direction specified by the user. Used at Interacft with robot activity.
+
+Input: direction --> string
+"""
 def move_interact(direction):
     if (Color_sensor_pipette.color() == Color.RED):
         return
     global Frame_interact
     current_x, current_y = Frame_interact.get_position()
     max_x, max_y = Frame_interact.get_xy_max()
-    if (direction == "up" and  current_y < max_y-1):#and current_y+1 < max_y
+    if (direction == "up" and  current_y < max_y-1):
         if (current_y == 3):
             Motor_y.run_target(250, Frame_interact.get_xy_between_constants()[1])
         else:
@@ -346,12 +453,17 @@ def move_interact(direction):
         Frame_interact.update_position(current_x+1, current_y)
     Motor_y.reset_angle(0)
     Motor_x.reset_angle(0)
-    #ev3.speaker.beep()
+    ev3.speaker.beep()
 
 # Custom program
+"""
+Executes the actions that the user has selected for the list of actions to be executed
+when creating a Custo Program for the robot.
+
+Input: instruction --> string
+"""
 def custom_program(instruction):
     global liquid_quantity
-    print(instruction)
     if instruction in ["up", "down", "left", "right"]:
         move_interact(instruction)
     elif (instruction == "raise_pipette"):
@@ -365,7 +477,6 @@ def custom_program(instruction):
         if (liquid_quantity > 0):
             deposit_liquid_interact()
     elif (instruction == "reset"):
-        print("hola")
         reset_robot()
         Frame_interact.update_position(0,0)
         set_plate_frame(0, 0)
@@ -381,6 +492,15 @@ def custom_program(instruction):
                 liquid_quantity -= float(ins[1])
 
 # Tic tac toe
+"""
+Moves the robot to the specified location to place the liquid that identifies the player,
+during a Tic Tac Toe match.
+
+Inputs:
+    - x --> int
+    - y --> int
+    - player_chip --> string
+"""
 def play_tic_tac_toe(x, y, player_chip):
     set_plate_frame(0,0)
     if (player_chip == '1'):
@@ -395,10 +515,21 @@ def play_tic_tac_toe(x, y, player_chip):
     return
 
 # Connect 4
+"""
+Moves the robot to the specified location to place the liquid that identifies the player,
+during a Connect 4 match.
+Takes into account the used liquid to know where the robot has to go to get liquid, as
+there are multiple places to take liquid.
+
+Inputs:
+    - x --> int
+    - y --> int
+    - player_chip --> string
+    - connect4_liquid_count --> list
+"""
 def play_connect4(x, y, player_chip, connect4_liquid_count):
     global connect4Flag
     connect4Flag = True
-    print(x+1, y)
     set_plate_frame(0,1)
     if (player_chip == '1'):
         if (connect4_liquid_count[0] < 11):
@@ -440,27 +571,16 @@ if __name__ == "__main__":
     s.listen(2)
     while True:
         conn, addr = s.accept()
-        #print('Connected by', addr)
         while True:
             data = conn.recv(1024)
             if not data:
                 break
-            #print(data)
             connect4Flag = False
             raw_instruccio=data.decode("utf-8")
             instruccio=raw_instruccio.split()
-            #ev3.speaker.beep()
+            ev3.speaker.beep()
             if instruccio[0]=='experiment':
                 start_experiment(instruccio[1])
-                conn.send(b"finished")
-            elif (instruccio[0] == "battleship"):
-                set_frame_config(Frame_Matrix([[Large_Matrix(), Small_Matrix()], [Large_Matrix(), Large_Matrix()]]))
-                instruccio.pop(0)
-                board_robot = instruccio
-                liquid_battle_count = [0,0]
-                print_battleship_map(instruccio)
-            elif (instruccio[0] == "battleship_check_board"):
-                liquid_battle_count = play_battleship(board_robot, int(instruccio[1]), int(instruccio[2]), liquid_battle_count)
                 conn.send(b"finished")
             elif (instruccio[0] == "connect4_start"):
                 set_frame_config(Frame_Matrix([[Large_Matrix(), Small_Matrix()], [Large_Matrix(), Large_Matrix()]]))
@@ -473,8 +593,6 @@ if __name__ == "__main__":
                 play_tic_tac_toe(int(instruccio[1]), int(instruccio[2]), instruccio[3])
                 conn.send(b"finished")
             elif (instruccio[0] == "start_interact"):
-                print("dad")
-                #start_interact(instruccio[1])
                 set_frame_config(Frame_Matrix([[Medium_Matrix(), Medium_Matrix()], [Medium_Matrix(), Medium_Matrix()]]))
                 start_interact("")
                 conn.send(b"finished")
@@ -505,9 +623,8 @@ if __name__ == "__main__":
             elif instruccio[0]=='program':
                 start_interact("")
                 ins=instruccio[1].split(',')
-                print (ins)
                 for i in range(len(ins)): 
                     custom_program(ins[i])
                     time.sleep(0.5)
     time.sleep(1)
-    #ev3.speaker.beep()
+    ev3.speaker.beep()
