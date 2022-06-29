@@ -144,7 +144,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
 
     // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
-        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.checkRobotConnection(robot);
         robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
             try {
                 JSONObject responseObject = new JSONObject(response);
@@ -388,7 +388,7 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
     // Method that is called when a program wants to be sent to robot, and checks the robot connection.
     private void setupSendCustomProgramToRobot() {
         flag = 1;
-        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.checkRobotConnection(robot);
     }
 
     // Sends program to the robot.
@@ -398,9 +398,14 @@ public class CustomProgram extends Fragment implements CustomProgramAdapter.ICus
             String programmedActions = parseActions();
             if (programmedActions.equals("impossibleLoop"))
                 Toast.makeText(getContext(), R.string.txtErrorLoop, Toast.LENGTH_SHORT).show();
-            else if (!programmedActions.equals("parseError"))
+            else if (!programmedActions.equals("parseError")) {
+                customProgramViewModel.resetRobot();
                 customProgramViewModel.onSendListActions(programmedActions);
-        } else Toast.makeText(getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            if (flag == 1)
+                Toast.makeText(getContext(), R.string.txtNoProgramToSend, Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Observer to know if the program has been sent correctly to the robot.

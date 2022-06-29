@@ -17,10 +17,10 @@ public class RobotConnectionViewModel extends ViewModel {
     private static MutableLiveData<String> robotConnectionResponseLiveData;
 
     // Method to check the robot connection.
-    public void checkRobotConnection() {
+    public void checkRobotConnection(int robot) {
         if (robotConnectionResponseLiveData == null)
             robotConnectionResponseLiveData = new MutableLiveData<>();
-        robotAPI.checkRobotConnection();
+        robotAPI.checkRobotConnection(robot);
     }
 
     // Method to get the robot connection. request response.

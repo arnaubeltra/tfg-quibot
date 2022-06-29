@@ -134,7 +134,7 @@ public class Connect4 extends Fragment {
 
     // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
-        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.checkRobotConnection(2);
         robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
             try {
                 JSONObject responseObject = new JSONObject(response);
@@ -283,7 +283,7 @@ public class Connect4 extends Fragment {
         flagClicked = 1;
         if (!GAME_STARTED) {
             flag = 1;
-            robotConnectionViewModel.checkRobotConnection();
+            robotConnectionViewModel.checkRobotConnection(2);
             resetUIGameFinished();
         } else {
             GAME_FINISHED = true;

@@ -92,8 +92,8 @@ public class RobotAPI extends ViewModel {
     }
 
     // Method to check whether robot is connected or not.
-    public void checkRobotConnection() {
-        String url = BASE_URL + "/check-robot-connection";
+    public void checkRobotConnection(int robot) {
+        String url = BASE_URL + "/check-robot-connection?robot=" + robot;
         getRequest(url, "checkRobotConnection");
     }
 

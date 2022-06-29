@@ -36,4 +36,8 @@ public class CustomProgramViewModel extends ViewModel {
     public void setSendListActionsRequestResponse(String response) {
         customProgramRequestResponse.setValue(response);
     }
+
+    public void resetRobot() {
+        robotAPI.startInteract();
+    }
 }

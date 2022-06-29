@@ -18,8 +18,8 @@ connectedUsers = {}
 connectedAdmins = 0
 
 robot = Robot()
-robot.setCurrentRobot('2')
-robot.setNumberAuthorizedUsers(0)
+#robot.setCurrentRobot('2')
+#robot.setNumberAuthorizedUsers(0)
 
 ticTacToe = None
 connect4 = None
@@ -145,9 +145,14 @@ Checks robot connection, to make sure the server is able to establish communicat
 def checkRobotConnection():
     global robot
     if (request.method == 'GET'):
+        robotNum = request.args.get('robot')
+        if (robotNum == '1'):
+            ip = '192.168.100.5'
+        elif (robotNum == '2'):
+            ip = '192.168.100.6'
         try:
             robotSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            robotSocket.connect((robot.getRobotIP(), PORT_ROBOT))
+            robotSocket.connect((ip, PORT_ROBOT))
             return {'response': 'robot-connection-success'}
         except socket.error:
             return {'response': 'robot-connection-failed'}
@@ -541,9 +546,9 @@ def after(response):
 
 if __name__ == '__main__':
     """
-    A flask server is used to serve the API.
+    A Flask server is used to serve the API.
 
     Host = 0.0.0.0 --> to make sure that all devices in the local area network can access the server.
     """
-    app.run(host = '0.0.0.0', port = 10000)
+    app.run(host = '0.0.0.0', port = 10000, debug = True)
     

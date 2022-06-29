@@ -119,7 +119,7 @@ public class TicTacToe extends Fragment {
 
     // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
-        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.checkRobotConnection(2);
         robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
             try {
                 JSONObject responseObject = new JSONObject(response);
@@ -266,7 +266,7 @@ public class TicTacToe extends Fragment {
         flagClicked = 1;
         if (!GAME_STARTED) {
             flag = 1;
-            robotConnectionViewModel.checkRobotConnection();
+            robotConnectionViewModel.checkRobotConnection(2);
         } else {
             GAME_FINISHED = true;
             btnNewGame.setText(R.string.btnTxtNewGame);

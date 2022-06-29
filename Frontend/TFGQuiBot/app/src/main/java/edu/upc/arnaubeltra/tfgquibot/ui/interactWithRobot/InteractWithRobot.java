@@ -130,7 +130,7 @@ public class InteractWithRobot extends Fragment {
 
     // Method to check if the robot is connected. All the use of flags is due to multiple responses that affected the flow of the program...
     private void checkRobotConnection() {
-        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.checkRobotConnection(robot);
         robotConnectionViewModel.getCheckRobotConnectionResponse().observe(getViewLifecycleOwner(), response -> {
             try {
                 JSONObject responseObject = new JSONObject(response);
@@ -178,7 +178,7 @@ public class InteractWithRobot extends Fragment {
     // Method that is called when an interaction has to be sent to robot, to check if robot is connected.
     private void setupInteraction(String action) {
         flag = 1;
-        robotConnectionViewModel.checkRobotConnection();
+        robotConnectionViewModel.checkRobotConnection(robot);
         interaction = action;
     }
 

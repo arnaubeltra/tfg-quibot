@@ -84,15 +84,20 @@ public class AdminLogin extends AppCompatActivity implements AdapterView.OnItemS
                     JSONObject responseObject = new JSONObject(response);
                     if (responseObject.getString("response").equals("login-admin-success")) {
                         if (String.valueOf(spinnerSelectRobot.getSelectedItem()).equals(getResources().getString(R.string.txtRobot1D))) {
-                            robot = 1;
-                            loginViewModel.selectRobot(1);
+                            robot = 1; loginViewModel.selectRobot(1);
                         } else if (String.valueOf(spinnerSelectRobot.getSelectedItem()).equals(getResources().getString(R.string.txtRobot2D))) {
-                            robot = 2;
-                            loginViewModel.selectRobot(2);
+                            robot = 2; loginViewModel.selectRobot(2);
                         }
                         goToHomeActivityAdmin();
-                    } else if (responseObject.getString("response").equals("another-admin-loged"))
+                    } else if (responseObject.getString("response").equals("another-admin-loged")) {
                         Toast.makeText(AdminLogin.this, R.string.txtErrorAnotherAdminLogged, Toast.LENGTH_SHORT).show();
+                        if (String.valueOf(spinnerSelectRobot.getSelectedItem()).equals(getResources().getString(R.string.txtRobot1D))) {
+                            robot = 1; loginViewModel.selectRobot(1);
+                        } else if (String.valueOf(spinnerSelectRobot.getSelectedItem()).equals(getResources().getString(R.string.txtRobot2D))) {
+                            robot = 2; loginViewModel.selectRobot(2);
+                        }
+                        goToHomeActivityAdmin();
+                    }
                     else Toast.makeText(AdminLogin.this, R.string.txtErrorLoggingIn, Toast.LENGTH_SHORT).show();
                     loginDialog.dismiss();
                 } catch (JSONException e) {
