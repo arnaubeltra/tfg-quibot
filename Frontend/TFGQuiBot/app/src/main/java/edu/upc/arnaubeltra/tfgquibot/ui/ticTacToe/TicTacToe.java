@@ -202,7 +202,6 @@ public class TicTacToe extends Fragment {
                     else txtInfoGame.setText(R.string.txtYouLost);
                     btnNewGame.setText(R.string.btnTxtNewGame);
                     GAME_FINISHED = true;
-                    //finishGame();
                 }
 
                 // Handle when there is a winner in the current game.
@@ -212,7 +211,6 @@ public class TicTacToe extends Fragment {
                     else txtInfoGame.setText(R.string.txtYouLost);
                     btnNewGame.setText(R.string.btnTxtNewGame);
                     GAME_FINISHED = true;
-                    //finishGame();
                 }
 
                 // Handle when game is over, due to external events.

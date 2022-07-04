@@ -18,8 +18,6 @@ connectedUsers = {}
 connectedAdmins = 0
 
 robot = Robot()
-#robot.setCurrentRobot('2')
-#robot.setNumberAuthorizedUsers(0)
 
 ticTacToe = None
 connect4 = None
@@ -537,12 +535,6 @@ def connect4Position():
         else:
             return {'response': 'connect4-position-full'}
     return ""
-
-@app.after_request
-def after(response):
-    print ("")
-    print(response.get_data())
-    return response
 
 if __name__ == '__main__':
     """

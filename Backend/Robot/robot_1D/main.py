@@ -385,7 +385,6 @@ if __name__ == "__main__":
             elif instruccio[0]=='action':
                 executa_instruccions(instruccio[1])
             elif instruccio[0]=='program':
-                print(instruccio)
                 ins=instruccio[1].split(',')
                 for i in range(len(ins)):
                     executa_instruccions(ins[i])

@@ -304,7 +304,6 @@ public class Connect4 extends Fragment {
                 while (!GAME_STARTED) {
                     if (!THREAD_RUNNING) break;
                     if (GAME_FINISHED && i == 5) {
-                        //GAME_STARTED = false;
                         connect4ViewModel.finishGameConnect4();
                         GAME_FINISHED = false;
                     }
